@@ -1,0 +1,2 @@
+import { Injectable } from '@nestjs/common'; import { PrismaService } from '../prisma.service';
+@Injectable() export class SecurityService{constructor(private p:PrismaService){} events(uid:string){return this.p.auditLog.findMany({where:{userId:uid},select:{id:true,action:true,createdAt:true,ipAddress:true,userAgent:true},orderBy:{createdAt:'desc'},take:100});} async report(uid:string,action:string,ip:string,ua:string){return this.p.auditLog.create({data:{userId:uid,action:action.slice(0,80),ipAddress:ip,userAgent:ua}});}}

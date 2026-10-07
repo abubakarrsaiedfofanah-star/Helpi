@@ -1,0 +1,2 @@
+import {Controller,Param,Post,UseGuards} from '@nestjs/common'; import {FraudGraphService} from './fraud-graph.service'; import {AuthGuard} from '../auth/auth.guard'; import {Roles} from '../roles.decorator'; import {UserRole} from '@prisma/client';
+@Controller('fraud-graph') @UseGuards(AuthGuard) export class FraudGraphController{constructor(private readonly f:FraudGraphService){} @Post('analyze/:caseId') @Roles(UserRole.ADMIN,UserRole.VERIFIER) analyze(@Param('caseId')id:string){return this.f.analyzeCase(id)}}

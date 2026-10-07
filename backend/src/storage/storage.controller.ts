@@ -1,0 +1,2 @@
+import {Body,Controller,Post,Req,UseGuards} from '@nestjs/common'; import {StorageService} from './storage.service'; import {AuthGuard} from '../auth/auth.guard';
+@Controller('storage') @UseGuards(AuthGuard) export class StorageController{constructor(private readonly storage:StorageService){} @Post('upload-url') create(@Req() req:any,@Body() b:{mimeType:string;sizeBytes:number;folder?:string}){return this.storage.createUploadUrl({ownerId:req.user.sub,mimeType:b.mimeType,sizeBytes:b.sizeBytes,folder:b.folder||'private'});}}

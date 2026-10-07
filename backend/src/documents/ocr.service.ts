@@ -1,0 +1,2 @@
+import {Injectable} from '@nestjs/common';
+@Injectable() export class OcrService{async process(storageKey:string){const endpoint=process.env.OCR_PROVIDER_URL;if(!endpoint)return{status:'NEEDS_REVIEW',provider:'manual-review',reason:'OCR provider is not configured'};const r=await fetch(`${endpoint}/extract`,{method:'POST',headers:{'content-type':'application/json',authorization:`Bearer ${process.env.OCR_PROVIDER_API_KEY||''}`},body:JSON.stringify({storageKey})});if(!r.ok)throw new Error(`OCR provider returned ${r.status}`);return r.json()}}

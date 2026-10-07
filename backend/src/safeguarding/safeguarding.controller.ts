@@ -1,0 +1,2 @@
+import {Body,Controller,Post,Req,UseGuards} from '@nestjs/common'; import {SafeguardingService} from './safeguarding.service'; import {AuthGuard} from '../auth/auth.guard';
+@Controller('safeguarding') @UseGuards(AuthGuard) export class SafeguardingController{constructor(private readonly s:SafeguardingService){} @Post('report') report(@Req()r:any,@Body()b:any){return this.s.open({...b,reporterId:r.user.sub})}}

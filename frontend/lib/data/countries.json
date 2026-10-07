@@ -1,0 +1,1496 @@
+[
+  {
+    "code": "DZ",
+    "name": "Algeria",
+    "currency": "DZD",
+    "continent": "Africa"
+  },
+  {
+    "code": "AO",
+    "name": "Angola",
+    "currency": "AOA",
+    "continent": "Africa"
+  },
+  {
+    "code": "BJ",
+    "name": "Benin",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "BW",
+    "name": "Botswana",
+    "currency": "BWP",
+    "continent": "Africa"
+  },
+  {
+    "code": "BF",
+    "name": "Burkina Faso",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "BI",
+    "name": "Burundi",
+    "currency": "BIF",
+    "continent": "Africa"
+  },
+  {
+    "code": "CV",
+    "name": "Cabo Verde",
+    "currency": "CVE",
+    "continent": "Africa"
+  },
+  {
+    "code": "CM",
+    "name": "Cameroon",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "CF",
+    "name": "Central African Republic",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "TD",
+    "name": "Chad",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "KM",
+    "name": "Comoros",
+    "currency": "KMF",
+    "continent": "Africa"
+  },
+  {
+    "code": "CG",
+    "name": "Congo",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "CD",
+    "name": "Congo, The Democratic Republic of the",
+    "currency": "CDF",
+    "continent": "Africa"
+  },
+  {
+    "code": "CI",
+    "name": "Côte d'Ivoire",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "DJ",
+    "name": "Djibouti",
+    "currency": "DJF",
+    "continent": "Africa"
+  },
+  {
+    "code": "EG",
+    "name": "Egypt",
+    "currency": "EGP",
+    "continent": "Africa"
+  },
+  {
+    "code": "GQ",
+    "name": "Equatorial Guinea",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "ER",
+    "name": "Eritrea",
+    "currency": "ERN",
+    "continent": "Africa"
+  },
+  {
+    "code": "SZ",
+    "name": "Eswatini",
+    "currency": "SZL",
+    "continent": "Africa"
+  },
+  {
+    "code": "ET",
+    "name": "Ethiopia",
+    "currency": "ETB",
+    "continent": "Africa"
+  },
+  {
+    "code": "GA",
+    "name": "Gabon",
+    "currency": "XAF",
+    "continent": "Africa"
+  },
+  {
+    "code": "GM",
+    "name": "Gambia",
+    "currency": "GMD",
+    "continent": "Africa"
+  },
+  {
+    "code": "GH",
+    "name": "Ghana",
+    "currency": "GHS",
+    "continent": "Africa"
+  },
+  {
+    "code": "GN",
+    "name": "Guinea",
+    "currency": "GNF",
+    "continent": "Africa"
+  },
+  {
+    "code": "GW",
+    "name": "Guinea-Bissau",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "KE",
+    "name": "Kenya",
+    "currency": "KES",
+    "continent": "Africa"
+  },
+  {
+    "code": "LS",
+    "name": "Lesotho",
+    "currency": "ZAR",
+    "continent": "Africa"
+  },
+  {
+    "code": "LR",
+    "name": "Liberia",
+    "currency": "LRD",
+    "continent": "Africa"
+  },
+  {
+    "code": "LY",
+    "name": "Libya",
+    "currency": "LYD",
+    "continent": "Africa"
+  },
+  {
+    "code": "MG",
+    "name": "Madagascar",
+    "currency": "MGA",
+    "continent": "Africa"
+  },
+  {
+    "code": "MW",
+    "name": "Malawi",
+    "currency": "MWK",
+    "continent": "Africa"
+  },
+  {
+    "code": "ML",
+    "name": "Mali",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "MR",
+    "name": "Mauritania",
+    "currency": "MRU",
+    "continent": "Africa"
+  },
+  {
+    "code": "MU",
+    "name": "Mauritius",
+    "currency": "MUR",
+    "continent": "Africa"
+  },
+  {
+    "code": "MA",
+    "name": "Morocco",
+    "currency": "MAD",
+    "continent": "Africa"
+  },
+  {
+    "code": "MZ",
+    "name": "Mozambique",
+    "currency": "MZN",
+    "continent": "Africa"
+  },
+  {
+    "code": "NA",
+    "name": "Namibia",
+    "currency": "ZAR",
+    "continent": "Africa"
+  },
+  {
+    "code": "NE",
+    "name": "Niger",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "NG",
+    "name": "Nigeria",
+    "currency": "NGN",
+    "continent": "Africa"
+  },
+  {
+    "code": "RW",
+    "name": "Rwanda",
+    "currency": "RWF",
+    "continent": "Africa"
+  },
+  {
+    "code": "ST",
+    "name": "Sao Tome and Principe",
+    "currency": "STN",
+    "continent": "Africa"
+  },
+  {
+    "code": "SN",
+    "name": "Senegal",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "SC",
+    "name": "Seychelles",
+    "currency": "SCR",
+    "continent": "Africa"
+  },
+  {
+    "code": "SL",
+    "name": "Sierra Leone",
+    "currency": "SLE",
+    "continent": "Africa"
+  },
+  {
+    "code": "SO",
+    "name": "Somalia",
+    "currency": "SOS",
+    "continent": "Africa"
+  },
+  {
+    "code": "ZA",
+    "name": "South Africa",
+    "currency": "ZAR",
+    "continent": "Africa"
+  },
+  {
+    "code": "SS",
+    "name": "South Sudan",
+    "currency": "SSP",
+    "continent": "Africa"
+  },
+  {
+    "code": "SD",
+    "name": "Sudan",
+    "currency": "SDG",
+    "continent": "Africa"
+  },
+  {
+    "code": "TZ",
+    "name": "Tanzania, United Republic of",
+    "currency": "TZS",
+    "continent": "Africa"
+  },
+  {
+    "code": "TG",
+    "name": "Togo",
+    "currency": "XOF",
+    "continent": "Africa"
+  },
+  {
+    "code": "TN",
+    "name": "Tunisia",
+    "currency": "TND",
+    "continent": "Africa"
+  },
+  {
+    "code": "UG",
+    "name": "Uganda",
+    "currency": "UGX",
+    "continent": "Africa"
+  },
+  {
+    "code": "ZM",
+    "name": "Zambia",
+    "currency": "ZMW",
+    "continent": "Africa"
+  },
+  {
+    "code": "ZW",
+    "name": "Zimbabwe",
+    "currency": "USD",
+    "continent": "Africa"
+  },
+  {
+    "code": "AQ",
+    "name": "Antarctica",
+    "currency": "",
+    "continent": "Antarctica"
+  },
+  {
+    "code": "AF",
+    "name": "Afghanistan",
+    "currency": "AFN",
+    "continent": "Asia"
+  },
+  {
+    "code": "AM",
+    "name": "Armenia",
+    "currency": "AMD",
+    "continent": "Asia"
+  },
+  {
+    "code": "AZ",
+    "name": "Azerbaijan",
+    "currency": "AZN",
+    "continent": "Asia"
+  },
+  {
+    "code": "BH",
+    "name": "Bahrain",
+    "currency": "BHD",
+    "continent": "Asia"
+  },
+  {
+    "code": "BD",
+    "name": "Bangladesh",
+    "currency": "BDT",
+    "continent": "Asia"
+  },
+  {
+    "code": "BT",
+    "name": "Bhutan",
+    "currency": "INR",
+    "continent": "Asia"
+  },
+  {
+    "code": "BN",
+    "name": "Brunei Darussalam",
+    "currency": "BND",
+    "continent": "Asia"
+  },
+  {
+    "code": "KH",
+    "name": "Cambodia",
+    "currency": "KHR",
+    "continent": "Asia"
+  },
+  {
+    "code": "CN",
+    "name": "China",
+    "currency": "CNY",
+    "continent": "Asia"
+  },
+  {
+    "code": "CY",
+    "name": "Cyprus",
+    "currency": "EUR",
+    "continent": "Asia"
+  },
+  {
+    "code": "GE",
+    "name": "Georgia",
+    "currency": "GEL",
+    "continent": "Asia"
+  },
+  {
+    "code": "IN",
+    "name": "India",
+    "currency": "INR",
+    "continent": "Asia"
+  },
+  {
+    "code": "ID",
+    "name": "Indonesia",
+    "currency": "IDR",
+    "continent": "Asia"
+  },
+  {
+    "code": "IR",
+    "name": "Iran, Islamic Republic of",
+    "currency": "IRR",
+    "continent": "Asia"
+  },
+  {
+    "code": "IQ",
+    "name": "Iraq",
+    "currency": "IQD",
+    "continent": "Asia"
+  },
+  {
+    "code": "IL",
+    "name": "Israel",
+    "currency": "ILS",
+    "continent": "Asia"
+  },
+  {
+    "code": "JP",
+    "name": "Japan",
+    "currency": "JPY",
+    "continent": "Asia"
+  },
+  {
+    "code": "JO",
+    "name": "Jordan",
+    "currency": "JOD",
+    "continent": "Asia"
+  },
+  {
+    "code": "KZ",
+    "name": "Kazakhstan",
+    "currency": "KZT",
+    "continent": "Asia"
+  },
+  {
+    "code": "KP",
+    "name": "Korea, Democratic People's Republic of",
+    "currency": "KPW",
+    "continent": "Asia"
+  },
+  {
+    "code": "KR",
+    "name": "Korea, Republic of",
+    "currency": "KRW",
+    "continent": "Asia"
+  },
+  {
+    "code": "KW",
+    "name": "Kuwait",
+    "currency": "KWD",
+    "continent": "Asia"
+  },
+  {
+    "code": "KG",
+    "name": "Kyrgyzstan",
+    "currency": "KGS",
+    "continent": "Asia"
+  },
+  {
+    "code": "LA",
+    "name": "Lao People's Democratic Republic",
+    "currency": "LAK",
+    "continent": "Asia"
+  },
+  {
+    "code": "LB",
+    "name": "Lebanon",
+    "currency": "LBP",
+    "continent": "Asia"
+  },
+  {
+    "code": "MY",
+    "name": "Malaysia",
+    "currency": "MYR",
+    "continent": "Asia"
+  },
+  {
+    "code": "MV",
+    "name": "Maldives",
+    "currency": "MVR",
+    "continent": "Asia"
+  },
+  {
+    "code": "MN",
+    "name": "Mongolia",
+    "currency": "MNT",
+    "continent": "Asia"
+  },
+  {
+    "code": "MM",
+    "name": "Myanmar",
+    "currency": "MMK",
+    "continent": "Asia"
+  },
+  {
+    "code": "NP",
+    "name": "Nepal",
+    "currency": "NPR",
+    "continent": "Asia"
+  },
+  {
+    "code": "OM",
+    "name": "Oman",
+    "currency": "OMR",
+    "continent": "Asia"
+  },
+  {
+    "code": "PK",
+    "name": "Pakistan",
+    "currency": "PKR",
+    "continent": "Asia"
+  },
+  {
+    "code": "PS",
+    "name": "Palestine, State of",
+    "currency": "ILS",
+    "continent": "Asia"
+  },
+  {
+    "code": "PH",
+    "name": "Philippines",
+    "currency": "PHP",
+    "continent": "Asia"
+  },
+  {
+    "code": "QA",
+    "name": "Qatar",
+    "currency": "QAR",
+    "continent": "Asia"
+  },
+  {
+    "code": "SA",
+    "name": "Saudi Arabia",
+    "currency": "SAR",
+    "continent": "Asia"
+  },
+  {
+    "code": "SG",
+    "name": "Singapore",
+    "currency": "SGD",
+    "continent": "Asia"
+  },
+  {
+    "code": "LK",
+    "name": "Sri Lanka",
+    "currency": "LKR",
+    "continent": "Asia"
+  },
+  {
+    "code": "SY",
+    "name": "Syrian Arab Republic",
+    "currency": "SYP",
+    "continent": "Asia"
+  },
+  {
+    "code": "TJ",
+    "name": "Tajikistan",
+    "currency": "TJS",
+    "continent": "Asia"
+  },
+  {
+    "code": "TH",
+    "name": "Thailand",
+    "currency": "THB",
+    "continent": "Asia"
+  },
+  {
+    "code": "TL",
+    "name": "Timor-Leste",
+    "currency": "USD",
+    "continent": "Asia"
+  },
+  {
+    "code": "TM",
+    "name": "Turkmenistan",
+    "currency": "TMT",
+    "continent": "Asia"
+  },
+  {
+    "code": "TR",
+    "name": "Türkiye",
+    "currency": "TRY",
+    "continent": "Asia"
+  },
+  {
+    "code": "AE",
+    "name": "United Arab Emirates",
+    "currency": "AED",
+    "continent": "Asia"
+  },
+  {
+    "code": "UZ",
+    "name": "Uzbekistan",
+    "currency": "UZS",
+    "continent": "Asia"
+  },
+  {
+    "code": "VN",
+    "name": "Viet Nam",
+    "currency": "VND",
+    "continent": "Asia"
+  },
+  {
+    "code": "YE",
+    "name": "Yemen",
+    "currency": "YER",
+    "continent": "Asia"
+  },
+  {
+    "code": "AL",
+    "name": "Albania",
+    "currency": "ALL",
+    "continent": "Europe"
+  },
+  {
+    "code": "AD",
+    "name": "Andorra",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "AT",
+    "name": "Austria",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "BY",
+    "name": "Belarus",
+    "currency": "BYN",
+    "continent": "Europe"
+  },
+  {
+    "code": "BE",
+    "name": "Belgium",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "BA",
+    "name": "Bosnia and Herzegovina",
+    "currency": "BAM",
+    "continent": "Europe"
+  },
+  {
+    "code": "BG",
+    "name": "Bulgaria",
+    "currency": "BGN",
+    "continent": "Europe"
+  },
+  {
+    "code": "HR",
+    "name": "Croatia",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "CZ",
+    "name": "Czechia",
+    "currency": "CZK",
+    "continent": "Europe"
+  },
+  {
+    "code": "DK",
+    "name": "Denmark",
+    "currency": "DKK",
+    "continent": "Europe"
+  },
+  {
+    "code": "EE",
+    "name": "Estonia",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "FI",
+    "name": "Finland",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "FR",
+    "name": "France",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "DE",
+    "name": "Germany",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "GR",
+    "name": "Greece",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "VA",
+    "name": "Holy See (Vatican City State)",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "HU",
+    "name": "Hungary",
+    "currency": "HUF",
+    "continent": "Europe"
+  },
+  {
+    "code": "IS",
+    "name": "Iceland",
+    "currency": "ISK",
+    "continent": "Europe"
+  },
+  {
+    "code": "IE",
+    "name": "Ireland",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "IT",
+    "name": "Italy",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "LV",
+    "name": "Latvia",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "LI",
+    "name": "Liechtenstein",
+    "currency": "CHF",
+    "continent": "Europe"
+  },
+  {
+    "code": "LT",
+    "name": "Lithuania",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "LU",
+    "name": "Luxembourg",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "MT",
+    "name": "Malta",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "MD",
+    "name": "Moldova, Republic of",
+    "currency": "MDL",
+    "continent": "Europe"
+  },
+  {
+    "code": "MC",
+    "name": "Monaco",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "ME",
+    "name": "Montenegro",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "NL",
+    "name": "Netherlands",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "MK",
+    "name": "North Macedonia",
+    "currency": "MKD",
+    "continent": "Europe"
+  },
+  {
+    "code": "NO",
+    "name": "Norway",
+    "currency": "NOK",
+    "continent": "Europe"
+  },
+  {
+    "code": "PL",
+    "name": "Poland",
+    "currency": "PLN",
+    "continent": "Europe"
+  },
+  {
+    "code": "PT",
+    "name": "Portugal",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "RO",
+    "name": "Romania",
+    "currency": "RON",
+    "continent": "Europe"
+  },
+  {
+    "code": "RU",
+    "name": "Russian Federation",
+    "currency": "RUB",
+    "continent": "Europe"
+  },
+  {
+    "code": "SM",
+    "name": "San Marino",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "RS",
+    "name": "Serbia",
+    "currency": "RSD",
+    "continent": "Europe"
+  },
+  {
+    "code": "SK",
+    "name": "Slovakia",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "SI",
+    "name": "Slovenia",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "ES",
+    "name": "Spain",
+    "currency": "EUR",
+    "continent": "Europe"
+  },
+  {
+    "code": "SE",
+    "name": "Sweden",
+    "currency": "SEK",
+    "continent": "Europe"
+  },
+  {
+    "code": "CH",
+    "name": "Switzerland",
+    "currency": "CHF",
+    "continent": "Europe"
+  },
+  {
+    "code": "UA",
+    "name": "Ukraine",
+    "currency": "UAH",
+    "continent": "Europe"
+  },
+  {
+    "code": "GB",
+    "name": "United Kingdom",
+    "currency": "GBP",
+    "continent": "Europe"
+  },
+  {
+    "code": "AG",
+    "name": "Antigua and Barbuda",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "BS",
+    "name": "Bahamas",
+    "currency": "BSD",
+    "continent": "North America"
+  },
+  {
+    "code": "BB",
+    "name": "Barbados",
+    "currency": "BBD",
+    "continent": "North America"
+  },
+  {
+    "code": "BZ",
+    "name": "Belize",
+    "currency": "BZD",
+    "continent": "North America"
+  },
+  {
+    "code": "CA",
+    "name": "Canada",
+    "currency": "CAD",
+    "continent": "North America"
+  },
+  {
+    "code": "CR",
+    "name": "Costa Rica",
+    "currency": "CRC",
+    "continent": "North America"
+  },
+  {
+    "code": "CU",
+    "name": "Cuba",
+    "currency": "CUP",
+    "continent": "North America"
+  },
+  {
+    "code": "DM",
+    "name": "Dominica",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "DO",
+    "name": "Dominican Republic",
+    "currency": "DOP",
+    "continent": "North America"
+  },
+  {
+    "code": "SV",
+    "name": "El Salvador",
+    "currency": "USD",
+    "continent": "North America"
+  },
+  {
+    "code": "GD",
+    "name": "Grenada",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "GT",
+    "name": "Guatemala",
+    "currency": "GTQ",
+    "continent": "North America"
+  },
+  {
+    "code": "HT",
+    "name": "Haiti",
+    "currency": "HTG",
+    "continent": "North America"
+  },
+  {
+    "code": "HN",
+    "name": "Honduras",
+    "currency": "HNL",
+    "continent": "North America"
+  },
+  {
+    "code": "JM",
+    "name": "Jamaica",
+    "currency": "JMD",
+    "continent": "North America"
+  },
+  {
+    "code": "MX",
+    "name": "Mexico",
+    "currency": "MXN",
+    "continent": "North America"
+  },
+  {
+    "code": "NI",
+    "name": "Nicaragua",
+    "currency": "NIO",
+    "continent": "North America"
+  },
+  {
+    "code": "PA",
+    "name": "Panama",
+    "currency": "PAB",
+    "continent": "North America"
+  },
+  {
+    "code": "KN",
+    "name": "Saint Kitts and Nevis",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "LC",
+    "name": "Saint Lucia",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "VC",
+    "name": "Saint Vincent and the Grenadines",
+    "currency": "XCD",
+    "continent": "North America"
+  },
+  {
+    "code": "TT",
+    "name": "Trinidad and Tobago",
+    "currency": "TTD",
+    "continent": "North America"
+  },
+  {
+    "code": "US",
+    "name": "United States",
+    "currency": "USD",
+    "continent": "North America"
+  },
+  {
+    "code": "AU",
+    "name": "Australia",
+    "currency": "AUD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "FJ",
+    "name": "Fiji",
+    "currency": "FJD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "KI",
+    "name": "Kiribati",
+    "currency": "AUD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "MH",
+    "name": "Marshall Islands",
+    "currency": "USD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "FM",
+    "name": "Micronesia, Federated States of",
+    "currency": "USD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "NR",
+    "name": "Nauru",
+    "currency": "AUD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "NZ",
+    "name": "New Zealand",
+    "currency": "NZD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "PW",
+    "name": "Palau",
+    "currency": "USD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "PG",
+    "name": "Papua New Guinea",
+    "currency": "PGK",
+    "continent": "Oceania"
+  },
+  {
+    "code": "WS",
+    "name": "Samoa",
+    "currency": "WST",
+    "continent": "Oceania"
+  },
+  {
+    "code": "SB",
+    "name": "Solomon Islands",
+    "currency": "SBD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "TO",
+    "name": "Tonga",
+    "currency": "TOP",
+    "continent": "Oceania"
+  },
+  {
+    "code": "TV",
+    "name": "Tuvalu",
+    "currency": "AUD",
+    "continent": "Oceania"
+  },
+  {
+    "code": "VU",
+    "name": "Vanuatu",
+    "currency": "VUV",
+    "continent": "Oceania"
+  },
+  {
+    "code": "AS",
+    "name": "American Samoa",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "AI",
+    "name": "Anguilla",
+    "currency": "XCD",
+    "continent": "Other"
+  },
+  {
+    "code": "AW",
+    "name": "Aruba",
+    "currency": "AWG",
+    "continent": "Other"
+  },
+  {
+    "code": "BM",
+    "name": "Bermuda",
+    "currency": "BMD",
+    "continent": "Other"
+  },
+  {
+    "code": "BQ",
+    "name": "Bonaire, Sint Eustatius and Saba",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "BV",
+    "name": "Bouvet Island",
+    "currency": "NOK",
+    "continent": "Other"
+  },
+  {
+    "code": "IO",
+    "name": "British Indian Ocean Territory",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "KY",
+    "name": "Cayman Islands",
+    "currency": "KYD",
+    "continent": "Other"
+  },
+  {
+    "code": "CX",
+    "name": "Christmas Island",
+    "currency": "AUD",
+    "continent": "Other"
+  },
+  {
+    "code": "CC",
+    "name": "Cocos (Keeling) Islands",
+    "currency": "AUD",
+    "continent": "Other"
+  },
+  {
+    "code": "CK",
+    "name": "Cook Islands",
+    "currency": "NZD",
+    "continent": "Other"
+  },
+  {
+    "code": "CW",
+    "name": "Curaçao",
+    "currency": "XCG",
+    "continent": "Other"
+  },
+  {
+    "code": "FK",
+    "name": "Falkland Islands (Malvinas)",
+    "currency": "FKP",
+    "continent": "Other"
+  },
+  {
+    "code": "FO",
+    "name": "Faroe Islands",
+    "currency": "DKK",
+    "continent": "Other"
+  },
+  {
+    "code": "GF",
+    "name": "French Guiana",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "PF",
+    "name": "French Polynesia",
+    "currency": "XPF",
+    "continent": "Other"
+  },
+  {
+    "code": "TF",
+    "name": "French Southern Territories",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "GI",
+    "name": "Gibraltar",
+    "currency": "GIP",
+    "continent": "Other"
+  },
+  {
+    "code": "GL",
+    "name": "Greenland",
+    "currency": "DKK",
+    "continent": "Other"
+  },
+  {
+    "code": "GP",
+    "name": "Guadeloupe",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "GU",
+    "name": "Guam",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "GG",
+    "name": "Guernsey",
+    "currency": "GBP",
+    "continent": "Other"
+  },
+  {
+    "code": "HM",
+    "name": "Heard Island and McDonald Islands",
+    "currency": "AUD",
+    "continent": "Other"
+  },
+  {
+    "code": "HK",
+    "name": "Hong Kong",
+    "currency": "HKD",
+    "continent": "Other"
+  },
+  {
+    "code": "IM",
+    "name": "Isle of Man",
+    "currency": "GBP",
+    "continent": "Other"
+  },
+  {
+    "code": "JE",
+    "name": "Jersey",
+    "currency": "GBP",
+    "continent": "Other"
+  },
+  {
+    "code": "MO",
+    "name": "Macao",
+    "currency": "MOP",
+    "continent": "Other"
+  },
+  {
+    "code": "MQ",
+    "name": "Martinique",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "YT",
+    "name": "Mayotte",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "MS",
+    "name": "Montserrat",
+    "currency": "XCD",
+    "continent": "Other"
+  },
+  {
+    "code": "NC",
+    "name": "New Caledonia",
+    "currency": "XPF",
+    "continent": "Other"
+  },
+  {
+    "code": "NU",
+    "name": "Niue",
+    "currency": "NZD",
+    "continent": "Other"
+  },
+  {
+    "code": "NF",
+    "name": "Norfolk Island",
+    "currency": "AUD",
+    "continent": "Other"
+  },
+  {
+    "code": "MP",
+    "name": "Northern Mariana Islands",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "PN",
+    "name": "Pitcairn",
+    "currency": "NZD",
+    "continent": "Other"
+  },
+  {
+    "code": "PR",
+    "name": "Puerto Rico",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "RE",
+    "name": "Réunion",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "BL",
+    "name": "Saint Barthélemy",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "SH",
+    "name": "Saint Helena, Ascension and Tristan da Cunha",
+    "currency": "SHP",
+    "continent": "Other"
+  },
+  {
+    "code": "MF",
+    "name": "Saint Martin (French part)",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "PM",
+    "name": "Saint Pierre and Miquelon",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "SX",
+    "name": "Sint Maarten (Dutch part)",
+    "currency": "XCG",
+    "continent": "Other"
+  },
+  {
+    "code": "GS",
+    "name": "South Georgia and the South Sandwich Islands",
+    "currency": "GBP",
+    "continent": "Other"
+  },
+  {
+    "code": "SJ",
+    "name": "Svalbard and Jan Mayen",
+    "currency": "NOK",
+    "continent": "Other"
+  },
+  {
+    "code": "TW",
+    "name": "Taiwan, Province of China",
+    "currency": "TWD",
+    "continent": "Other"
+  },
+  {
+    "code": "TK",
+    "name": "Tokelau",
+    "currency": "NZD",
+    "continent": "Other"
+  },
+  {
+    "code": "TC",
+    "name": "Turks and Caicos Islands",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "UM",
+    "name": "United States Minor Outlying Islands",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "VG",
+    "name": "Virgin Islands, British",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "VI",
+    "name": "Virgin Islands, U.S.",
+    "currency": "USD",
+    "continent": "Other"
+  },
+  {
+    "code": "WF",
+    "name": "Wallis and Futuna",
+    "currency": "XPF",
+    "continent": "Other"
+  },
+  {
+    "code": "EH",
+    "name": "Western Sahara",
+    "currency": "MAD",
+    "continent": "Other"
+  },
+  {
+    "code": "AX",
+    "name": "Åland Islands",
+    "currency": "EUR",
+    "continent": "Other"
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "currency": "ARS",
+    "continent": "South America"
+  },
+  {
+    "code": "BO",
+    "name": "Bolivia, Plurinational State of",
+    "currency": "BOB",
+    "continent": "South America"
+  },
+  {
+    "code": "BR",
+    "name": "Brazil",
+    "currency": "BRL",
+    "continent": "South America"
+  },
+  {
+    "code": "CL",
+    "name": "Chile",
+    "currency": "CLP",
+    "continent": "South America"
+  },
+  {
+    "code": "CO",
+    "name": "Colombia",
+    "currency": "COP",
+    "continent": "South America"
+  },
+  {
+    "code": "EC",
+    "name": "Ecuador",
+    "currency": "USD",
+    "continent": "South America"
+  },
+  {
+    "code": "GY",
+    "name": "Guyana",
+    "currency": "GYD",
+    "continent": "South America"
+  },
+  {
+    "code": "PY",
+    "name": "Paraguay",
+    "currency": "PYG",
+    "continent": "South America"
+  },
+  {
+    "code": "PE",
+    "name": "Peru",
+    "currency": "PEN",
+    "continent": "South America"
+  },
+  {
+    "code": "SR",
+    "name": "Suriname",
+    "currency": "SRD",
+    "continent": "South America"
+  },
+  {
+    "code": "UY",
+    "name": "Uruguay",
+    "currency": "UYU",
+    "continent": "South America"
+  },
+  {
+    "code": "VE",
+    "name": "Venezuela, Bolivarian Republic of",
+    "currency": "VES",
+    "continent": "South America"
+  }
+]

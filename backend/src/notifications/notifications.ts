@@ -1,0 +1,2 @@
+import { Controller, Get, Patch, Param, Req } from '@nestjs/common'; import { Request } from 'express'; import { PrismaService } from '../prisma.service';
+@Controller('notifications') export class NotificationsController{constructor(private p:PrismaService){} @Get() list(@Req() r:Request){return this.p.notification.findMany({where:{userId:(r as any).user.sub},orderBy:{createdAt:'desc'},take:100});} @Patch(':id/read') async read(@Req() r:Request,@Param('id') id:string){return this.p.notification.updateMany({where:{id,userId:(r as any).user.sub},data:{readAt:new Date()}});}}

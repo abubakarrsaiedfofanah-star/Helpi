@@ -1,0 +1,14 @@
+CREATE TYPE "UserRole" AS ENUM ('MEMBER','VERIFIER','ADMIN');
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE','SUSPENDED','PENDING');
+CREATE TYPE "CaseStatus" AS ENUM ('DRAFT','UNDER_REVIEW','PUBLISHED','PAUSED','COMPLETED','REJECTED');
+CREATE TYPE "CaseCategory" AS ENUM ('MEDICAL','FOOD','EDUCATION','HOUSING','WATER','DISABILITY','EMERGENCY','COMMUNITY','OTHER');
+CREATE TABLE "User" ("id" TEXT NOT NULL,"email" TEXT NOT NULL,"passwordHash" TEXT NOT NULL,"name" TEXT NOT NULL,"countryCode" TEXT NOT NULL,"role" "UserRole" NOT NULL DEFAULT 'MEMBER',"status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMP(3) NOT NULL,"lastLoginAt" TIMESTAMP(3),CONSTRAINT "User_pkey" PRIMARY KEY ("id"));
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE TABLE "HelpCase" ("id" TEXT NOT NULL,"ownerId" TEXT NOT NULL,"title" TEXT NOT NULL,"description" TEXT NOT NULL,"category" "CaseCategory" NOT NULL,"goalMinor" INTEGER NOT NULL,"currency" TEXT NOT NULL,"countryCode" TEXT NOT NULL,"city" TEXT,"status" "CaseStatus" NOT NULL DEFAULT 'DRAFT',"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMP(3) NOT NULL,CONSTRAINT "HelpCase_pkey" PRIMARY KEY ("id"));
+CREATE INDEX "HelpCase_status_createdAt_idx" ON "HelpCase"("status","createdAt"); CREATE INDEX "HelpCase_ownerId_idx" ON "HelpCase"("ownerId");
+CREATE TABLE "RefreshSession" ("id" TEXT NOT NULL,"userId" TEXT NOT NULL,"tokenHash" TEXT NOT NULL,"deviceName" TEXT,"userAgent" TEXT,"ipAddress" TEXT,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"expiresAt" TIMESTAMP(3) NOT NULL,"revokedAt" TIMESTAMP(3),CONSTRAINT "RefreshSession_pkey" PRIMARY KEY ("id"));
+CREATE UNIQUE INDEX "RefreshSession_tokenHash_key" ON "RefreshSession"("tokenHash"); CREATE INDEX "RefreshSession_userId_revokedAt_idx" ON "RefreshSession"("userId","revokedAt");
+CREATE TABLE "AuditLog" ("id" TEXT NOT NULL,"userId" TEXT,"action" TEXT NOT NULL,"ipAddress" TEXT,"userAgent" TEXT,"createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,CONSTRAINT "AuditLog_pkey" PRIMARY KEY ("id")); CREATE INDEX "AuditLog_userId_createdAt_idx" ON "AuditLog"("userId","createdAt");
+ALTER TABLE "HelpCase" ADD CONSTRAINT "HelpCase_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "RefreshSession" ADD CONSTRAINT "RefreshSession_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "AuditLog" ADD CONSTRAINT "AuditLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;

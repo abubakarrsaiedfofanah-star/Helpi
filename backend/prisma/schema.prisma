@@ -1,0 +1,678 @@
+generator client { provider = "prisma-client-js" }
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum UserRole { MEMBER VERIFIER ADMIN ORGANIZATION }
+enum UserStatus { PENDING ACTIVE SUSPENDED DISABLED }
+enum CaseStatus { DRAFT UNDER_REVIEW PUBLISHED PAUSED COMPLETED REJECTED }
+enum CaseCategory { MEDICAL FOOD EDUCATION HOUSING WATER DISABILITY EMERGENCY COMMUNITY FAMILY FARMING ELDERLY OTHER }
+enum OfferType { MONEY GOODS SKILLS TIME TRANSPORT ACCOMMODATION SERVICES OTHER }
+enum VerificationStatus { PENDING IN_REVIEW VERIFIED REJECTED NEEDS_MORE_EVIDENCE }
+enum ThreadStatus { OPEN CLOSED }
+enum NotificationType { SECURITY CASE MESSAGE VERIFICATION PAYMENT SYSTEM }
+enum ReportType { FRAUD HARASSMENT SCAM SAFEGUARDING OTHER }
+enum TransactionStatus { CREATED PROCESSING SUCCEEDED FAILED REFUNDED }
+enum FraudSignalStatus { OPEN REVIEWED DISMISSED CONFIRMED }
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  passwordHash String
+  name String
+  publicIdentityMode PublicIdentityMode @default(REAL_NAME)
+  publicAlias String?
+  countryCode String
+  role UserRole @default(MEMBER)
+  status UserStatus @default(PENDING)
+  emailVerifiedAt DateTime?
+  mfaEnabled Boolean @default(false)
+  mfaSecretEncrypted String?
+  failedLoginCount Int @default(0)
+  lockedUntil DateTime?
+  lastLoginAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cases HelpCase[]
+  refreshSessions RefreshSession[]
+  auditLogs AuditLog[]
+  verificationTokens EmailVerificationToken[]
+  passwordResetTokens PasswordResetToken[]
+  offers HelpOffer[]
+  sentMessages Message[] @relation("SentMessages")
+  threads MessageThread[] @relation("ThreadParticipants")
+  notifications Notification[]
+  reports Report[]
+  verificationRequests VerificationRequest[]
+  referralsMade Referral[] @relation("ReferralMaker")
+  transactions Transaction[]
+  fraudSignals FraudSignal[]
+  identityVerifications IdentityVerification[]
+  sanctionsScreenings SanctionsScreening[]
+  devices DeviceRegistration[]
+  createdRooms CommunicationRoom[] @relation("CreatedRooms")
+  assignedSafeguarding SafeguardingCase[] @relation("AssignedSafeguarding")
+  organizationMemberships OrganizationMember[]
+  ownedHelpCircles HelpCircle[]
+  helpCircleMemberships HelpCircleMember[]
+  appeals Appeal[] @relation("AppellantAppeals")
+  reviewedAppeals Appeal[] @relation("ReviewerAppeals")
+  payoutApprovals PayoutApproval[]
+  countryConfigurations CountryConfiguration[] @relation("CountryConfigurationUpdatedBy")
+  securityEvents SecurityEvent[]
+  payoutDestinations PayoutDestination[]
+}
+
+model Referral {
+  id String @id @default(cuid())
+  referrerId String
+  personName String
+  needSummary String
+  safeContact String?
+  consentConfirmed Boolean
+  status String @default("PENDING_CONTACT")
+  createdAt DateTime @default(now())
+  referrer User @relation("ReferralMaker",fields:[referrerId],references:[id],onDelete:Restrict)
+  @@index([referrerId,createdAt])
+}
+
+model HelpCase {
+  id String @id @default(cuid())
+  ownerId String
+  organizationId String?
+  title String
+  description String
+  category CaseCategory
+  goalMinor Int
+  currency String
+  countryCode String
+  city String?
+  status CaseStatus @default(DRAFT)
+  verificationStatus VerificationStatus @default(PENDING)
+  verificationSummary String?
+  publicIdentityMode PublicIdentityMode @default(REAL_NAME)
+  publicDisplayName String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict)
+  organization Organization? @relation(fields:[organizationId],references:[id],onDelete:SetNull)
+  offers HelpOffer[]
+  threads MessageThread[]
+  reports Report[]
+  verificationRequests VerificationRequest[]
+  evidence CaseEvidence[]
+  transactions Transaction[]
+  institutionVerifications InstitutionVerification[]
+  appeals Appeal[]
+  sanctionsScreenings SanctionsScreening[]
+  communicationRooms CommunicationRoom[]
+  fraudSignals FraudSignal[]
+  @@index([status,createdAt])
+  @@index([ownerId])
+  @@index([countryCode,category,status])
+}
+
+model CaseEvidence {
+  id String @id @default(cuid())
+  caseId String
+  type String
+  storageKey String
+  sha256 String
+  mimeType String
+  sizeBytes Int
+  uploadedBy String
+  durationSeconds Int?
+  thumbnailStorageKey String?
+  moderationStatus MediaModerationStatus @default(PENDING)
+  moderationReason String?
+  createdAt DateTime @default(now())
+  case HelpCase @relation(fields:[caseId],references:[id],onDelete:Cascade)
+  @@index([caseId])
+}
+
+model VerificationRequest {
+  id String @id @default(cuid())
+  caseId String
+  requesterId String
+  status VerificationStatus @default(PENDING)
+  reason String?
+  reviewerId String?
+  reviewedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  case HelpCase @relation(fields:[caseId],references:[id],onDelete:Cascade)
+  requester User @relation(fields:[requesterId],references:[id],onDelete:Restrict)
+  @@index([status,createdAt])
+  @@index([caseId])
+}
+
+model HelpOffer {
+  id String @id @default(cuid())
+  userId String
+  caseId String?
+  type OfferType
+  title String
+  description String
+  amountMinor Int?
+  currency String?
+  countryCode String
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  case HelpCase? @relation(fields:[caseId],references:[id],onDelete:SetNull)
+  @@index([countryCode,status])
+  @@index([caseId])
+}
+
+model MessageThread {
+  id String @id @default(cuid())
+  caseId String?
+  status ThreadStatus @default(OPEN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  case HelpCase? @relation(fields:[caseId],references:[id],onDelete:SetNull)
+  participants User[] @relation("ThreadParticipants")
+  messages Message[]
+  @@index([caseId])
+}
+
+model Message {
+  id String @id @default(cuid())
+  threadId String
+  senderId String
+  body String
+  createdAt DateTime @default(now())
+  thread MessageThread @relation(fields:[threadId],references:[id],onDelete:Cascade)
+  sender User @relation("SentMessages",fields:[senderId],references:[id],onDelete:Restrict)
+  @@index([threadId,createdAt])
+}
+
+model Report {
+  id String @id @default(cuid())
+  reporterId String
+  caseId String?
+  type ReportType
+  description String
+  status String @default("OPEN")
+  createdAt DateTime @default(now())
+  reporter User @relation(fields:[reporterId],references:[id],onDelete:Restrict)
+  case HelpCase? @relation(fields:[caseId],references:[id],onDelete:SetNull)
+  safeguardingCase SafeguardingCase?
+  @@index([status,createdAt])
+}
+
+model Notification {
+  id String @id @default(cuid())
+  userId String
+  type NotificationType
+  title String
+  body String
+  readAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@index([userId,readAt,createdAt])
+}
+
+model RefreshSession {
+  id String @id @default(cuid())
+  userId String
+  tokenHash String @unique
+  deviceName String?
+  userAgent String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+  user User @relation(fields:[userId],references:[id],onDelete: Cascade)
+  @@index([userId,revokedAt])
+}
+
+model EmailVerificationToken {
+  id String @id @default(cuid())
+  userId String
+  tokenHash String @unique
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@index([userId,expiresAt])
+}
+
+model PasswordResetToken {
+  id String @id @default(cuid())
+  userId String
+  tokenHash String @unique
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@index([userId,expiresAt])
+}
+
+model AuditLog {
+  id String @id @default(cuid())
+  userId String?
+  action String
+  ipAddress String?
+  userAgent String?
+  metadata Json?
+  createdAt DateTime @default(now())
+  user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
+  @@index([userId,createdAt])
+  @@index([action,createdAt])
+}
+
+
+
+enum SecurityEventStatus { OPEN REVIEWED RESOLVED }
+
+model SecurityEvent {
+  id String @id @default(cuid())
+  userId String?
+  type String
+  severity String
+  status SecurityEventStatus @default(OPEN)
+  ipAddress String?
+  userAgent String?
+  deviceHash String?
+  details Json?
+  createdAt DateTime @default(now())
+  resolvedAt DateTime?
+  resolvedBy String?
+  user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
+  @@index([userId,status,createdAt])
+  @@index([type,severity,createdAt])
+}
+
+model PayoutDestination {
+  id String @id @default(cuid())
+  userId String
+  countryCode String
+  method String
+  destinationHash String
+  displayLast4 String?
+  status String @default("PENDING")
+  riskLevel String @default("LOW")
+  createdAt DateTime @default(now())
+  verifiedAt DateTime?
+  blockedAt DateTime?
+  user User @relation(fields:[userId],references:[id],onDelete:Restrict)
+  approvals PayoutApproval[]
+  @@unique([userId,destinationHash])
+  @@index([userId,status])
+  @@index([destinationHash])
+}
+
+model PayoutApproval {
+  id String @id @default(cuid())
+  destinationId String
+  reviewerId String
+  decision String
+  reason String?
+  createdAt DateTime @default(now())
+  destination PayoutDestination @relation(fields:[destinationId],references:[id],onDelete:Cascade)
+  reviewer User @relation(fields:[reviewerId],references:[id],onDelete:Restrict)
+  @@index([destinationId,createdAt])
+}
+
+model Transaction {
+  id String @id @default(cuid())
+  userId String
+  caseId String
+  amountMinor Int
+  currency String
+  purpose String?
+  status TransactionStatus @default(CREATED)
+  providerReference String? @unique
+  idempotencyKey String? @unique
+  blockedReason String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields:[userId],references:[id],onDelete:Restrict)
+  case HelpCase @relation(fields:[caseId],references:[id],onDelete:Restrict)
+  attempts PaymentAttempt[]
+  @@index([userId,createdAt])
+  @@index([caseId,status,createdAt])
+}
+
+model FraudSignal {
+  id String @id @default(cuid())
+  caseId String
+  actorId String?
+  type String
+  severity String
+  status FraudSignalStatus @default(OPEN)
+  details Json?
+  resolutionNote String?
+  resolvedBy String?
+  resolvedAt DateTime?
+  createdAt DateTime @default(now())
+  case HelpCase @relation(fields:[caseId],references:[id],onDelete:Cascade)
+  actor User? @relation(fields:[actorId],references:[id],onDelete:SetNull)
+  @@index([status,severity,createdAt])
+  @@index([caseId])
+}
+
+
+model PaymentWebhookEvent {
+  id String @id @default(cuid())
+  providerReference String
+  eventType String
+  payloadHash String
+  processed Boolean @default(false)
+  createdAt DateTime @default(now())
+  processedAt DateTime?
+  @@unique([providerReference,eventType])
+  @@index([payloadHash])
+}
+
+enum DocumentReviewStatus { PENDING PROCESSING PASSED FAILED NEEDS_REVIEW }
+enum VerificationType { IDENTITY NEED INSTITUTION PAYMENT_DESTINATION ENHANCED }
+enum SanctionsStatus { PENDING CLEAR MATCH REVIEW_REQUIRED FAILED }
+enum SafeguardingStatus { OPEN TRIAGED INVESTIGATING RESOLVED }
+enum CommunicationType { VOICE VIDEO }
+enum PublicIdentityMode { REAL_NAME ANONYMOUS ALIAS }
+enum MediaModerationStatus { PENDING SCANNING APPROVED REVIEW BLOCKED }
+enum PaymentProviderType { MPESA CARD BANK_TRANSFER OTHER }
+
+model DocumentCheck {
+ id String @id @default(cuid())
+ evidenceId String @unique
+ status DocumentReviewStatus @default(PENDING)
+ ocrTextEncrypted String?
+ extractedData Json?
+ tamperSignals Json?
+ providerReference String?
+ reviewedAt DateTime?
+ createdAt DateTime @default(now())
+ evidence CaseEvidence @relation(fields:[evidenceId],references:[id],onDelete:Cascade)
+}
+
+model IdentityVerification {
+ id String @id @default(cuid())
+ userId String
+ type VerificationType
+ provider String
+ status VerificationStatus @default(PENDING)
+ providerReference String?
+ countryCode String
+ documentType String?
+ documentLast4 String?
+ reason String?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+ @@index([userId,status])
+}
+
+model InstitutionVerification {
+ id String @id @default(cuid())
+ caseId String
+ institutionName String
+ institutionType String
+ provider String
+ status VerificationStatus @default(PENDING)
+ providerReference String?
+ evidence Json?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ case HelpCase @relation(fields:[caseId],references:[id],onDelete:Cascade)
+ @@index([caseId,status])
+}
+
+model SanctionsScreening {
+ id String @id @default(cuid())
+ userId String?
+ caseId String?
+ provider String
+ status SanctionsStatus @default(PENDING)
+ providerReference String?
+ result Json?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ user User? @relation(fields:[userId],references:[id],onDelete:SetNull)
+ case HelpCase? @relation(fields:[caseId],references:[id],onDelete:SetNull)
+ @@index([status,createdAt])
+}
+
+model FraudGraphNode {
+ id String @id @default(cuid())
+ type String
+ valueHash String
+ createdAt DateTime @default(now())
+ edgesFrom FraudGraphEdge[] @relation("FromNode")
+ edgesTo FraudGraphEdge[] @relation("ToNode")
+ @@unique([type,valueHash])
+}
+
+model FraudGraphEdge {
+ id String @id @default(cuid())
+ fromId String
+ toId String
+ relation String
+ confidence Float
+ createdAt DateTime @default(now())
+ from FraudGraphNode @relation("FromNode",fields:[fromId],references:[id],onDelete:Cascade)
+ to FraudGraphNode @relation("ToNode",fields:[toId],references:[id],onDelete:Cascade)
+ @@index([fromId,relation])
+ @@index([toId,relation])
+}
+
+model DeviceRegistration {
+ id String @id @default(cuid())
+ userId String
+ deviceHash String
+ platform String
+ pushToken String?
+ lastSeenAt DateTime @default(now())
+ createdAt DateTime @default(now())
+ user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+ @@unique([userId,deviceHash])
+}
+
+model CommunicationRoom {
+ id String @id @default(cuid())
+ type CommunicationType
+ provider String
+ providerRoomId String?
+ caseId String?
+ createdById String
+ status String @default("ACTIVE")
+ createdAt DateTime @default(now())
+ endedAt DateTime?
+ case HelpCase? @relation(fields:[caseId],references:[id],onDelete:SetNull)
+ createdBy User @relation(fields:[createdById],references:[id],onDelete:Restrict)
+ @@index([caseId,status])
+}
+
+model SafeguardingCase {
+ id String @id @default(cuid())
+ reportId String @unique
+ status SafeguardingStatus @default(OPEN)
+ priority String @default("NORMAL")
+ assignedToId String?
+ actionPlan String?
+ resolvedAt DateTime?
+ createdAt DateTime @default(now())
+ report Report @relation(fields:[reportId],references:[id],onDelete:Cascade)
+ assignedTo User? @relation(fields:[assignedToId],references:[id],onDelete:SetNull)
+ @@index([status,priority,createdAt])
+}
+
+model PaymentProvider {
+ id String @id @default(cuid())
+ countryCode String
+ type PaymentProviderType
+ name String
+ enabled Boolean @default(false)
+ settlementCurrency String
+ configRef String?
+ createdAt DateTime @default(now())
+ @@unique([countryCode,type,name])
+}
+
+model PaymentAttempt {
+ id String @id @default(cuid())
+ transactionId String
+ providerId String
+ providerReference String?
+ status String @default("CREATED")
+ requestHash String?
+ responseMeta Json?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ transaction Transaction @relation(fields:[transactionId],references:[id],onDelete:Cascade)
+ provider PaymentProvider @relation(fields:[providerId],references:[id],onDelete:Restrict)
+ @@index([transactionId,status])
+}
+
+model ExchangeRateSnapshot {
+ id String @id @default(cuid())
+ baseCurrency String
+ quoteCurrency String
+ rate Decimal @db.Decimal(20,10)
+ source String
+ capturedAt DateTime @default(now())
+ @@index([baseCurrency,quoteCurrency,capturedAt])
+}
+
+model Organization {
+  id String @id @default(cuid())
+  name String
+  type String
+  countryCode String
+  city String?
+  description String?
+  status VerificationStatus @default(PENDING)
+  website String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  members OrganizationMember[]
+  cases HelpCase[]
+  projects Project[]
+  @@index([countryCode,status])
+}
+
+model OrganizationMember {
+  id String @id @default(cuid())
+  organizationId String
+  userId String
+  role String @default("STAFF")
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+  organization Organization @relation(fields:[organizationId],references:[id],onDelete:Cascade)
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@unique([organizationId,userId])
+  @@index([userId,status])
+}
+
+model HelpCircle {
+  id String @id @default(cuid())
+  ownerId String
+  name String
+  purpose String?
+  goalMinor Int?
+  currency String?
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  owner User @relation(fields:[ownerId],references:[id],onDelete:Restrict)
+  members HelpCircleMember[]
+  @@index([ownerId,status])
+}
+
+model HelpCircleMember {
+  id String @id @default(cuid())
+  circleId String
+  userId String
+  role String @default("MEMBER")
+  status String @default("ACTIVE")
+  createdAt DateTime @default(now())
+  circle HelpCircle @relation(fields:[circleId],references:[id],onDelete:Cascade)
+  user User @relation(fields:[userId],references:[id],onDelete:Cascade)
+  @@unique([circleId,userId])
+}
+
+model Appeal {
+  id String @id @default(cuid())
+  caseId String
+  appellantId String
+  reason String
+  status String @default("OPEN")
+  reviewerId String?
+  reviewerNote String?
+  createdAt DateTime @default(now())
+  reviewedAt DateTime?
+  case HelpCase @relation(fields:[caseId],references:[id],onDelete:Cascade)
+  appellant User @relation("AppellantAppeals",fields:[appellantId],references:[id],onDelete:Restrict)
+  reviewer User? @relation("ReviewerAppeals",fields:[reviewerId],references:[id],onDelete:SetNull)
+  @@index([status,createdAt])
+  @@index([caseId])
+}
+
+model Project {
+  id String @id @default(cuid())
+  organizationId String?
+  title String
+  description String
+  countryCode String
+  city String?
+  category String
+  goalMinor Int
+  currency String
+  status String @default("PLANNING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  organization Organization? @relation(fields:[organizationId],references:[id],onDelete:SetNull)
+  milestones ProjectMilestone[]
+  @@index([countryCode,status])
+}
+
+model ProjectMilestone {
+  id String @id @default(cuid())
+  projectId String
+  title String
+  description String?
+  amountMinor Int?
+  status String @default("PENDING")
+  evidence Json?
+  dueAt DateTime?
+  completedAt DateTime?
+  project Project @relation(fields:[projectId],references:[id],onDelete:Cascade)
+  @@index([projectId,status])
+}
+
+model PublicImpactSnapshot {
+  id String @id @default(cuid())
+  countryCode String
+  category String
+  completedCases Int @default(0)
+  contributors Int @default(0)
+  amountMinor Int @default(0)
+  currency String
+  capturedAt DateTime @default(now())
+  @@index([countryCode,category,capturedAt])
+}
+
+model CountryConfiguration {
+  id String @id @default(cuid())
+  countryCode String @unique
+  enabled Boolean @default(true)
+  defaultLanguage String @default("en")
+  languages Json
+  currencies Json
+  paymentMethods Json
+  kycRequirements Json
+  kybRequirements Json
+  safeguardingRules Json
+  emergencyResources Json
+  documentTypes Json
+  dataRetention Json
+  helpMethods Json
+  verificationRules Json
+  communicationRules Json
+  updatedById String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  updatedBy User? @relation("CountryConfigurationUpdatedBy",fields:[updatedById],references:[id],onDelete:SetNull)
+  @@index([enabled])
+}

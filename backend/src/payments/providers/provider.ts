@@ -1,0 +1,1 @@
+export type PaymentInit={amountMinor:number;currency:string;reference:string;phone?:string;returnUrl?:string}; export interface PaymentProviderAdapter{name:string;countryCodes:string[];initiate(i:PaymentInit):Promise<any>;verifyWebhook(signature:string,payload:string):boolean;handleWebhook(payload:any):Promise<any>}

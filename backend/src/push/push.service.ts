@@ -1,0 +1,2 @@
+import {Injectable} from '@nestjs/common';
+@Injectable() export class PushService{async send(i:{token:string;title:string;body:string;data?:Record<string,string>}){const key=process.env.FCM_SERVER_KEY;if(!key)return{queued:false,reason:'FCM is not configured'};const r=await fetch('https://fcm.googleapis.com/fcm/send',{method:'POST',headers:{authorization:`key=${key}`,'content-type':'application/json'},body:JSON.stringify({to:i.token,notification:{title:i.title,body:i.body},data:i.data||{}})});return{queued:r.ok,providerStatus:r.status}}}

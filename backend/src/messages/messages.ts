@@ -1,0 +1,7 @@
+import { Body, Controller, Get, Param, Post, Req, ForbiddenException } from '@nestjs/common'; import { Request } from 'express'; import { IsString, MaxLength, MinLength } from 'class-validator'; import { PrismaService } from '../prisma.service';
+export class SendMessageDto{@IsString() @MinLength(1) @MaxLength(4000) body!:string;}
+@Controller('messages') export class MessagesController{constructor(private p:PrismaService){}
+ @Get('threads') async threads(@Req() r:Request){const uid=(r as any).user.sub;return this.p.messageThread.findMany({where:{participants:{some:{id:uid}}},include:{case:true,participants:{select:{id:true,name:true}},messages:{orderBy:{createdAt:'desc'},take:1,select:{body:true}}},orderBy:{updatedAt:'desc'}});}
+ @Get('threads/:id') async messages(@Req() r:Request,@Param('id') id:string){const uid=(r as any).user.sub;const t=await this.p.messageThread.findFirst({where:{id,participants:{some:{id:uid}}}});if(!t)throw new ForbiddenException();return this.p.message.findMany({where:{threadId:id},orderBy:{createdAt:'asc'},take:200});}
+ @Post('threads/:id') async send(@Req() r:Request,@Param('id') id:string,@Body() d:SendMessageDto){const uid=(r as any).user.sub;const t=await this.p.messageThread.findFirst({where:{id,participants:{some:{id:uid}}}});if(!t)throw new ForbiddenException();const m=await this.p.message.create({data:{threadId:id,senderId:uid,body:d.body}});await this.p.messageThread.update({where:{id},data:{updatedAt:new Date()}});return m;}
+}

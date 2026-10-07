@@ -1,0 +1,3979 @@
+[
+  {
+    "countryCode": "DZ",
+    "currency": "DZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AO",
+    "currency": "AOA",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BJ",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BW",
+    "currency": "BWP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BF",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BI",
+    "currency": "BIF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CV",
+    "currency": "CVE",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CM",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CF",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TD",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KM",
+    "currency": "KMF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CG",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CD",
+    "currency": "CDF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CI",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "DJ",
+    "currency": "DJF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "EG",
+    "currency": "EGP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GQ",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ER",
+    "currency": "ERN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SZ",
+    "currency": "SZL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ET",
+    "currency": "ETB",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GA",
+    "currency": "XAF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GM",
+    "currency": "GMD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GH",
+    "currency": "GHS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GN",
+    "currency": "GNF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GW",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KE",
+    "currency": "KES",
+    "providers": {
+      "MONEY": [
+        "mpesa-daraja"
+      ]
+    }
+  },
+  {
+    "countryCode": "LS",
+    "currency": "ZAR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LR",
+    "currency": "LRD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LY",
+    "currency": "LYD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MG",
+    "currency": "MGA",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MW",
+    "currency": "MWK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ML",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MR",
+    "currency": "MRU",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MU",
+    "currency": "MUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MA",
+    "currency": "MAD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MZ",
+    "currency": "MZN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NA",
+    "currency": "ZAR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NE",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NG",
+    "currency": "NGN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "RW",
+    "currency": "RWF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ST",
+    "currency": "STN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SN",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SC",
+    "currency": "SCR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SL",
+    "currency": "SLE",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SO",
+    "currency": "SOS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ZA",
+    "currency": "ZAR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SS",
+    "currency": "SSP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SD",
+    "currency": "SDG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TZ",
+    "currency": "TZS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TG",
+    "currency": "XOF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TN",
+    "currency": "TND",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "UG",
+    "currency": "UGX",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ZM",
+    "currency": "ZMW",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ZW",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AQ",
+    "currency": "",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AF",
+    "currency": "AFN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AM",
+    "currency": "AMD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AZ",
+    "currency": "AZN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BH",
+    "currency": "BHD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BD",
+    "currency": "BDT",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BT",
+    "currency": "INR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BN",
+    "currency": "BND",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KH",
+    "currency": "KHR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CN",
+    "currency": "CNY",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CY",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GE",
+    "currency": "GEL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IN",
+    "currency": "INR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ID",
+    "currency": "IDR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IR",
+    "currency": "IRR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IQ",
+    "currency": "IQD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IL",
+    "currency": "ILS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "JP",
+    "currency": "JPY",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "JO",
+    "currency": "JOD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KZ",
+    "currency": "KZT",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KP",
+    "currency": "KPW",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KR",
+    "currency": "KRW",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KW",
+    "currency": "KWD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KG",
+    "currency": "KGS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LA",
+    "currency": "LAK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LB",
+    "currency": "LBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MY",
+    "currency": "MYR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MV",
+    "currency": "MVR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MN",
+    "currency": "MNT",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MM",
+    "currency": "MMK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NP",
+    "currency": "NPR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "OM",
+    "currency": "OMR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PK",
+    "currency": "PKR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PS",
+    "currency": "ILS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PH",
+    "currency": "PHP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "QA",
+    "currency": "QAR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SA",
+    "currency": "SAR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SG",
+    "currency": "SGD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LK",
+    "currency": "LKR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SY",
+    "currency": "SYP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TJ",
+    "currency": "TJS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TH",
+    "currency": "THB",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TL",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TM",
+    "currency": "TMT",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TR",
+    "currency": "TRY",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AE",
+    "currency": "AED",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "UZ",
+    "currency": "UZS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VN",
+    "currency": "VND",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "YE",
+    "currency": "YER",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AL",
+    "currency": "ALL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AD",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BY",
+    "currency": "BYN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BE",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BA",
+    "currency": "BAM",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BG",
+    "currency": "BGN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HR",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CZ",
+    "currency": "CZK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "DK",
+    "currency": "DKK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "EE",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FI",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FR",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "DE",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GR",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VA",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HU",
+    "currency": "HUF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IS",
+    "currency": "ISK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IE",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LV",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LI",
+    "currency": "CHF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LU",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MD",
+    "currency": "MDL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MC",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ME",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NL",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MK",
+    "currency": "MKD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NO",
+    "currency": "NOK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PL",
+    "currency": "PLN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "RO",
+    "currency": "RON",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "RU",
+    "currency": "RUB",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SM",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "RS",
+    "currency": "RSD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SK",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SI",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "ES",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SE",
+    "currency": "SEK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CH",
+    "currency": "CHF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "UA",
+    "currency": "UAH",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GB",
+    "currency": "GBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AG",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BS",
+    "currency": "BSD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BB",
+    "currency": "BBD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BZ",
+    "currency": "BZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CA",
+    "currency": "CAD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CR",
+    "currency": "CRC",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CU",
+    "currency": "CUP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "DM",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "DO",
+    "currency": "DOP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SV",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GD",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GT",
+    "currency": "GTQ",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HT",
+    "currency": "HTG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HN",
+    "currency": "HNL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "JM",
+    "currency": "JMD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MX",
+    "currency": "MXN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NI",
+    "currency": "NIO",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PA",
+    "currency": "PAB",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KN",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "LC",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VC",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TT",
+    "currency": "TTD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "US",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AU",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FJ",
+    "currency": "FJD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KI",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MH",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FM",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NR",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NZ",
+    "currency": "NZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PW",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PG",
+    "currency": "PGK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "WS",
+    "currency": "WST",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SB",
+    "currency": "SBD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TO",
+    "currency": "TOP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TV",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VU",
+    "currency": "VUV",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AS",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AI",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AW",
+    "currency": "AWG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BM",
+    "currency": "BMD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BQ",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BV",
+    "currency": "NOK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IO",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "KY",
+    "currency": "KYD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CX",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CC",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CK",
+    "currency": "NZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CW",
+    "currency": "XCG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FK",
+    "currency": "FKP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "FO",
+    "currency": "DKK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GF",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PF",
+    "currency": "XPF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TF",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GI",
+    "currency": "GIP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GL",
+    "currency": "DKK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GP",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GU",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GG",
+    "currency": "GBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HM",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "HK",
+    "currency": "HKD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "IM",
+    "currency": "GBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "JE",
+    "currency": "GBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MO",
+    "currency": "MOP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MQ",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "YT",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MS",
+    "currency": "XCD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NC",
+    "currency": "XPF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NU",
+    "currency": "NZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "NF",
+    "currency": "AUD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MP",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PN",
+    "currency": "NZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PR",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "RE",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BL",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SH",
+    "currency": "SHP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "MF",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PM",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SX",
+    "currency": "XCG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GS",
+    "currency": "GBP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SJ",
+    "currency": "NOK",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TW",
+    "currency": "TWD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TK",
+    "currency": "NZD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "TC",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "UM",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VG",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VI",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "WF",
+    "currency": "XPF",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "EH",
+    "currency": "MAD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AX",
+    "currency": "EUR",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "AR",
+    "currency": "ARS",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BO",
+    "currency": "BOB",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "BR",
+    "currency": "BRL",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CL",
+    "currency": "CLP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "CO",
+    "currency": "COP",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "EC",
+    "currency": "USD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "GY",
+    "currency": "GYD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PY",
+    "currency": "PYG",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "PE",
+    "currency": "PEN",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "SR",
+    "currency": "SRD",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "UY",
+    "currency": "UYU",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  },
+  {
+    "countryCode": "VE",
+    "currency": "VES",
+    "providers": {
+      "MONEY": [],
+      "GOODS": [
+        "internal"
+      ],
+      "SKILLS": [
+        "internal"
+      ],
+      "TIME": [
+        "internal"
+      ]
+    }
+  }
+]
