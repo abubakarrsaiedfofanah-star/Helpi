@@ -5,7 +5,7 @@ import { Body, Controller, Get, Headers, Ip, Post, Req } from '@nestjs/common'; 
  @Post('refresh') refresh(@Body() d:RefreshDto,@Ip() ip:string,@Headers('user-agent') ua='unknown'){return this.auth.refresh(d.refreshToken,{ip,userAgent:ua});}
  @Post('logout') logout(@Body() d:RefreshDto){return this.auth.revoke(d.refreshToken);}
  @Post('verify-email') verify(@Body() d:VerifyEmailDto){return this.auth.verifyEmail(d.token);}
- @Get('me') me(@Req() r:Request){return (r as any).user;}
+ @Get('me') me(@Req() r:Request){const current=(r as any).user;return current.user??current;}
  @Post('mfa/setup') setup(@Req() r:Request){return this.auth.setupMfa((r as any).user.sub);}
  @Post('mfa/enable') enable(@Req() r:Request,@Body() d:MfaCodeDto){return this.auth.enableMfa((r as any).user.sub,d.code);}
  @Post('mfa/disable') disable(@Req() r:Request,@Body() d:MfaCodeDto){return this.auth.disableMfa((r as any).user.sub,d.code);}

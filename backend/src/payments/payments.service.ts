@@ -14,17 +14,26 @@ const allowedTransitions: Record<string,string[]> = {
 export class PaymentsService {
   constructor(private prisma: PrismaService) {}
 
+  async payoutDestination(userId:string) {
+    const row=await this.prisma.payoutDestination.findFirst({where:{userId},orderBy:{createdAt:'desc'}});
+    return row?{countryCode:row.countryCode,method:row.method,displayLast4:row.displayLast4,status:row.status}:null;
+  }
+
   async createIntent(userId: string, b: {caseId:string; amountMinor:number; currency:string; purpose?:string; idempotencyKey?:string}) {
     const c = await this.prisma.helpCase.findUnique({ where:{id:b.caseId} });
     if (!c) throw new NotFoundException('Case not found.');
-    if (c.status !== 'PUBLISHED' || c.verificationStatus !== 'VERIFIED') {
+    if (c.status !== 'PUBLISHED') {
       throw new BadRequestException('This case is not ready for payment.');
     }
+    const destination=await this.prisma.payoutDestination.findFirst({where:{userId:c.ownerId,countryCode:c.countryCode}});
+    if(!destination?.encryptedDestination) throw new BadRequestException('The recipient has not added a private payout method yet.');
+    if(destination.status==='BLOCKED'||destination.status==='PENDING_REVIEW') throw new BadRequestException('This recipient payout method needs review before payments can be prepared.');
     if (!Number.isSafeInteger(b.amountMinor) || b.amountMinor <= 0 || b.amountMinor > 1000000000) {
       throw new BadRequestException('Invalid amount.');
     }
     const currency = String(b.currency || '').trim().toUpperCase();
     if (!/^[A-Z]{3}$/.test(currency)) throw new BadRequestException('Invalid currency.');
+    if (c.countryCode !== 'KE' || currency !== 'KES') throw new BadRequestException('Payments are currently available only for Kenyan requests in KES.');
 
     // Fail closed: never create a fake/demo payment when no real provider is configured.
     const provider = await this.prisma.paymentProvider.findFirst({

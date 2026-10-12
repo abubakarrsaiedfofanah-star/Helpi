@@ -2,222 +2,365 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/app_state.dart';
 import '../../core/theme.dart';
-import '../../widgets.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
-  @override State<AuthScreen> createState() => _AuthScreenState();
+
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  bool register = false, show = false, busy = false, anonymousPublic = false;
+  final _formKey = GlobalKey<FormState>();
   final name = TextEditingController();
   final email = TextEditingController();
-  final pass = TextEditingController();
+  final password = TextEditingController();
   final alias = TextEditingController();
-  String country = 'KE';
+  bool register = false;
+  bool showPassword = false;
+  bool busy = false;
+  bool anonymousPublic = false;
+
+  @override
+  void dispose() {
+    name.dispose();
+    email.dispose();
+    password.dispose();
+    alias.dispose();
+    super.dispose();
+  }
 
   Future<void> submit() async {
+    if (busy || !(_formKey.currentState?.validate() ?? false)) return;
     setState(() => busy = true);
-    final s = context.read<AppState>();
+    final state = context.read<AppState>();
     final messenger = ScaffoldMessenger.of(context);
-    String? err;
-    if (register) {
-      err = await s.register(name.text, email.text, pass.text, country, anonymousPublic: anonymousPublic, publicAlias: alias.text);
-      if (err == null && mounted) {
-        messenger.showSnackBar(const SnackBar(content: Text('Account created. Check your email to verify it before signing in.')));
-        setState(() => register = false);
-      }
-    } else {
-      err = await s.login(email.text, pass.text);
-    }
-    if (err != null && mounted) {
-      if (err.toLowerCase().contains('mfa')) {
-        final code = await _mfaDialog();
-        if (code != null) {
-          err = await s.login(email.text, pass.text, mfa: code);
+    try {
+      String? error;
+      if (register) {
+        error = await state.register(
+          name.text.trim(),
+          email.text.trim(),
+          password.text,
+          'KE',
+          anonymousPublic: anonymousPublic,
+          publicAlias: anonymousPublic ? alias.text.trim() : null,
+        );
+        if (error == null && mounted) {
+          setState(() => register = false);
+          messenger.showSnackBar(
+            const SnackBar(
+                content:
+                    Text('Account created. Verify your email to sign in.')),
+          );
+        }
+      } else {
+        error = await state.login(email.text.trim(), password.text);
+        if (error != null && error.toLowerCase().contains('mfa') && mounted) {
+          final code = await _mfaDialog();
+          if (code != null && code.isNotEmpty) {
+            error =
+                await state.login(email.text.trim(), password.text, mfa: code);
+          }
         }
       }
-      if (err != null && err.isNotEmpty && mounted) {
-        messenger.showSnackBar(SnackBar(content: Text(err)));
+
+      if (error != null && error.isNotEmpty && mounted) {
+        messenger.showSnackBar(SnackBar(content: Text(error)));
       }
+    } finally {
+      if (mounted) setState(() => busy = false);
     }
-    if (mounted) setState(() => busy = false);
   }
 
   Future<String?> _mfaDialog() async {
-    final c = TextEditingController();
-    return showDialog<String>(
+    final code = TextEditingController();
+    final result = await showDialog<String>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Security verification code'),
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Security code'),
         content: TextField(
-          controller: c,
+          controller: code,
+          autofocus: true,
           keyboardType: TextInputType.number,
           maxLength: 6,
-          decoration: const InputDecoration(labelText: 'Enter 6-digit MFA code', prefixIcon: Icon(Icons.lock_clock)),
+          decoration: const InputDecoration(labelText: '6-digit code'),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(context, c.text), child: const Text('Verify')),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, code.text.trim()),
+            child: const Text('Continue'),
+          ),
         ],
       ),
     );
+    code.dispose();
+    return result;
+  }
+
+  Future<void> _enterPreview() async {
+    setState(() => busy = true);
+    try {
+      final error =
+          await context.read<AppState>().login('demo@helpi.local', 'demo');
+      if (error != null && mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error)));
+      }
+    } finally {
+      if (mounted) setState(() => busy = false);
+    }
+  }
+
+  String? _emailError(String? value) {
+    final candidate = (value ?? '').trim();
+    if (candidate.isEmpty) return 'Enter your email.';
+    if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(candidate)) {
+      return 'Enter a valid email.';
+    }
+    return null;
   }
 
   @override
-  Widget build(BuildContext c) => Scaffold(
-        body: Container(
+  Widget build(BuildContext context) => Scaffold(
+        body: DecoratedBox(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: [orange, orangeDark],
             ),
           ),
           child: SafeArea(
-            child: LayoutBuilder(builder: (context, constraints) {
-              final compact = constraints.maxWidth < 430;
-              return Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 480),
-                  child: SingleChildScrollView(
-                    padding: EdgeInsets.all(compact ? 16 : 24),
-                    child: Card(
-                      elevation: 8,
-                      shadowColor: Colors.black26,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-                      child: Padding(
-                        padding: EdgeInsets.all(compact ? 20 : 32),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Center(
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(color: orange.withValues(alpha: .1), shape: BoxShape.circle),
-                                child: Image.asset(
-                                  'assets/helpi_logo.png',
-                                  height: compact ? 64 : 84,
-                                  errorBuilder: (_, __, ___) => const Icon(Icons.monetization_on, size: 60, color: orange),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final compact = constraints.maxWidth < 430;
+                return Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(compact ? 16 : 24),
+                      child: Card(
+                        elevation: 8,
+                        shadowColor: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(28),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(compact ? 22 : 32),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Center(
+                                  child: CircleAvatar(
+                                    radius: compact ? 38 : 44,
+                                    backgroundColor:
+                                        orange.withValues(alpha: .1),
+                                    child: Image.asset(
+                                      'assets/helpi_logo.png',
+                                      height: compact ? 54 : 62,
+                                      errorBuilder: (_, __, ___) => const Icon(
+                                        Icons.volunteer_activism_outlined,
+                                        color: orange,
+                                        size: 42,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Text(
-                              register ? 'Create Account' : 'Welcome Back',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: compact ? 24 : 28, fontWeight: FontWeight.w900, color: navy),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              register ? 'Secure financial assistance & giving.' : 'Sign in to access your financial assistant.',
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(color: Colors.black54, fontSize: 13),
-                            ),
-                            if (helpiDemoMode) ...[
-                              const SizedBox(height: 12),
-                              Center(
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                  decoration: BoxDecoration(color: orange.withValues(alpha: .12), borderRadius: BorderRadius.circular(30)),
-                                  child: const Text('APP PREVIEW MODE ACTIVE', style: TextStyle(color: orangeDark, fontSize: 11, fontWeight: FontWeight.w900)),
+                                const SizedBox(height: 18),
+                                Text(
+                                  register
+                                      ? 'Create your account'
+                                      : 'Welcome back',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: navy,
+                                    fontSize: compact ? 25 : 29,
+                                    fontWeight: FontWeight.w900,
+                                  ),
                                 ),
-                              ),
-                            ],
-                            const SizedBox(height: 24),
-                            if (register) ...[
-                              TextField(
-                                controller: name,
-                                textInputAction: TextInputAction.next,
-                                decoration: const InputDecoration(labelText: 'Full name', prefixIcon: Icon(Icons.person_outline)),
-                              ),
-                              const SizedBox(height: 14),
-                            ],
-                            TextField(
-                              controller: email,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              decoration: const InputDecoration(labelText: 'Email address', prefixIcon: Icon(Icons.email_outlined)),
-                            ),
-                            const SizedBox(height: 14),
-                            TextField(
-                              controller: pass,
-                              obscureText: !show,
-                              onSubmitted: (_) => submit(),
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                prefixIcon: const Icon(Icons.lock_outline),
-                                suffixIcon: IconButton(
-                                  tooltip: show ? 'Hide password' : 'Show password',
-                                  onPressed: () => setState(() => show = !show),
-                                  icon: Icon(show ? Icons.visibility_off : Icons.visibility),
-                                ),
-                              ),
-                            ),
-                            if (register) ...[
-                              const Padding(
-                                padding: EdgeInsets.only(top: 8),
-                                child: Text('Use at least 12 characters with letters and numbers.', style: TextStyle(fontSize: 11, color: Colors.black54)),
-                              ),
-                              const SizedBox(height: 8),
-                              SwitchListTile(
-                                contentPadding: EdgeInsets.zero,
-                                title: const Text('Anonymous public profile', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                                subtitle: const Text('Keep your public identity private while Helpi retains required security records.', style: TextStyle(fontSize: 12)),
-                                value: anonymousPublic,
-                                onChanged: (v) => setState(() => anonymousPublic = v),
-                              ),
-                              if (anonymousPublic) ...[
                                 const SizedBox(height: 6),
-                                TextField(
-                                  controller: alias,
-                                  maxLength: 40,
-                                  decoration: const InputDecoration(labelText: 'Public alias (optional)', prefixIcon: Icon(Icons.visibility_off_outlined)),
+                                Text(
+                                  register
+                                      ? 'Give or receive financial help.'
+                                      : 'Sign in to continue.',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                                if (helpiDemoMode) ...[
+                                  const SizedBox(height: 14),
+                                  Center(
+                                    child: Chip(
+                                      avatar: const Icon(
+                                          Icons.visibility_outlined,
+                                          size: 17,
+                                          color: orangeDark),
+                                      label: const Text('Preview mode'),
+                                      backgroundColor:
+                                          orange.withValues(alpha: .1),
+                                      side: BorderSide.none,
+                                    ),
+                                  ),
+                                ],
+                                const SizedBox(height: 24),
+                                if (register) ...[
+                                  TextFormField(
+                                    controller: name,
+                                    enabled: !busy,
+                                    textCapitalization:
+                                        TextCapitalization.words,
+                                    textInputAction: TextInputAction.next,
+                                    autofillHints: const [AutofillHints.name],
+                                    validator: (value) =>
+                                        (value ?? '').trim().length < 2
+                                            ? 'Enter your name.'
+                                            : null,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Full name',
+                                      prefixIcon: Icon(Icons.person_outline),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 14),
+                                ],
+                                TextFormField(
+                                  controller: email,
+                                  enabled: !busy,
+                                  keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  autofillHints: const [AutofillHints.email],
+                                  validator: _emailError,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Email',
+                                    prefixIcon: Icon(Icons.email_outlined),
+                                  ),
+                                ),
+                                const SizedBox(height: 14),
+                                TextFormField(
+                                  controller: password,
+                                  enabled: !busy,
+                                  obscureText: !showPassword,
+                                  textInputAction: TextInputAction.done,
+                                  autofillHints: [
+                                    register
+                                        ? AutofillHints.newPassword
+                                        : AutofillHints.password,
+                                  ],
+                                  onFieldSubmitted: (_) => submit(),
+                                  validator: (value) {
+                                    final candidate = value ?? '';
+                                    if (candidate.isEmpty)
+                                      return 'Enter your password.';
+                                    if (register && candidate.length < 12) {
+                                      return 'Use at least 12 characters.';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    prefixIcon: const Icon(Icons.lock_outline),
+                                    suffixIcon: IconButton(
+                                      tooltip: showPassword
+                                          ? 'Hide password'
+                                          : 'Show password',
+                                      onPressed: busy
+                                          ? null
+                                          : () => setState(() =>
+                                              showPassword = !showPassword),
+                                      icon: Icon(showPassword
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined),
+                                    ),
+                                  ),
+                                ),
+                                if (register) ...[
+                                  const SizedBox(height: 12),
+                                  SwitchListTile.adaptive(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: const Text(
+                                      'Use an anonymous profile',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    subtitle: const Text(
+                                      'Others see an alias or “Anonymous”.',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                    value: anonymousPublic,
+                                    onChanged: busy
+                                        ? null
+                                        : (value) => setState(
+                                            () => anonymousPublic = value),
+                                  ),
+                                  if (anonymousPublic) ...[
+                                    const SizedBox(height: 6),
+                                    TextFormField(
+                                      controller: alias,
+                                      enabled: !busy,
+                                      maxLength: 40,
+                                      textCapitalization:
+                                          TextCapitalization.words,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Public alias (optional)',
+                                        prefixIcon:
+                                            Icon(Icons.visibility_off_outlined),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                                const SizedBox(height: 20),
+                                SizedBox(
+                                  height: 52,
+                                  child: FilledButton(
+                                    onPressed: busy ? null : submit,
+                                    child: busy
+                                        ? const SizedBox.square(
+                                            dimension: 22,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2.5,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                        : Text(register
+                                            ? 'Create account'
+                                            : 'Sign in'),
+                                  ),
+                                ),
+                                if (helpiDemoMode && !register) ...[
+                                  const SizedBox(height: 10),
+                                  OutlinedButton.icon(
+                                    onPressed: busy ? null : _enterPreview,
+                                    icon: const Icon(Icons.play_arrow_rounded),
+                                    label: const Text('Enter preview'),
+                                  ),
+                                ],
+                                const SizedBox(height: 12),
+                                TextButton(
+                                  onPressed: busy
+                                      ? null
+                                      : () => setState(() {
+                                            register = !register;
+                                            _formKey.currentState?.reset();
+                                          }),
+                                  child: Text(register
+                                      ? 'Already registered? Sign in'
+                                      : 'Create an account'),
                                 ),
                               ],
-                            ],
-                            const SizedBox(height: 22),
-                            HelpiLoadingButton(
-                              loading: busy,
-                              label: register ? 'CREATE SECURE ACCOUNT' : 'SIGN IN',
-                              onPressed: submit,
                             ),
-                            if (helpiDemoMode) ...[
-                              const SizedBox(height: 12),
-                              OutlinedButton.icon(
-                                style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                ),
-                                onPressed: busy
-                                    ? null
-                                    : () async {
-                                        final s = context.read<AppState>();
-                                        final messenger = ScaffoldMessenger.of(context);
-                                        final err = await s.login('demo@helpi.local', 'demo');
-                                        if (err != null && mounted) messenger.showSnackBar(SnackBar(content: Text(err)));
-                                      },
-                                icon: const Icon(Icons.play_arrow_rounded, color: orange),
-                                label: const Text('ENTER APP PREVIEW', style: TextStyle(fontWeight: FontWeight.w800, color: orange)),
-                              ),
-                            ],
-                            const SizedBox(height: 12),
-                            TextButton(
-                              onPressed: busy ? null : () => setState(() => register = !register),
-                              child: Text(
-                                register ? 'Already registered? Sign in' : 'Create a secure account',
-                                style: const TextStyle(fontWeight: FontWeight.w700, color: navy),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              );
-            }),
+                );
+              },
+            ),
           ),
         ),
       );

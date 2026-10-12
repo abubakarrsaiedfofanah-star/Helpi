@@ -16,25 +16,31 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
   final goal = TextEditingController();
   final alias = TextEditingController();
   final currencyInput = TextEditingController(text: 'KES');
-  String category = 'MEDICAL';
+  String category = 'HARDSHIP';
   String country = 'KE';
   bool busy = false;
   bool anonymous = false;
 
   final cats = [
-    'MEDICAL',
-    'FOOD',
-    'EDUCATION',
-    'HOUSING',
-    'WATER',
+    'HARDSHIP',
+    'JOBLESS',
+    'WIDOW',
+    'ORPHAN',
+    'WAR_VICTIM',
     'DISABILITY',
-    'EMERGENCY',
-    'COMMUNITY',
-    'FAMILY',
-    'FARMING',
-    'ELDERLY',
     'OTHER'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final user = context.read<AppState>().user;
+    country = user?['countryCode']?.toString().toUpperCase() ?? 'KE';
+    currencyInput.text = country == 'KE' ? 'KES' : '';
+    final identityMode = user?['publicIdentityMode']?.toString();
+    anonymous = identityMode == 'ANONYMOUS' || identityMode == 'ALIAS';
+    alias.text = user?['publicAlias']?.toString() ?? '';
+  }
 
   @override
   void dispose() {
@@ -73,23 +79,22 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
         'currency': currencyInput.text.trim().toUpperCase(),
         'countryCode': country,
         'publicIdentityMode': anonymous
-            ? 'ANONYMOUS'
-            : (alias.text.trim().isNotEmpty ? 'ALIAS' : 'REAL_NAME'),
-        'publicDisplayName':
-            alias.text.trim().isEmpty ? null : alias.text.trim(),
+            ? (alias.text.trim().isEmpty ? 'ANONYMOUS' : 'ALIAS')
+            : 'REAL_NAME',
+        'publicDisplayName': anonymous && alias.text.trim().isNotEmpty
+            ? alias.text.trim()
+            : null,
       });
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Financial help request posted successfully. Helpers can now connect with you.')),
+          const SnackBar(content: Text('Request posted.')),
         );
         Navigator.pop(context);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(e.toString().replaceFirst('Exception: ', ''))));
       }
     } finally {
       if (mounted) setState(() => busy = false);
@@ -121,12 +126,18 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
                             SizedBox(width: 12),
                             Expanded(
                                 child: Text(
-                                    'Tell helpers what financial support you need and how much. No evidence or documents are required.',
+                                    'No proof or documents needed. Use the money as you choose.',
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         height: 1.4))),
                           ]),
                     ),
+                  ),
+                  const ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: Icon(Icons.language, color: orange),
+                    title: Text('Kenya · KES', style: TextStyle(fontWeight: FontWeight.w800)),
+                    subtitle: Text('Your request uses your country’s local currency.'),
                   ),
                   const SizedBox(height: 12),
                   TextField(
@@ -140,7 +151,15 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
                   DropdownButtonFormField<String>(
                     initialValue: category,
                     items: cats
-                        .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                        .map((e) => DropdownMenuItem(
+                            value: e,
+                            child: Text(e == 'JOBLESS' ? 'Unemployment' : e
+                                .replaceAll('_', ' ')
+                                .toLowerCase()
+                                .split(' ')
+                                .map((w) =>
+                                    '${w[0].toUpperCase()}${w.substring(1)}')
+                                .join(' '))))
                         .toList(),
                     onChanged: (v) => setState(() => category = v!),
                     decoration: const InputDecoration(labelText: 'Category'),
@@ -175,10 +194,8 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
                         width: 112,
                         child: TextField(
                           controller: currencyInput,
-                          maxLength: 3,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration:
-                              const InputDecoration(labelText: 'Currency'),
+                          readOnly: true,
+                          decoration: const InputDecoration(labelText: 'Currency', helperText: 'Based on country'),
                         ),
                       ),
                     ],
@@ -189,7 +206,7 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
                     title: const Text('Show me anonymously',
                         style: TextStyle(fontWeight: FontWeight.w800)),
                     subtitle: const Text(
-                        'Other users see Anonymous Helpi Member or your chosen alias. Helpi keeps your account identity private.'),
+                        'Others see your alias or “Anonymous”. Your account stays private.'),
                     value: anonymous,
                     onChanged: (v) => setState(() => anonymous = v),
                   ),
@@ -207,8 +224,7 @@ class _CaseCreateScreenState extends State<CaseCreateScreen> {
                     style: FilledButton.styleFrom(
                         backgroundColor: orange,
                         padding: const EdgeInsets.all(16)),
-                    child: Text(
-                        busy ? 'POSTING...' : 'POST FINANCIAL HELP REQUEST'),
+                    child: Text(busy ? 'Posting…' : 'Post request'),
                   ),
                 ],
               ),

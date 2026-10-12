@@ -73,10 +73,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       await showDialog<void>(
         context: context,
         builder: (_) => AlertDialog(
-          icon: const Icon(Icons.check_circle_outline, color: green, size: 34),
-          title: const Text('Secure payment created'),
+          icon: const Icon(Icons.info_outline, color: orange, size: 34),
+          title: const Text('Payment not completed'),
           content: Text(
-            'Payment intent ${result['id']} is ready. The payment is complete only after the payment provider confirms it.',
+            'A payment record (${result['id']}) was created, but this app is not connected to a live M-Pesa charge or payout yet. No money was taken or sent.',
           ),
           actions: [
             TextButton(
@@ -203,7 +203,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                             SizedBox(width: 12),
                             Expanded(
                               child: Text(
-                                  'Your payment is handled through the configured payment provider. Never share your PIN, password or one-time code.'),
+                                  'Kenya payments use KES. Live M-Pesa collection and direct payout are not connected yet, so this screen cannot take or send money.'),
                             ),
                           ]),
                     ),
@@ -221,7 +221,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                         : const Icon(Icons.lock_outline),
                     label: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      child: Text(busy ? 'Please wait' : 'Continue securely'),
+                      child: Text(busy ? 'Please wait' : 'Create payment record'),
                     ),
                   ),
                 ],

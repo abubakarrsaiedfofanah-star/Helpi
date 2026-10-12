@@ -1,6 +1,7 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { createHash } from 'crypto';
 import { PrismaService } from '../prisma.service';
+import { privateFingerprint, seal } from '../crypto';
 
 @Injectable()
 export class AccountSecurityService {
@@ -34,18 +35,22 @@ export class AccountSecurityService {
   }
 
   async createPayoutDestination(userId: string, input: { countryCode: string; method: string; destination: string }) {
-    const destinationHash = createHash('sha256').update(input.destination.trim()).digest('hex');
-    const existing = await this.prisma.payoutDestination.findUnique({ where: { userId_destinationHash: { userId, destinationHash } } });
+    const countryCode=String(input.countryCode||'').toUpperCase();
+    const method=String(input.method||'').toUpperCase();
+    const destination=String(input.destination||'').replace(/[\s()-]/g,'');
+    const user=await this.prisma.user.findUnique({where:{id:userId},select:{countryCode:true}});
+    if(countryCode!=='KE'||user?.countryCode!=='KE'||method!=='MPESA'||!/^(?:\+254|254|0)?[17]\d{8}$/.test(destination)) throw new ForbiddenException('Enter a valid Kenyan M-Pesa destination.');
+    const normalized=destination.startsWith('+')?destination:`+${destination.startsWith('0')?'254'+destination.slice(1):destination.startsWith('254')?destination:'254'+destination}`;
+    const destinationHash = privateFingerprint(normalized);
+    const existing = await this.prisma.payoutDestination.findFirst({ where: { userId }, orderBy:{createdAt:'desc'} });
     if (existing && existing.status === 'BLOCKED') throw new ForbiddenException('This payout destination is blocked.');
     const recent = await this.prisma.securityEvent.count({ where: { userId, type: 'NEW_DEVICE_LOGIN', createdAt: { gte: new Date(Date.now() - 24 * 60 * 60 * 1000) } } });
     const riskLevel = recent >= 2 ? 'HIGH' : 'LOW';
     const status = riskLevel === 'HIGH' ? 'PENDING_REVIEW' : 'PENDING';
-    return this.prisma.payoutDestination.upsert({
-      where: { userId_destinationHash: { userId, destinationHash } },
-      create: { userId, countryCode: input.countryCode.toUpperCase(), method: input.method.toUpperCase(), destinationHash, displayLast4: input.destination.slice(-4), status, riskLevel },
-      update: { countryCode: input.countryCode.toUpperCase(), method: input.method.toUpperCase(), displayLast4: input.destination.slice(-4), status, riskLevel, blockedAt: null },
-      select: { id: true, countryCode: true, method: true, displayLast4: true, status: true, riskLevel: true, createdAt: true }
-    });
+    const data={countryCode,method,destinationHash,encryptedDestination:seal(normalized),displayLast4:normalized.slice(-4),status,riskLevel,blockedAt:null};
+    if(existing?.status==='BLOCKED') throw new ForbiddenException('This payout destination is blocked.');
+    const row=existing?await this.prisma.payoutDestination.update({where:{id:existing.id},data}):await this.prisma.payoutDestination.create({data:{...data,userId}});
+    return { id:row.id,countryCode:row.countryCode,method:row.method,displayLast4:row.displayLast4,status:row.status,riskLevel:row.riskLevel,createdAt:row.createdAt };
   }
 
   private platform(ua: string) {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
 import 'explore_screen.dart';
-import 'help_screen.dart';
 import 'messages_screen.dart';
 import 'profile_screen.dart';
 import '../core/theme.dart';
@@ -13,10 +12,10 @@ class MainShell extends StatefulWidget {
 
 class _MainShellState extends State<MainShell> {
   int i = 0;
-  final pages = const [HomeScreen(), ExploreScreen(), HelpScreen(), MessagesScreen(), ProfileScreen()];
-  final labels = const ['Home', 'Explore', 'Help', 'Messages', 'Profile'];
-  final icons = const [Icons.home_outlined, Icons.explore_outlined, Icons.volunteer_activism_outlined, Icons.chat_bubble_outline, Icons.person_outlined];
-  final selectedIcons = const [Icons.home, Icons.explore, Icons.volunteer_activism, Icons.chat_bubble, Icons.person];
+  final pages = const [HomeScreen(), ExploreScreen(), MessagesScreen(), ProfileScreen()];
+  final labels = const ['Home', 'Find help', 'Messages', 'Profile'];
+  final icons = const [Icons.home_outlined, Icons.volunteer_activism_outlined, Icons.chat_bubble_outline, Icons.person_outlined];
+  final selectedIcons = const [Icons.home, Icons.volunteer_activism, Icons.chat_bubble, Icons.person];
 
   @override
   Widget build(BuildContext context) {

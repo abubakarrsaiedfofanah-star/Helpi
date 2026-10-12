@@ -20,17 +20,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
   int requestId = 0;
 
   final cats = [
-    'MEDICAL',
-    'FOOD',
-    'EDUCATION',
-    'HOUSING',
-    'WATER',
+    'HARDSHIP',
+    'JOBLESS',
+    'WIDOW',
+    'ORPHAN',
+    'WAR_VICTIM',
     'DISABILITY',
-    'EMERGENCY',
-    'COMMUNITY',
-    'FAMILY',
-    'FARMING',
-    'ELDERLY'
+    'OTHER'
   ];
 
   Future<void> search() async {
@@ -146,6 +142,5 @@ class _ExploreScreenState extends State<ExploreScreen> {
         ),
       );
 
-  String _categoryLabel(String value) =>
-      value[0] + value.substring(1).toLowerCase();
+  String _categoryLabel(String value) => value.replaceAll('_', ' ').toLowerCase().split(' ').map((w) => '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
 }

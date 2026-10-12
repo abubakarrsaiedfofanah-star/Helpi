@@ -20,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool loading = true;
   String? error;
   int searchId = 0;
+  String? category;
   final q = TextEditingController();
 
   Future<void> load() => _search();
@@ -40,9 +41,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 term.isEmpty ||
                 x['title'].toString().toLowerCase().contains(term) ||
                 x['category'].toString().toLowerCase().contains(term))
+            .where((x) => category == null || x['category'] == category)
             .toList();
       } else {
-        results = await s.api.cases(q: q.text);
+        results = await s.api.cases(q: q.text, category: category);
       }
       if (mounted && currentSearch == searchId) {
         setState(() => cases = results);
@@ -73,8 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext c) {
     final s = context.watch<AppState>();
-    final u = s.user;
-    final name = (u?['name'] ?? 'friend').toString().split(' ').first;
+    final name = s.displayName.split(' ').first;
 
     return Scaffold(
       body: RefreshIndicator(
@@ -161,24 +162,24 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(children: [
-                                Icon(Icons.verified_user, color: Colors.white),
+                                Icon(Icons.volunteer_activism_outlined,
+                                    color: Colors.white),
                                 SizedBox(width: 8),
-                                Text('FINANCIAL ASSISTANT',
+                                Text('DIRECT FINANCIAL HELP',
                                     style: TextStyle(
                                         color: Colors.white70,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w800))
                               ]),
                               SizedBox(height: 10),
-                              Text(
-                                  'A person who needs help. A person ready to help.',
+                              Text('Give or get financial help.',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 23,
                                       fontWeight: FontWeight.w900)),
                               SizedBox(height: 7),
                               Text(
-                                  'Request or give financial support. No proof or documents needed.',
+                                  'Give or receive money. No proof needed. Use it as you choose.',
                                   style: TextStyle(color: Colors.white70)),
                             ]),
                       ),
@@ -237,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(height: 22),
                       const Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Explore by category',
+                          child: Text('Who needs help?',
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w900))),
                       const SizedBox(height: 10),
@@ -245,19 +246,21 @@ class _HomeScreenState extends State<HomeScreen> {
                           spacing: 8,
                           runSpacing: 8,
                           children: [
-                            'Medical',
-                            'Education',
-                            'Food',
-                            'Housing',
-                            'Water',
-                            'Emergency'
+                            'HARDSHIP',
+                            'JOBLESS',
+                            'WIDOW',
+                            'ORPHAN',
+                            'WAR_VICTIM',
+                            'DISABILITY'
                           ]
-                              .map((x) => ActionChip(
+                              .map((x) => FilterChip(
+                                  selected: category == x,
                                   avatar: Icon(_catIcon(x),
                                       size: 17, color: orange),
-                                  label: Text(x),
-                                  onPressed: () {
-                                    q.text = x;
+                                  label: Text(_categoryLabel(x)),
+                                  onSelected: (_) {
+                                    category = category == x ? null : x;
+                                    q.clear();
                                     _search();
                                   }))
                               .toList()),
@@ -268,16 +271,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                     fontSize: 21,
                                     fontWeight: FontWeight.w900))),
-                        if (q.text.trim().isNotEmpty)
+                        if (q.text.trim().isNotEmpty || category != null)
                           TextButton.icon(
                               onPressed: loading
                                   ? null
                                   : () {
                                       q.clear();
+                                      category = null;
                                       _search();
                                     },
                               icon: const Icon(Icons.close, size: 18),
-                              label: const Text('Clear')),
+                              label: const Text('Clear filters')),
                       ]),
                       const SizedBox(height: 10),
                     ]),
@@ -367,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   fontSize:
                                                                       11))),
                                                   const Spacer(),
-                                                  const Icon(Icons.verified,
+                                                  const Icon(Icons.public,
                                                       color: green, size: 18),
                                                   const SizedBox(width: 4),
                                                   Text(
@@ -488,18 +492,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
   IconData _catIcon(String cat) {
     switch (cat.toUpperCase()) {
-      case 'MEDICAL':
-        return Icons.medical_services;
-      case 'EDUCATION':
-        return Icons.school;
-      case 'FOOD':
-        return Icons.restaurant;
-      case 'HOUSING':
-        return Icons.home;
-      case 'WATER':
-        return Icons.water_drop;
+      case 'JOBLESS':
+        return Icons.work_off_outlined;
+      case 'WIDOW':
+        return Icons.person_outline;
+      case 'ORPHAN':
+        return Icons.child_care;
+      case 'WAR_VICTIM':
+        return Icons.shield_outlined;
+      case 'DISABILITY':
+        return Icons.accessible;
       default:
-        return Icons.emergency;
+        return Icons.volunteer_activism_outlined;
     }
   }
+
+  String _categoryLabel(String value) => value
+      .replaceAll('_', ' ')
+      .toLowerCase()
+      .split(' ')
+      .map((w) => '${w[0].toUpperCase()}${w.substring(1)}')
+      .join(' ');
 }

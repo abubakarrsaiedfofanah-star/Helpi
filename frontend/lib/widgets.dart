@@ -109,27 +109,11 @@ class CaseCard extends StatelessWidget {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Row(children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                    color: green.withValues(alpha: .1),
-                    borderRadius: BorderRadius.circular(30)),
-                child: const Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.verified, color: green, size: 14),
-                  SizedBox(width: 4),
-                  Text('VERIFIED',
-                      style: TextStyle(
-                          color: green,
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold)),
-                ]),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(color: orange.withValues(alpha: .1), borderRadius: BorderRadius.circular(30)),
+                child: Text((item['category'] ?? 'FINANCIAL HELP').toString().replaceAll('_', ' '), style: const TextStyle(color: orange, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
               const Spacer(),
-              Flexible(
-                  child: Text(item['category'] ?? '',
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          color: Colors.black54, fontSize: 12))),
             ]),
             const SizedBox(height: 10),
             Text(item['title'] ?? '',

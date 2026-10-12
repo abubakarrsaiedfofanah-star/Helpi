@@ -61,6 +61,11 @@ class Api{
   Future<Map<String,dynamic>> createPaymentIntent(String caseId,int amountMinor,String currency,{String? purpose,String? idempotencyKey})=>call('POST','/payments/intents',{'caseId':caseId,'amountMinor':amountMinor,'currency':currency,if(purpose!=null)'purpose':purpose,if(idempotencyKey!=null)'idempotencyKey':idempotencyKey}) as Future<Map<String,dynamic>>;
   Future<Map<String,dynamic>> convertCurrency(double amount, String from, String to) => call('GET', '/currency/convert?amount=$amount&from=$from&to=$to') as Future<Map<String,dynamic>>;
   Future<List<dynamic>> myPayments() async => await call('GET','/payments/mine') as List<dynamic>;
+  Future<Map<String,dynamic>?> payoutDestination() async {
+    final value = await call('GET', '/payments/payout-destination');
+    return value is Map<String, dynamic> ? value : null;
+  }
+  Future<Map<String,dynamic>> savePayoutDestination(String phone) => call('POST','/payments/payout-destination',{'countryCode':'KE','method':'MPESA','phone':phone}) as Future<Map<String,dynamic>>;
   Future<Map<String,dynamic>> impact() async => await call('GET','/impact/me') as Map<String,dynamic>;
   Future<Map<String,dynamic>> markNotificationRead(String id) async => await call('PATCH','/notifications/$id/read') as Map<String,dynamic>;
   Future<Map<String,dynamic>> requestVerification(String caseId,{String? reason})=>call('POST','/verification/cases/$caseId/request',{'reason':reason}) as Future<Map<String,dynamic>>;

@@ -1,10 +1,11 @@
 import { BadRequestException, Body, Controller, Get, Headers, Post, Req } from '@nestjs/common';
 import { createHmac, timingSafeEqual } from 'crypto';
 import { PaymentsService } from './payments.service';
+import { AccountSecurityService } from '../security/account-security.service';
 
 @Controller('payments')
 export class PaymentsController {
-  constructor(private s: PaymentsService) {}
+  constructor(private s: PaymentsService, private account: AccountSecurityService) {}
 
   @Post('intents')
   create(@Req() r:any, @Body() b:{caseId:string;amountMinor:number;currency:string;purpose?:string;idempotencyKey?:string}) {
@@ -13,6 +14,12 @@ export class PaymentsController {
 
   @Get('mine')
   mine(@Req() r:any) { return this.s.listMine(r.user.sub); }
+
+  @Get('payout-destination')
+  payoutDestination(@Req() r:any) { return this.s.payoutDestination(r.user.sub); }
+
+  @Post('payout-destination')
+  savePayoutDestination(@Req() r:any,@Body() b:{countryCode:string;method:string;phone:string}) { return this.account.createPayoutDestination(r.user.sub,{...b,destination:b.phone}); }
 
   @Post('webhooks/provider')
   webhook(@Headers('x-payment-signature') signature:string,@Body() b:any) {

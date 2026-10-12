@@ -108,9 +108,7 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
                         const SizedBox(width: 8),
                         Expanded(
                             child: Text(
-                                (item['category'] ?? 'FINANCIAL NEED')
-                                    .toString()
-                                    .toUpperCase(),
+                                _categoryName(item['category']),
                                 style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.w800))),
@@ -229,6 +227,12 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
       }
     }
     return 'Posted by a Helpi member';
+  }
+
+  String _categoryName(dynamic value) {
+    final category = (value ?? 'Financial need').toString();
+    if (category == 'JOBLESS') return 'UNEMPLOYMENT';
+    return category.replaceAll('_', ' ').toUpperCase();
   }
 
   Widget _stat(String a, String b, IconData icon) => Expanded(
