@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
+import '../core/case_categories.dart';
 import '../core/theme.dart';
 import '../core/localization.dart';
 import 'security_screen.dart';
@@ -18,9 +19,9 @@ class ProfileScreen extends StatelessWidget {
     final identityMode = u?['publicIdentityMode']?.toString();
     final isAnonymous = identityMode == 'ANONYMOUS';
     final identityLabel = switch (identityMode) {
-      'ANONYMOUS' => 'Anonymous profile',
-      'ALIAS' => 'Public alias',
-      _ => 'Personal profile',
+      'ANONYMOUS' => l.get('anonymous_profile'),
+      'ALIAS' => l.get('public_alias'),
+      _ => l.get('personal_profile'),
     };
     final email = (u?['email'] ?? '').toString();
     final initials = name
@@ -31,7 +32,7 @@ class ProfileScreen extends StatelessWidget {
         .map((part) => part[0].toUpperCase())
         .join();
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile'), actions: [
+      appBar: AppBar(title: Text(l.get('profile')), actions: [
         IconButton(
             tooltip: 'Security settings',
             icon: const Icon(Icons.settings_outlined),
@@ -80,6 +81,17 @@ class ProfileScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13))
                       ]),
+                      if (caseCategoryLabels
+                          .containsKey(u?['supportGroup']?.toString())) ...[
+                        const SizedBox(height: 5),
+                        Text(
+                          l.category(u!['supportGroup'].toString()),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12),
+                        ),
+                      ],
                       const SizedBox(height: 4),
                       if (!isAnonymous && email.isNotEmpty)
                         Text(email,
@@ -101,8 +113,8 @@ class ProfileScreen extends StatelessWidget {
                   child: const Icon(Icons.dark_mode_outlined)),
               title: Text(l.get('dark_mode'),
                   style: const TextStyle(fontWeight: FontWeight.w800)),
-              subtitle: const Text('Light or dark appearance',
-                  style: TextStyle(fontSize: 12)),
+              subtitle: Text(l.get('appearance_hint'),
+                  style: const TextStyle(fontSize: 12)),
               value: s.isDarkMode,
               onChanged: (_) => s.toggleTheme(),
             ),
@@ -114,31 +126,35 @@ class ProfileScreen extends StatelessWidget {
                   backgroundColor: Color(0xFFE3F2FD),
                   foregroundColor: Colors.blue,
                   child: Icon(Icons.language)),
-              title: const Text('Language',
+              title: Text(l.get('language'),
                   style: TextStyle(fontWeight: FontWeight.w800)),
-              subtitle: Text('Current: ${s.locale.toUpperCase()}'),
-              trailing: DropdownButton<String>(
-                value: s.locale,
-                underline: const SizedBox(),
-                items: const [
-                  DropdownMenuItem(value: 'en', child: Text('English')),
-                  DropdownMenuItem(value: 'sw', child: Text('Swahili')),
-                  DropdownMenuItem(value: 'fr', child: Text('Français')),
-                ],
-                onChanged: (v) {
-                  if (v != null) s.setLocale(v);
-                },
+              subtitle: Text(l.get('current_language', {
+                'language': AppLocalizations.supportedLanguages[s.locale] ??
+                    AppLocalizations.supportedLanguages['en']!,
+              })),
+              trailing: SizedBox(
+                width: 108,
+                child: DropdownButton<String>(
+                  value: s.locale,
+                  underline: const SizedBox(),
+                  items: AppLocalizations.supportedLanguages.entries
+                      .map((entry) => DropdownMenuItem(
+                            value: entry.key,
+                            child: Text(entry.value),
+                          ))
+                      .toList(),
+                  onChanged: (v) {
+                    if (v != null) s.setLocale(v);
+                  },
+                  isExpanded: true,
+                ),
               ),
             ),
           ),
-          _item(c, Icons.folder_open, 'My requests',
-              'View your financial help requests', const MyHelpScreen()),
-          _item(c, Icons.account_balance_wallet_outlined, 'Payout method',
-              'Private M-Pesa details for receiving help', const PayoutSettingsScreen()),
-          _item(c, Icons.favorite_border, 'My contributions',
-              'View your giving activity', const ImpactScreenStub()),
-          _item(c, Icons.settings_outlined, 'Security',
-              'Password and account privacy', const SecurityScreen()),
+          _item(c, Icons.folder_open, l.get('my_requests'),
+              l.get('view_requests'), const MyHelpScreen()),
+          _item(c, Icons.settings_outlined, l.get('security'),
+              l.get('account_privacy'), const SecurityScreen()),
           const SizedBox(height: 20),
           FilledButton.tonalIcon(
             onPressed: () => s.logout(),
@@ -170,67 +186,4 @@ class ProfileScreen extends StatelessWidget {
               Navigator.push(c, MaterialPageRoute(builder: (_) => page)),
         ),
       );
-}
-
-class PayoutSettingsScreen extends StatefulWidget {
-  const PayoutSettingsScreen({super.key});
-  @override
-  State<PayoutSettingsScreen> createState() => _PayoutSettingsScreenState();
-}
-
-class _PayoutSettingsScreenState extends State<PayoutSettingsScreen> {
-  final phone = TextEditingController();
-  bool loading = true, saving = false;
-  Map<String, dynamic>? destination;
-  String? error;
-
-  @override
-  void initState() { super.initState(); _load(); }
-  @override
-  void dispose() { phone.dispose(); super.dispose(); }
-
-  Future<void> _load() async {
-    try { destination = await context.read<AppState>().api.payoutDestination(); }
-    catch (e) { error = e.toString(); }
-    if (mounted) setState(() => loading = false);
-  }
-
-  Future<void> _save() async {
-    if (phone.text.trim().isEmpty) { setState(() => error = 'Enter your M-Pesa number.'); return; }
-    setState(() { saving = true; error = null; });
-    try {
-      destination = await context.read<AppState>().api.savePayoutDestination(phone.text.trim());
-      phone.clear();
-    } catch (e) { error = e.toString(); }
-    if (mounted) setState(() => saving = false);
-  }
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Payout method')),
-    body: ListView(padding: const EdgeInsets.all(20), children: [
-      const Card(child: Padding(padding: EdgeInsets.all(16), child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [Icon(Icons.lock_outline, color: green), SizedBox(width: 12), Expanded(child: Text('Your payout number is private. Only you can view its last digits. Helpi stores it encrypted for payout processing.'))]))),
-      const SizedBox(height: 18),
-      const Text('Kenya · M-Pesa', style: TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
-      const SizedBox(height: 8),
-      if (loading) const LinearProgressIndicator(),
-      if (!loading && destination != null) Card(child: ListTile(leading: const Icon(Icons.phone_android, color: orange), title: Text('•••• ${destination!['displayLast4'] ?? '••••'}'), subtitle: Text('Status: ${destination!['status'] ?? 'PENDING'}'), trailing: const Icon(Icons.lock_outline))),
-      if (!loading) TextField(controller: phone, keyboardType: TextInputType.phone, decoration: const InputDecoration(labelText: 'M-Pesa number', hintText: '+254 7xx xxx xxx', prefixIcon: Icon(Icons.phone_outlined))),
-      if (error != null) Padding(padding: const EdgeInsets.only(top: 10), child: Text(error!, style: const TextStyle(color: Colors.red))),
-      const SizedBox(height: 18),
-      FilledButton(onPressed: loading || saving ? null : _save, child: Text(saving ? 'Saving…' : destination == null ? 'Save payout number' : 'Update payout number')),
-      const SizedBox(height: 12),
-      const Text('Payouts are not live until Helpi has active M-Pesa collection and disbursement credentials.', style: TextStyle(color: Colors.black54, height: 1.4)),
-    ]),
-  );
-}
-
-class ImpactScreenStub extends StatelessWidget {
-  const ImpactScreenStub({super.key});
-  @override
-  Widget build(BuildContext c) => Scaffold(
-      appBar: AppBar(title: const Text('My Donations & Ledger')),
-      body: const Center(
-          child:
-              Text('Your financial contribution ledger and impact receipts.')));
 }

@@ -8,30 +8,15 @@ interface HeaderProps {
 export function Header({ setOpen, search, setSearch, setTab }: HeaderProps) {
   return (
     <header>
-      <button className="menu" onClick={() => setOpen(true)} aria-label="Open Menu">
-        ☰
-      </button>
+      <button className="menu" onClick={() => setOpen(true)} aria-label="Open navigation">Menu</button>
       <div className="brand">
         <div className="mark">H</div>
-        <div>
-          <strong>Helpi</strong>
-          <span>Real help. Global impact.</span>
-        </div>
+        <div><strong>Helpi</strong><span>Community admin</span></div>
       </div>
       <div className="headerRight">
-        <div className="search">
-          ⌕{' '}
-          <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            aria-label="Search"
-            placeholder="Search cases, people, organizations..."
-          />
-        </div>
-        <button className="iconBtn" aria-label="Notifications" onClick={() => setTab('media')}>
-          ●
-        </button>
-        <button className="avatar" aria-label="Admin User">A</button>
+        <label className="search"><span aria-hidden="true">Search</span><input value={search} onChange={(event) => setSearch(event.target.value)} aria-label="Search workspace" placeholder="Search requests, people, organizations…" /></label>
+        <button className="iconBtn" aria-label="Community safety reports" onClick={() => setTab('safety')}>!</button>
+        <button className="avatar" aria-label="Administrator account">A</button>
       </div>
     </header>
   );

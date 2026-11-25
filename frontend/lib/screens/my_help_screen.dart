@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
+import '../core/case_categories.dart';
+import '../core/localization.dart';
 import '../core/theme.dart';
 
 class MyHelpScreen extends StatefulWidget {
@@ -35,29 +37,32 @@ class _MyHelpScreenState extends State<MyHelpScreen> {
   }
 
   @override
-  Widget build(BuildContext c) => Scaffold(
-        appBar: AppBar(title: const Text('My requests')),
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            if (busy) const Center(child: CircularProgressIndicator(color: orange)),
-            ...items.map((x) => Card(
-                  margin: const EdgeInsets.only(bottom: 10),
-                  child: ListTile(
-                    title: Text(x['title'] ?? ''),
-                    subtitle: Text((x['status'] ?? '')
-                        .toString()
-                        .replaceAll('_', ' ')
-                        .toLowerCase()),
-                    trailing: const Icon(Icons.chevron_right),
-                  ),
-                )),
-            if (!busy && items.isEmpty)
-              const Padding(
-                padding: EdgeInsets.only(top: 32),
-                child: Text('Your requests will appear here.', textAlign: TextAlign.center),
-              ),
-          ],
-        ),
-      );
+  Widget build(BuildContext c) {
+    final l = AppLocalizations(context.watch<AppState>().locale);
+    return Scaffold(
+      appBar: AppBar(title: Text(l.get('my_requests'))),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          if (busy)
+            const Center(child: CircularProgressIndicator(color: orange)),
+          ...items.map((x) => Card(
+                margin: const EdgeInsets.only(bottom: 10),
+                child: ListTile(
+                  title:
+                      Text(l.category((x['category'] ?? 'OTHER').toString())),
+                  subtitle: Text(
+                      '${x['currency'] ?? ''} ${((x['goalMinor'] ?? 0) / 100).toStringAsFixed(0)} requested · ${(x['status'] ?? '').toString().replaceAll('_', ' ').toLowerCase()}'),
+                  trailing: const Icon(Icons.chevron_right),
+                ),
+              )),
+          if (!busy && items.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Text(l.get('requests_empty'), textAlign: TextAlign.center),
+            ),
+        ],
+      ),
+    );
+  }
 }

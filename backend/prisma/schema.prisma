@@ -48,6 +48,15 @@ enum CaseCategory {
   WIDOW
   ORPHAN
   WAR_VICTIM
+  WAR_SURVIVOR
+  DISPLACED_PERSON
+  SINGLE_PARENT
+  UNEMPLOYED
+  LOW_INCOME_FAMILY
+  CAREGIVER
+  CHRONIC_ILLNESS
+  HOMELESS
+  TRAFFICKING_SURVIVOR
 }
 
 enum OfferType {
@@ -111,6 +120,7 @@ model User {
   email                   String                   @unique
   passwordHash            String
   name                    String
+  supportGroup            CaseCategory?
   publicIdentityMode      PublicIdentityMode       @default(REAL_NAME)
   publicAlias             String?
   countryCode             String

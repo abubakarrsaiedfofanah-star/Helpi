@@ -13,11 +13,15 @@ class NotificationsScreen extends StatefulWidget {
 class _NotificationsScreenState extends State<NotificationsScreen> {
   List<dynamic> items = [];
   bool loading = true;
+  String? error;
 
   Future<void> load() async {
+    if (mounted) setState(() { loading = true; error = null; });
     try {
-      items = await context.read<AppState>().api.notifications();
-    } catch (_) {
+      final result = await context.read<AppState>().api.notifications();
+      if (mounted) setState(() => items = result);
+    } catch (cause) {
+      if (mounted) setState(() => error = cause.toString().replaceFirst('Exception: ', ''));
     } finally {
       if (mounted) setState(() => loading = false);
     }
@@ -36,6 +40,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           onRefresh: load,
           child: loading
               ? const Center(child: CircularProgressIndicator(color: orange))
+              : error != null
+                  ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(28),
+                      children: [
+                        const SizedBox(height: 90),
+                        const Icon(Icons.cloud_off_outlined, size: 58, color: Colors.black38),
+                        const SizedBox(height: 14),
+                        const Center(child: Text('Could not load notifications', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700))),
+                        const SizedBox(height: 8),
+                        Center(child: Text(error!, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54))),
+                        const SizedBox(height: 18),
+                        Center(child: FilledButton.icon(onPressed: load, icon: const Icon(Icons.refresh), label: const Text('Try again'))),
+                      ],
+                    )
               : items.isEmpty
                   ? ListView(
                       children: const [
@@ -59,8 +78,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                           child: ListTile(
                             onTap: () async {
                               if (unread) {
-                                await context.read<AppState>().api.markNotificationRead(n['id'].toString());
-                                await load();
+                                try {
+                                  await context.read<AppState>().api.markNotificationRead(n['id'].toString());
+                                  await load();
+                                } catch (cause) {
+                                  if (context.mounted) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('Could not update notification: $cause')),
+                                    );
+                                  }
+                                }
                               }
                             },
                             leading: CircleAvatar(

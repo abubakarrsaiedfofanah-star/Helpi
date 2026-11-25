@@ -67,15 +67,8 @@ class _TrustCenterScreenState extends State<TrustCenterScreen> {
           children: [
             const Text('Your safety comes first', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text('Verification, safeguarding and communication tools are designed to protect people without exposing unnecessary personal information.'),
+            const Text('Helpi connects people seeking financial support with helpers and NGOs. You choose what to share in direct conversations.'),
             const SizedBox(height: 20),
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.verified_user),
-                title: Text('Identity & document verification'),
-                subtitle: Text('Provider-backed checks with manual review when automated checks are unavailable.'),
-              ),
-            ),
             Card(
               child: ListTile(
                 leading: const Icon(Icons.gavel),
@@ -101,7 +94,7 @@ class _TrustCenterScreenState extends State<TrustCenterScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            const Text('Never send passwords, PINs, full card details or private verification documents through ordinary chat.', style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text('Never share passwords, PINs or full card details in chat.', style: TextStyle(fontWeight: FontWeight.w600)),
           ],
         ),
       );

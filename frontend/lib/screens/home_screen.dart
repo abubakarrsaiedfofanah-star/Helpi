@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
+import '../core/case_categories.dart';
+import '../core/localization.dart';
 import '../core/theme.dart';
 import '../widgets.dart';
 import 'case_create_screen.dart';
@@ -39,7 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
         results = s.demoCases
             .where((x) =>
                 term.isEmpty ||
-                x['title'].toString().toLowerCase().contains(term) ||
+                caseCategoryLabel(x['category'].toString())
+                    .toLowerCase()
+                    .contains(term) ||
                 x['category'].toString().toLowerCase().contains(term))
             .where((x) => category == null || x['category'] == category)
             .toList();
@@ -75,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext c) {
     final s = context.watch<AppState>();
+    final l = AppLocalizations(s.locale);
     final name = s.displayName.split(' ').first;
 
     return Scaffold(
@@ -88,14 +93,14 @@ class _HomeScreenState extends State<HomeScreen> {
               expandedHeight: 170,
               actions: [
                 IconButton(
-                    tooltip: 'Notifications',
+                    tooltip: l.get('notifications'),
                     onPressed: () => Navigator.push(
                         c,
                         MaterialPageRoute(
                             builder: (_) => const NotificationsScreen())),
                     icon: const Icon(Icons.notifications_none)),
                 IconButton(
-                    tooltip: 'Security',
+                    tooltip: l.get('security'),
                     onPressed: () => Navigator.push(
                         c,
                         MaterialPageRoute(
@@ -110,15 +115,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('Hello, $name',
+                        Text(l.get('hello_user', {'name': name}),
                             style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w900)),
                         const SizedBox(height: 3),
-                        const Text(
-                            'Financial help, shared directly between people.',
-                            style: TextStyle(color: Colors.white70)),
+                        Text(l.get('hello_tagline'),
+                            style: const TextStyle(color: Colors.white70)),
                       ]),
                 ),
               ),
@@ -139,13 +143,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                               color: navy,
                               borderRadius: BorderRadius.circular(14)),
-                          child: const Row(children: [
-                            Icon(Icons.visibility_outlined,
+                          child: Row(children: [
+                            const Icon(Icons.visibility_outlined,
                                 color: Colors.white, size: 18),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
                                 child: Text(
-                                    'Preview mode · explore financial assistance without real transactions.',
+                                    'Preview mode · sample people and requests.',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
@@ -158,40 +162,40 @@ class _HomeScreenState extends State<HomeScreen> {
                             gradient: const LinearGradient(
                                 colors: [orange, orangeDark]),
                             borderRadius: BorderRadius.circular(24)),
-                        child: const Column(
+                        child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(children: [
                                 Icon(Icons.volunteer_activism_outlined,
                                     color: Colors.white),
                                 SizedBox(width: 8),
-                                Text('DIRECT FINANCIAL HELP',
+                                Text('HELPI COMMUNITY',
                                     style: TextStyle(
                                         color: Colors.white70,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w800))
                               ]),
                               SizedBox(height: 10),
-                              Text('Give or get financial help.',
-                                  style: TextStyle(
+                              Text(l.get('connect_directly'),
+                                  style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 23,
                                       fontWeight: FontWeight.w900)),
                               SizedBox(height: 7),
-                              Text(
-                                  'Give or receive money. No proof needed. Use it as you choose.',
-                                  style: TextStyle(color: Colors.white70)),
+                              Text(l.get('browse_help'),
+                                  style:
+                                      const TextStyle(color: Colors.white70)),
                             ]),
                       ),
                       const SizedBox(height: 14),
                       // Financial Assistant Core Action Tiles
                       LayoutBuilder(builder: (context, box) {
-                        final compact = box.maxWidth < 560;
+                        final compact = box.maxWidth < 720;
                         final needHelp = _roleAction(
                           icon: Icons.volunteer_activism_outlined,
-                          title: 'I need financial help',
-                          subtitle: 'Share what you need and how much.',
-                          action: 'Create a request',
+                          title: l.get('post_request'),
+                          subtitle: l.get('choose_for_you_or_other'),
+                          action: l.get('post_request_action'),
                           onTap: () async {
                             await Navigator.push(
                                 c,
@@ -202,9 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                         final canHelp = _roleAction(
                           icon: Icons.favorite_outline,
-                          title: 'I can help someone',
-                          subtitle: 'Find a person and offer support.',
-                          action: 'Find a person to help',
+                          title: l.get('can_help'),
+                          subtitle: l.get('browse_groups_chat'),
+                          action: l.get('find_person_to_help'),
                           onTap: () => Navigator.push(
                               c,
                               MaterialPageRoute(
@@ -214,12 +218,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ? Column(children: [
                                 needHelp,
                                 const SizedBox(height: 10),
-                                canHelp
+                                canHelp,
                               ])
                             : Row(children: [
                                 Expanded(child: needHelp),
                                 const SizedBox(width: 12),
-                                Expanded(child: canHelp)
+                                Expanded(child: canHelp),
                               ]);
                       }),
                       const SizedBox(height: 18),
@@ -229,46 +233,50 @@ class _HomeScreenState extends State<HomeScreen> {
                             if (!loading) _search();
                           },
                           decoration: InputDecoration(
-                              hintText: 'Search people who need help',
+                              hintText: l.get('search_people_groups'),
                               prefixIcon: const Icon(Icons.search),
                               suffixIcon: IconButton(
-                                  tooltip: 'Search requests',
+                                  tooltip: l.get('search_requests'),
                                   onPressed: loading ? null : _search,
                                   icon: const Icon(Icons.arrow_forward)))),
                       const SizedBox(height: 22),
-                      const Align(
+                      Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Who needs help?',
-                              style: TextStyle(
+                          child: Text(l.get('who_needs_help'),
+                              style: const TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.w900))),
                       const SizedBox(height: 10),
                       Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            'HARDSHIP',
-                            'JOBLESS',
-                            'WIDOW',
-                            'ORPHAN',
-                            'WAR_VICTIM',
-                            'DISABILITY'
-                          ]
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          FilterChip(
+                            selected: category == null,
+                            label: Text(l.get('all_groups')),
+                            onSelected: (_) {
+                              category = null;
+                              _search();
+                            },
+                          ),
+                          ...caseCategoryLabels.keys
                               .map((x) => FilterChip(
                                   selected: category == x,
                                   avatar: Icon(_catIcon(x),
                                       size: 17, color: orange),
-                                  label: Text(_categoryLabel(x)),
+                                  label: Text(l.category(x)),
                                   onSelected: (_) {
                                     category = category == x ? null : x;
                                     q.clear();
                                     _search();
                                   }))
-                              .toList()),
+                              .toList()
+                        ],
+                      ),
                       const SizedBox(height: 22),
                       Row(children: [
-                        const Expanded(
-                            child: Text('People who need financial help',
-                                style: TextStyle(
+                        Expanded(
+                            child: Text(l.get('people_seeking_support'),
+                                style: const TextStyle(
                                     fontSize: 21,
                                     fontWeight: FontWeight.w900))),
                         if (q.text.trim().isNotEmpty || category != null)
@@ -281,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       _search();
                                     },
                               icon: const Icon(Icons.close, size: 18),
-                              label: const Text('Clear filters')),
+                              label: Text(l.get('clear_filters'))),
                       ]),
                       const SizedBox(height: 10),
                     ]),
@@ -303,24 +311,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               HelpiErrorState(message: error!, onRetry: load),
                         ))
                       : cases.isEmpty
-                          ? const SliverFillRemaining(
+                          ? SliverFillRemaining(
                               child: Center(
                                   child: HelpiEmptyState(
                               icon: Icons.volunteer_activism_outlined,
-                              title: 'No requests found',
-                              message:
-                                  'Try another search or category to find someone to support.',
+                              title: l.get('no_requests_found'),
+                              message: l.get('try_another_group'),
                             )))
                           : SliverList(
                               delegate: SliverChildBuilderDelegate(
                                 (_, i) {
                                   final item = cases[i];
                                   final goal = (item['goalMinor'] ?? 0) / 100;
-                                  final raised =
-                                      (item['raisedMinor'] ?? 0) / 100;
-                                  final progress = goal > 0
-                                      ? (raised / goal).clamp(0.0, 1.0)
-                                      : 0.0;
                                   return Center(
                                       child: ConstrainedBox(
                                     constraints:
@@ -359,17 +361,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               BorderRadius
                                                                   .circular(8)),
                                                       child: Text(
-                                                          (item['category'] ??
-                                                                  'GENERAL')
-                                                              .toString(),
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: orange,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w900,
-                                                                  fontSize:
-                                                                      11))),
+                                                          caseCategoryLabel(
+                                                              (item['category'] ??
+                                                                      'OTHER')
+                                                                  .toString()),
+                                                          style: const TextStyle(
+                                                              color: orange,
+                                                              fontWeight:
+                                                                  FontWeight.w900,
+                                                              fontSize: 11))),
                                                   const Spacer(),
                                                   const Icon(Icons.public,
                                                       color: green, size: 18),
@@ -386,45 +386,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ],
                                               ),
                                               const SizedBox(height: 10),
-                                              Text(item['title'] ?? '',
-                                                  style: const TextStyle(
-                                                      fontSize: 18,
-                                                      fontWeight:
-                                                          FontWeight.w900)),
-                                              const SizedBox(height: 6),
-                                              Text(item['description'] ?? '',
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                      color: Colors.black54,
-                                                      fontSize: 13)),
-                                              const SizedBox(height: 14),
-                                              LinearProgressIndicator(
-                                                  value: progress,
-                                                  color: orange,
-                                                  backgroundColor:
-                                                      Colors.grey.shade200),
-                                              const SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                      '${item['currency'] ?? ''} ${raised.toStringAsFixed(0)} raised of ${goal.toStringAsFixed(0)}',
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w800,
-                                                          fontSize: 12)),
-                                                  Text(
-                                                      '${(progress * 100).toStringAsFixed(0)}%',
-                                                      style: const TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          color: orange,
-                                                          fontSize: 12)),
-                                                ],
+                                              Text(
+                                                '${item['currency'] ?? ''} ${goal.toStringAsFixed(0)} requested',
+                                                style: const TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -499,18 +466,20 @@ class _HomeScreenState extends State<HomeScreen> {
       case 'ORPHAN':
         return Icons.child_care;
       case 'WAR_VICTIM':
+      case 'WAR_SURVIVOR':
         return Icons.shield_outlined;
       case 'DISABILITY':
         return Icons.accessible;
+      case 'DISPLACED_PERSON':
+        return Icons.flight_outlined;
+      case 'ELDERLY':
+        return Icons.elderly_outlined;
+      case 'CAREGIVER':
+        return Icons.volunteer_activism_outlined;
+      case 'UNEMPLOYED':
+        return Icons.work_off_outlined;
       default:
         return Icons.volunteer_activism_outlined;
     }
   }
-
-  String _categoryLabel(String value) => value
-      .replaceAll('_', ' ')
-      .toLowerCase()
-      .split(' ')
-      .map((w) => '${w[0].toUpperCase()}${w.substring(1)}')
-      .join(' ');
 }

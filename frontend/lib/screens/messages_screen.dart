@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
+import '../core/localization.dart';
 import '../core/theme.dart';
 import '../widgets.dart';
 import 'voice_call_screen.dart';
@@ -30,20 +31,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
     });
     try {
       final state = context.read<AppState>();
-      final result = state.demoMode
+      final List<dynamic> result = state.demoMode
           ? [
               {
                 'id': 'thread-1',
-                'case': {'title': 'School medical support'},
+                'case': {'title': 'Orphan support request'},
                 'participants': [
                   {'id': 'demo-helper-1', 'name': 'Sarah Johnson'},
                   {'id': 'demo-user', 'name': 'Helpi Demo User'}
                 ],
-                'lastMessage': 'I can help with the school supplies.',
+                'lastMessage':
+                    'I would like to offer KES 5,000. Let’s connect.',
               },
               {
                 'id': 'thread-2',
-                'case': {'title': 'Emergency food support'},
+                'case': {'title': 'War survivor support request'},
                 'participants': [
                   {'id': 'demo-helper-2', 'name': 'James Otieno'},
                   {'id': 'demo-user', 'name': 'Helpi Demo User'}
@@ -64,9 +66,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   Widget build(BuildContext c) {
-    final currentUserId = context.watch<AppState>().user?['id']?.toString();
+    final appState = context.watch<AppState>();
+    final l = AppLocalizations(appState.locale);
+    final currentUserId = appState.user?['id']?.toString();
     return Scaffold(
-      appBar: AppBar(title: const Text('Messages')),
+      appBar: AppBar(title: Text(l.get('messages'))),
       body: RefreshIndicator(
         onRefresh: load,
         child: Center(
@@ -85,24 +89,24 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         end: Alignment.bottomRight),
                     borderRadius: BorderRadius.circular(22),
                   ),
-                  child: const Row(
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.forum_outlined, color: Colors.white, size: 26),
-                      SizedBox(width: 12),
+                      const Icon(Icons.forum_outlined,
+                          color: Colors.white, size: 26),
+                      const SizedBox(width: 12),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Talk about the help request',
-                                style: TextStyle(
+                            Text(l.get('talk_request'),
+                                style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w900)),
-                            SizedBox(height: 5),
-                            Text(
-                                'Keep your conversation in Helpi. Never share passwords, card details or one-time codes.',
-                                style: TextStyle(
+                            const SizedBox(height: 5),
+                            Text(l.get('chat_hint'),
+                                style: const TextStyle(
                                     color: Colors.white70, height: 1.35)),
                           ],
                         ),
@@ -111,9 +115,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   ),
                 ),
                 const SizedBox(height: 22),
-                const Text('Your conversations',
-                    style:
-                        TextStyle(fontSize: 21, fontWeight: FontWeight.w900)),
+                Text(l.get('your_conversations'),
+                    style: const TextStyle(
+                        fontSize: 21, fontWeight: FontWeight.w900)),
                 const SizedBox(height: 10),
                 if (busy)
                   const Padding(
@@ -124,19 +128,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 else if (error != null)
                   HelpiErrorState(message: error!, onRetry: load)
                 else if (threads.isEmpty)
-                  const HelpiEmptyState(
+                  HelpiEmptyState(
                     icon: Icons.chat_bubble_outline,
-                    title: 'No conversations yet',
-                    message:
-                        'Conversations about financial help requests will appear here.',
+                    title: l.get('no_conversations'),
+                    message: l.get('conversations_empty_hint'),
                   )
                 else
                   ...threads.map((thread) {
                     final threadCase = thread['case'];
                     final title = threadCase is Map
-                        ? (threadCase['title']?.toString() ??
-                            'Financial help request')
-                        : 'Financial help request';
+                        ? (threadCase['title']?.toString() ?? 'Support request')
+                        : 'Support request';
                     final participants = thread['participants'];
                     final peerName = _peerName(participants, currentUserId);
                     final latest = thread['lastMessage'] ??
@@ -247,12 +249,14 @@ class ThreadScreen extends StatefulWidget {
   final String id;
   final String title;
   final String peerName;
+  final String? initialMessage;
 
   const ThreadScreen({
     super.key,
     required this.id,
     required this.title,
     required this.peerName,
+    this.initialMessage,
   });
 
   @override
@@ -280,9 +284,16 @@ class _ThreadScreenState extends State<ThreadScreen> {
     });
     try {
       final state = context.read<AppState>();
-      final result = state.demoMode
+      final List<dynamic> result = state.demoMode
           ? _demoMessages()
           : await state.api.threadMessages(widget.id);
+      if (state.demoMode && widget.initialMessage != null) {
+        result.add({
+          'senderId': state.user?['id'] ?? 'demo-user',
+          'senderName': 'You',
+          'body': widget.initialMessage,
+        });
+      }
       if (mounted) {
         setState(() {
           messages
@@ -304,7 +315,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         {
           'senderId': 'demo-helper',
           'senderName': widget.peerName,
-          'body': 'Hello, I saw your financial help request. How can I help?',
+          'body': 'Hello, I would like to connect and offer support.',
         },
         {
           'senderId': 'demo-user',
@@ -373,7 +384,9 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
   @override
   Widget build(BuildContext c) {
-    final userId = context.watch<AppState>().user?['id']?.toString();
+    final appState = context.watch<AppState>();
+    final l = AppLocalizations(appState.locale);
+    final userId = appState.user?['id']?.toString();
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -390,7 +403,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
         ]),
         actions: [
           IconButton(
-            tooltip: 'Voice call',
+            tooltip: l.get('voice_call'),
             icon: const Icon(Icons.phone_outlined),
             onPressed: () => Navigator.push(
                 c,
@@ -399,7 +412,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                         VoiceCallScreen(peerName: widget.peerName))),
           ),
           IconButton(
-            tooltip: 'Video call',
+            tooltip: l.get('video_call'),
             icon: const Icon(Icons.videocam_outlined),
             onPressed: () => Navigator.push(
                 c,
@@ -424,13 +437,13 @@ class _ThreadScreenState extends State<ThreadScreen> {
                         ),
                       )
                     : messages.isEmpty
-                        ? const Center(
+                        ? Center(
                             child: Padding(
-                              padding: EdgeInsets.all(24),
+                              padding: const EdgeInsets.all(24),
                               child: Text(
-                                'Say hello and talk about how you can help.',
+                                l.get('say_hello'),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: Colors.black54, fontSize: 15),
                               ),
                             ),
@@ -459,7 +472,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                                     message['senderId']?.toString() == userId ||
                                         message['senderName'] == 'You';
                                 final sender = isMe
-                                    ? 'You'
+                                    ? l.get('you')
                                     : (message['senderName']?.toString() ??
                                         widget.peerName);
                                 final text = message['body']?.toString() ?? '';
@@ -562,8 +575,8 @@ class _ThreadScreenState extends State<ThreadScreen> {
                       maxLength: 4000,
                       textCapitalization: TextCapitalization.sentences,
                       keyboardType: TextInputType.multiline,
-                      decoration: const InputDecoration(
-                        hintText: 'Write a message',
+                      decoration: InputDecoration(
+                        hintText: l.get('write_message'),
                         counterText: '',
                         prefixIcon: Icon(Icons.chat_bubble_outline, size: 19),
                       ),
@@ -574,7 +587,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 4),
                     child: IconButton.filled(
-                      tooltip: 'Send message',
+                      tooltip: l.get('send_message'),
                       onPressed: sending ? null : send,
                       style: IconButton.styleFrom(
                           backgroundColor: orange,

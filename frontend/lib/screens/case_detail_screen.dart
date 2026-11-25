@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../core/app_state.dart';
+import '../core/case_categories.dart';
 import '../core/theme.dart';
-import 'payment_screen.dart';
+import 'messages_screen.dart';
 
 class CaseDetailScreen extends StatefulWidget {
   final Map<String, dynamic> item;
+
   const CaseDetailScreen({super.key, required this.item});
 
   @override
@@ -13,55 +16,146 @@ class CaseDetailScreen extends StatefulWidget {
 }
 
 class _CaseDetailScreenState extends State<CaseDetailScreen> {
-  Future<void> report() async {
-    final d = TextEditingController();
-    final ok = await showDialog<bool>(
+  bool contacting = false;
+
+  Future<void> _offerAndContact() async {
+    final amount = TextEditingController();
+    final currency = (widget.item['currency'] ?? '').toString();
+    final value = await showDialog<double>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Report this case'),
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Offer an amount'),
         content: TextField(
-            controller: d,
-            maxLines: 5,
-            decoration:
-                const InputDecoration(labelText: 'Tell us what seems wrong')),
+          controller: amount,
+          autofocus: true,
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          decoration: InputDecoration(
+            labelText: 'Amount you would like to offer',
+            prefixText: '$currency ',
+          ),
+        ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
           FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Report')),
+            onPressed: () {
+              final parsed = double.tryParse(amount.text.trim());
+              if (parsed != null && parsed.isFinite && parsed > 0) {
+                Navigator.pop(dialogContext, parsed);
+              }
+            },
+            child: const Text('Continue to chat'),
+          ),
         ],
       ),
     );
-    if (ok == true && d.text.trim().isNotEmpty) {
-      if (!mounted) {
-        return;
-      }
-      await context
-          .read<AppState>()
-          .api
-          .report('OTHER', d.text.trim(), caseId: widget.item['id']);
+    amount.dispose();
+    if (value == null || !mounted) return;
+
+    setState(() => contacting = true);
+    try {
+      final state = context.read<AppState>();
+      final amountMinor = (value * 100).round();
+      final offerText =
+          'I would like to offer $currency ${value.toStringAsFixed(2)}. Let’s connect to discuss details.';
+      final Map<String, dynamic> thread = state.demoMode
+          ? {
+              'id': 'demo-direct-${widget.item['id']}',
+              'title': 'Support request',
+            }
+          : await state.api
+              .startCaseChat(widget.item['id'].toString(), amountMinor);
+      if (!mounted) return;
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ThreadScreen(
+            id: thread['id'].toString(),
+            title: thread['title']?.toString() ?? 'Support request',
+            peerName: _requesterName(widget.item),
+            initialMessage: state.demoMode ? offerText : null,
+          ),
+        ),
+      );
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Report submitted for review.')));
+          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+        );
       }
+    } finally {
+      if (mounted) setState(() => contacting = false);
     }
   }
 
+  Future<void> _report() async {
+    final description = TextEditingController();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Report this request'),
+        content: TextField(
+          controller: description,
+          maxLines: 5,
+          decoration:
+              const InputDecoration(labelText: 'Tell us what seems wrong'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Report'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true && description.text.trim().isNotEmpty && mounted) {
+      try {
+        await context.read<AppState>().api.report(
+              'OTHER',
+              description.text.trim(),
+              caseId: widget.item['id'],
+            );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Report submitted for review.')),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      }
+    }
+    description.dispose();
+  }
+
   @override
-  Widget build(BuildContext c) {
+  Widget build(BuildContext context) {
     final item = widget.item;
-    final goal = _money(item['goalMinor']);
-    final raised = _money(item['raisedMinor']);
-    final progress = goal > 0 ? (raised / goal).clamp(0.0, 1.0) : 0.0;
+    final requested = _major(item['goalMinor']);
+    final currency = (item['currency'] ?? '').toString();
+    final category =
+        caseCategoryLabel((item['category'] ?? 'OTHER').toString());
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Financial help details'), actions: [
-        IconButton(
+      appBar: AppBar(
+        title: const Text('Request details'),
+        actions: [
+          IconButton(
             tooltip: 'Report request',
-            onPressed: report,
-            icon: const Icon(Icons.flag_outlined))
-      ]),
+            onPressed: _report,
+            icon: const Icon(Icons.flag_outlined),
+          ),
+        ],
+      ),
       bottomNavigationBar: SafeArea(
         minimum: const EdgeInsets.fromLTRB(16, 8, 16, 12),
         child: Center(
@@ -70,14 +164,23 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
             child: SizedBox(
               width: double.infinity,
               child: FilledButton.icon(
-                onPressed: () => Navigator.push(
-                    c,
-                    MaterialPageRoute(
-                        builder: (_) => PaymentScreen(item: item))),
-                icon: const Icon(Icons.favorite_outline),
-                label: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Text('Help this person financially')),
+                onPressed: contacting ? null : _offerAndContact,
+                icon: contacting
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : const Icon(Icons.chat_bubble_outline),
+                label: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  child: Text(contacting
+                      ? 'Opening chat…'
+                      : 'Offer an amount and contact'),
+                ),
               ),
             ),
           ),
@@ -88,114 +191,91 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 760),
             child: ListView(
-              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
               children: [
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                          colors: [orange, orangeDark],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight),
-                      borderRadius: BorderRadius.circular(24)),
+                    gradient: const LinearGradient(
+                      colors: [orange, orangeDark],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(children: [
-                        const Icon(Icons.volunteer_activism_outlined,
-                            color: Colors.white),
-                        const SizedBox(width: 8),
-                        Expanded(
+                      Row(
+                        children: [
+                          const Icon(Icons.volunteer_activism_outlined,
+                              color: Colors.white),
+                          const SizedBox(width: 8),
+                          Expanded(
                             child: Text(
-                                _categoryName(item['category']),
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w800))),
-                      ]),
-                      const SizedBox(height: 8),
-                      Text(item['title'] ?? '',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 27,
-                              fontWeight: FontWeight.w800,
-                              height: 1.15)),
-                      const SizedBox(height: 10),
-                      Row(children: [
-                        const Icon(Icons.person_outline,
-                            color: Colors.white70, size: 18),
-                        const SizedBox(width: 6),
-                        Expanded(
-                            child: Text(_publicName(item),
-                                style: const TextStyle(
-                                    color: Colors.white70,
-                                    fontWeight: FontWeight.w600)))
-                      ]),
+                              category,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 14),
+                      Text(
+                        _requesterName(item),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 23,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        (item['countryCode'] ?? '').toString(),
+                        style: const TextStyle(color: Colors.white70),
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 18),
                 Card(
                   child: Padding(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                    child: Text(
-                                        '${item['currency'] ?? ''} ${goal.toStringAsFixed(0)}',
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w900,
-                                            color: navy))),
-                                const Text('goal',
-                                    style: TextStyle(
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w700)),
-                              ]),
-                          const SizedBox(height: 12),
-                          ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: LinearProgressIndicator(
-                                  value: progress,
-                                  minHeight: 9,
-                                  color: orange,
-                                  backgroundColor:
-                                      orange.withValues(alpha: .12))),
-                          const SizedBox(height: 8),
-                          Row(children: [
-                            Expanded(
-                                child: Text(
-                                    '${item['currency'] ?? ''} ${raised.toStringAsFixed(0)} raised',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.w700))),
-                            Text('${(progress * 100).toStringAsFixed(0)}%',
-                                style: const TextStyle(
-                                    color: orange, fontWeight: FontWeight.w900))
-                          ]),
-                        ]),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Amount requested',
+                          style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          '$currency ${requested.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w900,
+                            color: navy,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 18),
-                Row(children: [
-                  _stat('Location', (item['countryCode'] ?? '').toString(),
-                      Icons.place_outlined),
-                  _stat(
-                      'Support type',
-                      (item['category'] ?? 'Financial').toString(),
-                      Icons.category_outlined)
-                ]),
-                const SizedBox(height: 18),
-                const Text('About this need',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Text(item['description'] ?? '',
-                    style: const TextStyle(fontSize: 16, height: 1.55)),
-                const SizedBox(height: 24),
+                const SizedBox(height: 14),
+                const Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text(
+                      'Helpi connects people seeking support with helpers. Contact this person directly to discuss details; you choose whether and how to help.',
+                      style: TextStyle(height: 1.45),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -204,54 +284,25 @@ class _CaseDetailScreenState extends State<CaseDetailScreen> {
     );
   }
 
-  double _money(dynamic value) => value is num
+  double _major(dynamic value) => value is num
       ? value / 100
       : (double.tryParse(value?.toString() ?? '') ?? 0) / 100;
 
-  String _publicName(Map<String, dynamic> i) {
-    if (i['publicDisplayName'] != null &&
-        i['publicDisplayName'].toString().trim().isNotEmpty) {
-      return 'Posted by ${i['publicDisplayName']}';
-    }
-    final owner = i['owner'];
+  String _requesterName(Map<String, dynamic> item) {
+    // A request may be posted by a helper for someone without a Helpi account.
+    // Respect request-level privacy before looking at the poster's profile.
+    if (item['publicIdentityMode'] == 'ANONYMOUS') return 'Anonymous member';
+    final displayName = item['publicDisplayName']?.toString().trim();
+    if (displayName != null && displayName.isNotEmpty) return displayName;
+    final owner = item['owner'];
     if (owner is Map) {
-      if (owner['publicIdentityMode'] == 'ANONYMOUS') {
-        return 'Posted anonymously';
+      if (owner['publicIdentityMode'] == 'ANONYMOUS') return 'Anonymous member';
+      if (owner['publicAlias'] != null &&
+          owner['publicAlias'].toString().trim().isNotEmpty) {
+        return owner['publicAlias'].toString();
       }
-      if (owner['publicIdentityMode'] == 'ALIAS' &&
-          owner['publicAlias'] != null) {
-        return 'Posted by ${owner['publicAlias']}';
-      }
-      if (owner['name'] != null) {
-        return 'Posted by ${owner['name']}';
-      }
+      if (owner['name'] != null) return owner['name'].toString();
     }
-    return 'Posted by a Helpi member';
+    return 'Helpi member';
   }
-
-  String _categoryName(dynamic value) {
-    final category = (value ?? 'Financial need').toString();
-    if (category == 'JOBLESS') return 'UNEMPLOYMENT';
-    return category.replaceAll('_', ' ').toUpperCase();
-  }
-
-  Widget _stat(String a, String b, IconData icon) => Expanded(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(icon, color: orange, size: 20),
-                const SizedBox(height: 8),
-                Text(a, style: const TextStyle(color: Colors.black54)),
-                const SizedBox(height: 4),
-                Text(b,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 17)),
-              ],
-            ),
-          ),
-        ),
-      );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
+import '../core/case_categories.dart';
 import '../core/theme.dart';
 
 class ReferralScreen extends StatefulWidget {
@@ -12,15 +13,16 @@ class ReferralScreen extends StatefulWidget {
 
 class _ReferralScreenState extends State<ReferralScreen> {
   final name = TextEditingController();
-  final need = TextEditingController();
+  final amount = TextEditingController();
   final contact = TextEditingController();
+  String? category;
   bool consent = false;
   bool busy = false;
 
   @override
   void dispose() {
     name.dispose();
-    need.dispose();
+    amount.dispose();
     contact.dispose();
     super.dispose();
   }
@@ -40,7 +42,26 @@ class _ReferralScreenState extends State<ReferralScreen> {
             const SizedBox(height: 14),
             TextField(controller: name, decoration: const InputDecoration(labelText: 'Person’s name')),
             const SizedBox(height: 10),
-            TextField(controller: need, maxLines: 5, decoration: const InputDecoration(labelText: 'What help do they need?')),
+            DropdownButtonFormField<String>(
+              initialValue: category,
+              items: caseCategoryLabels.entries
+                  .map((entry) => DropdownMenuItem(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      ))
+                  .toList(),
+              onChanged: (value) => setState(() => category = value),
+              decoration: const InputDecoration(labelText: 'Their group'),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: amount,
+              keyboardType: TextInputType.text,
+              decoration: const InputDecoration(
+                labelText: 'Amount and currency they are seeking',
+                hintText: 'e.g. KES 5,000',
+              ),
+            ),
             const SizedBox(height: 10),
             TextField(controller: contact, decoration: const InputDecoration(labelText: 'Safe contact method (optional)')),
             CheckboxListTile(
@@ -54,17 +75,27 @@ class _ReferralScreenState extends State<ReferralScreen> {
               onPressed: !consent || busy
                   ? null
                   : () async {
+                      if (name.text.trim().length < 2 ||
+                          category == null ||
+                          amount.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(c).showSnackBar(
+                          const SnackBar(
+                            content: Text('Enter their name, group, and requested amount.'),
+                          ),
+                        );
+                        return;
+                      }
                       setState(() => busy = true);
                       try {
                         await c.read<AppState>().api.createReferral({
                           'personName': name.text.trim(),
-                          'needSummary': need.text.trim(),
+                          'needSummary': 'Group: ${caseCategoryLabel(category!)}. Amount requested: ${amount.text.trim()}.',
                           'safeContact': contact.text.trim().isEmpty ? null : contact.text.trim(),
                           'consentConfirmed': true,
                         });
                         if (c.mounted) {
                           ScaffoldMessenger.of(c).showSnackBar(
-                            const SnackBar(content: Text('Referral captured. A full referral case will require consent and verification before publication.')),
+                            const SnackBar(content: Text('Referral saved. They can post their group and requested amount when they are ready.')),
                           );
                           Navigator.pop(c);
                         }

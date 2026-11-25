@@ -42,7 +42,7 @@ class EmergencyScreen extends StatelessWidget {
                   const SizedBox(height: 14),
                   const Text('I NEED URGENT HELP', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
                   const SizedBox(height: 6),
-                  const Text('Get immediate assistance and verified emergency routing.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
+                  const Text('Find local emergency contacts and support.', textAlign: TextAlign.center, style: TextStyle(color: Colors.white70)),
                 ],
               ),
             ),
@@ -72,7 +72,7 @@ class EmergencyScreen extends StatelessWidget {
                         context: c,
                         builder: (_) => AlertDialog(
                           title: Text('Emergency: ${e['title']}'),
-                          content: Text('Dispatching urgent alert for ${e['title']} assistance with accelerated verification.'),
+                          content: Text('Connecting you with local emergency support.'),
                           actions: [
                             TextButton(onPressed: () => Navigator.pop(c), child: const Text('Cancel')),
                             FilledButton(

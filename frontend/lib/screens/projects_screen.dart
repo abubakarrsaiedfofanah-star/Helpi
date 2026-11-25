@@ -19,7 +19,7 @@ class ProjectsScreen extends StatelessWidget {
         children: [
           const Text('Institutional & Community Projects', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
           const SizedBox(height: 6),
-          const Text('Track verified milestone-based projects supported by the Helpi community.', style: TextStyle(color: Colors.black54)),
+          const Text('Browse support requests from people in the Helpi community.', style: TextStyle(color: Colors.black54)),
           const SizedBox(height: 18),
           ...projects.map((p) => Card(
                 margin: const EdgeInsets.only(bottom: 14),

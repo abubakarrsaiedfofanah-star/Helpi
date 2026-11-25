@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/api.dart';
 import 'biometric_service.dart';
+import 'localization.dart';
 
 const bool helpiDemoMode =
     bool.fromEnvironment('HELPI_DEMO', defaultValue: false);
@@ -12,11 +15,13 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
   final storage = const FlutterSecureStorage();
   bool loading = true;
   String? access;
+  String? lastDevelopmentVerificationToken;
   Map<String, dynamic>? user;
   DateTime? _pausedAt;
 
   AppState() {
     WidgetsBinding.instance.addObserver(this);
+    api.onUnauthorized = _refreshExpiredSession;
   }
 
   @override
@@ -52,6 +57,20 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     return name.isEmpty ? 'Your account' : name;
   }
 
+  Future<bool> _refreshExpiredSession() async {
+    if (helpiDemoMode) return false;
+    final refreshToken = await storage.read(key: 'refresh');
+    if (refreshToken == null || refreshToken.isEmpty) return false;
+    try {
+      await _set(await api.refresh(refreshToken));
+      return true;
+    } catch (_) {
+      await _clear();
+      notifyListeners();
+      return false;
+    }
+  }
+
   bool isDarkMode = false;
   String locale = 'en';
 
@@ -60,51 +79,65 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     notifyListeners();
   }
 
-  void setLocale(String l) {
+  Future<void> setLocale(String l) async {
+    if (!AppLocalizations.supportedLanguages.containsKey(l)) return;
     locale = l;
+    unawaited(storage.write(key: 'preferred_locale', value: l));
     notifyListeners();
   }
 
   List<Map<String, dynamic>> get demoCases => const [
         {
           'id': 'demo-hardship-1',
-          'title': 'Help a family through hardship',
+          'title': 'Orphan support request',
           'description':
-              'A parent is asking for financial help to support their family.',
-          'category': 'HARDSHIP',
+              'Seeking financial support. Contact directly to discuss details.',
+          'category': 'ORPHAN',
           'countryCode': 'KE',
           'city': 'Nairobi',
           'currency': 'KES',
           'goalMinor': 180000,
-          'raisedMinor': 112000,
         },
         {
           'id': 'demo-widow-1',
-          'title': 'Support for a widow',
+          'title': 'Widow support request',
           'description':
-              'A widow is asking for financial support as she rebuilds stability for her family.',
+              'Seeking financial support. Contact directly to discuss details.',
           'category': 'WIDOW',
           'countryCode': 'KE',
           'city': 'Kajiado',
           'currency': 'KES',
           'goalMinor': 95000,
-          'raisedMinor': 67000,
         },
         {
           'id': 'demo-jobless-1',
-          'title': 'Help an unemployed worker',
+          'title': 'War survivor support request',
           'description':
-              'A job seeker needs financial help while looking for work.',
-          'category': 'JOBLESS',
+              'Seeking financial support. Contact directly to discuss details.',
+          'category': 'WAR_SURVIVOR',
           'countryCode': 'KE',
           'city': 'Mombasa',
           'currency': 'KES',
           'goalMinor': 120000,
-          'raisedMinor': 54000,
+        },
+        {
+          'id': 'demo-family-1',
+          'title': 'Single-parent family support request',
+          'description':
+              'Seeking financial support. Contact directly to discuss details.',
+          'category': 'SINGLE_PARENT',
+          'countryCode': 'KE',
+          'city': 'Kisumu',
+          'currency': 'KES',
+          'goalMinor': 85000,
         },
       ];
 
   Future<void> restore() async {
+    final savedLocale = await storage.read(key: 'preferred_locale');
+    if (AppLocalizations.supportedLanguages.containsKey(savedLocale)) {
+      locale = savedLocale!;
+    }
     if (helpiDemoMode) {
       access = 'demo-access';
       user = {
@@ -171,7 +204,9 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     String country, {
     bool anonymousPublic = false,
     String? publicAlias,
+    String? supportGroup,
   }) async {
+    lastDevelopmentVerificationToken = null;
     if (helpiDemoMode) {
       access = 'demo-access';
       user = {
@@ -179,6 +214,7 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
         'name': name.isEmpty ? 'Helpi Demo User' : name,
         'email': email.isEmpty ? 'demo@helpi.local' : email,
         'countryCode': country,
+        'supportGroup': supportGroup,
         'publicAlias': (publicAlias == null || publicAlias.isEmpty)
             ? 'Demo Member'
             : publicAlias,
@@ -193,11 +229,24 @@ class AppState extends ChangeNotifier with WidgetsBindingObserver {
     }
     try {
       final r = await api.register(name, email, password, country,
-          anonymousPublic: anonymousPublic, publicAlias: publicAlias);
+          anonymousPublic: anonymousPublic,
+          publicAlias: publicAlias,
+          supportGroup: supportGroup);
+      lastDevelopmentVerificationToken =
+          r['verificationTokenForDevelopment']?.toString();
       if (r['accessToken'] != null) await _set(r);
       return null;
     } catch (e) {
       return e.toString().replaceFirst('Exception: ', '');
+    }
+  }
+
+  Future<String?> verifyEmail(String token) async {
+    try {
+      await api.verifyEmail(token);
+      return null;
+    } catch (error) {
+      return error.toString().replaceFirst('Exception: ', '');
     }
   }
 

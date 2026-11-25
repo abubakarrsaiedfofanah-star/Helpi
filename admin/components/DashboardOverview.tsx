@@ -4,87 +4,37 @@ interface DashboardOverviewProps {
   error: string;
   load: () => void;
   setTab: (tab: any) => void;
-  cards: [string, any, string][];
-  featureCards: [string, string, string][];
+  cards: [string, number | undefined, string][];
+  featureCards: [string, string, any][];
 }
 
+const groupLabels: Record<string, string> = {
+  ORPHAN: 'Orphans', WIDOW: 'Widows', WAR_SURVIVOR: 'War survivors',
+  DISABILITY: 'People with disabilities', ELDERLY: 'Older adults',
+  DISPLACED_PERSON: 'Refugees and displaced people', SINGLE_PARENT: 'Single parents',
+  UNEMPLOYED: 'Unemployed people', LOW_INCOME_FAMILY: 'Low-income families',
+  CAREGIVER: 'Caregivers', CHRONIC_ILLNESS: 'People with chronic illness',
+  HOMELESS: 'People without stable housing', TRAFFICKING_SURVIVOR: 'Survivors of trafficking or abuse',
+  OTHER: 'Other groups',
+};
+
 export function DashboardOverview({ d, title, error, load, setTab, cards, featureCards }: DashboardOverviewProps) {
-  return (
-    <>
-      {d && (d.verificationQueue > 0 || d.fraudQueue > 0 || d.openReports > 0) && (
-        <div style={{ background: '#FEF3C7', border: '1px solid #F59E0B', padding: '12px 20px', margin: '16px 20px 0', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span><b>Action Required:</b> {d.verificationQueue} cases in verification queue, {d.fraudQueue} fraud signals, {d.openReports} open reports.</span>
-          <button onClick={() => setTab('fraud')} style={{ background: '#D97706', color: '#fff', border: 0, padding: '6px 12px', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}>Review Queue</button>
-        </div>
-      )}
-      <section className="hero">
-        <div>
-          <p className="eyebrow">GLOBAL HUMANITARIAN NETWORK • SECURITY FIRST</p>
-          <h1>{title}</h1>
-          <p>One responsive platform for discovering verified needs, coordinating assistance, protecting people and proving impact.</p>
-          <div className="heroActions">
-            <button className="primary" onClick={() => setTab('discover')}>Explore verified needs</button>
-            <button className="light" onClick={() => setTab('trust')}>Open Trust Center</button>
-          </div>
-        </div>
-        <div className="shield">✓</div>
-      </section>
-      {error && <div className="alert">{error}</div>}
-      <section className="sectionHead">
-        <div>
-          <h2>Platform pulse</h2>
-          <p>Live counts from the connected database. No fabricated operational totals.</p>
-        </div>
-        <button className="ghost" onClick={load}>Refresh</button>
-      </section>
-      <section className="grid">
-        {cards.map(([k, v, s]) => (
-          <article className="metric" key={String(k)}>
-            <span>{k}</span>
-            <b>{v ?? '—'}</b>
-            <small>{s}</small>
-          </article>
-        ))}
-      </section>
-      <section className="featureGrid">
-        {featureCards.map(([k, p, t]) => (
-          <button className="feature" key={k} onClick={() => setTab(t)}>
-            <span className="featureIcon">{k === 'Verified Help' ? '✓' : k === 'Trust Passport' ? '◈' : k === 'Proof of Impact' ? '♥' : k === 'Organization Network' ? '▣' : k === 'Global Help' ? '◎' : '♧'}</span>
-            <div>
-              <b>{k}</b>
-              <p>{p}</p>
-            </div>
-            <span className="arrow">→</span>
-          </button>
-        ))}
-      </section>
-      <section className="panels">
-        <article>
-          <div className="cardHead">
-            <h2>Security guardrails</h2>
-            <span className="ok">ACTIVE</span>
-          </div>
-          <ul>
-            <li><b>Private evidence</b><span>Short-lived access links and ownership checks.</span></li>
-            <li><b>Human review</b><span>Fraud and safeguarding signals are investigation leads, not verdicts.</span></li>
-            <li><b>Payment controls</b><span>Country-aware provider routing and signed webhooks.</span></li>
-            <li><b>Auditability</b><span>Administrative actions are recorded for accountability.</span></li>
-          </ul>
-        </article>
-        <article>
-          <div className="cardHead">
-            <h2>Trust layers</h2>
-            <span className="ok">MULTI-LAYERED</span>
-          </div>
-          {['Identity', 'Need', 'Institution', 'Payment destination', 'Independent evidence', 'Recent review'].map((x) => (
-            <div className="status" key={x}>
-              <span className="dot" />
-              <b>{x}</b>
-              <span>Specific verification</span>
-            </div>
-          ))}
-        </article>
-      </section>
-    </>
-  );
+  const groups = (d?.requestGroups || []) as { category: string; _count: { _all: number } }[];
+  const maxCount = Math.max(1, ...groups.map((group) => group._count._all));
+
+  return <>
+    <section className="hero">
+      <div><p className="eyebrow">HELPI COMMUNITY</p><h1>{title}</h1><p>Keep the community organized so people can connect directly with helpers and NGOs.</p><div className="heroActions"><button className="primary" onClick={() => setTab('requests')}>View requests</button><button className="light" onClick={() => setTab('people')}>Manage people</button></div></div>
+      <div className="shield" aria-hidden="true">H</div>
+    </section>
+    {error && <div className="alert" role="alert">{error}</div>}
+    <section className="sectionHead"><div><h2>Community overview</h2><p>Live counts from the Helpi database.</p></div><button className="ghost" onClick={load}>Refresh</button></section>
+    <section className="grid">{cards.map(([label, value, note]) => <article className="metric" key={label}><span>{label}</span><b>{value ?? '-'}</b><small>{note}</small></article>)}</section>
+    <section className="panels">
+      <article><div className="cardHead"><div><h2>Requests by group</h2><p className="muted">Requests show a support group and amount.</p></div><button className="ghost" onClick={() => setTab('requests')}>View list</button></div>
+        {groups.length ? groups.map((group) => <div className="groupBar" key={group.category}><div><b>{groupLabels[group.category] || group.category}</b><span>{group._count._all}</span></div><div className="barTrack"><i style={{ width: `${Math.max(5, group._count._all / maxCount * 100)}%` }} /></div></div>) : <div className="emptyState"><h3>No published requests yet</h3><p>Requests will appear here when people post them.</p></div>}
+      </article>
+      <article><div className="cardHead"><h2>Admin workspaces</h2><span className="ok">READY</span></div><div className="adminQuickLinks">{featureCards.map(([label, description, target]) => <button key={label} className="quickLink" onClick={() => setTab(target)}><span className="featureIcon" aria-hidden="true">{label === 'Support requests' ? 'R' : label === 'Organizations' ? 'O' : label === 'Community safety' ? '!' : 'P'}</span><span><b>{label}</b><small>{description}</small></span><span className="arrow" aria-hidden="true">&gt;</span></button>)}</div></article>
+    </section>
+  </>;
 }

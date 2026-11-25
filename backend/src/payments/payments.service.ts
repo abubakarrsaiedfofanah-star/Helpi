@@ -69,7 +69,9 @@ export class PaymentsService {
   }
 
   async webhook(b:{transactionId:string; status:'PROCESSING'|'SUCCEEDED'|'FAILED'; providerReference?:string; amountMinor?:number; currency?:string; eventType?:string; providerId?:string}) {
-    if (!b.transactionId || !b.providerReference || !b.eventType) throw new BadRequestException('Incomplete payment event.');
+    const providerReference = b.providerReference;
+    const eventType = b.eventType;
+    if (!b.transactionId || !providerReference || !eventType) throw new BadRequestException('Incomplete payment event.');
     const tx = await this.prisma.transaction.findUnique({where:{id:b.transactionId}});
     if (!tx) throw new NotFoundException('Transaction not found.');
     if (b.amountMinor !== undefined && b.amountMinor !== tx.amountMinor) return this.reject(tx.id,'Provider amount mismatch.');
@@ -77,19 +79,19 @@ export class PaymentsService {
 
     const payloadHash = createHash('sha256').update(JSON.stringify(b)).digest('hex');
     try {
-      await this.prisma.paymentWebhookEvent.create({data:{providerReference:b.providerReference,eventType:b.eventType,payloadHash}});
+      await this.prisma.paymentWebhookEvent.create({data:{providerReference,eventType,payloadHash}});
     } catch {
       // Duplicate provider event: idempotent success, never apply it twice.
       return this.publicTransaction(tx);
     }
 
-    if (tx.providerReference && tx.providerReference !== b.providerReference) return this.reject(tx.id,'Transaction already has a different provider reference.');
+    if (tx.providerReference && tx.providerReference !== providerReference) return this.reject(tx.id,'Transaction already has a different provider reference.');
     if (!(allowedTransitions[tx.status] || []).includes(b.status)) return this.reject(tx.id,`Invalid payment state transition: ${tx.status} -> ${b.status}.`);
 
     const updated = await this.prisma.$transaction(async db => {
-      const next = await db.transaction.update({where:{id:tx.id},data:{status:b.status,providerReference:b.providerReference}});
-      await db.paymentWebhookEvent.update({where:{providerReference_eventType:{providerReference:b.providerReference,eventType:b.eventType}},data:{processed:true,processedAt:new Date()}});
-      await db.auditLog.create({data:{userId:tx.userId,action:`PAYMENT_${b.status}`,metadata:{transactionId:tx.id,providerReference:b.providerReference,eventType:b.eventType}}});
+      const next = await db.transaction.update({where:{id:tx.id},data:{status:b.status,providerReference}});
+      await db.paymentWebhookEvent.update({where:{providerReference_eventType:{providerReference,eventType}},data:{processed:true,processedAt:new Date()}});
+      await db.auditLog.create({data:{userId:tx.userId,action:`PAYMENT_${b.status}`,metadata:{transactionId:tx.id,providerReference,eventType}}});
       return next;
     });
     return this.publicTransaction(updated);

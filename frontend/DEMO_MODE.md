@@ -16,4 +16,4 @@ flutter pub get
 flutter run --dart-define=HELPI_DEMO=true
 ```
 
-The preview supplies sample verified cases so Home and Explore can be opened without a backend. Production builds should omit the define.
+The preview opens on Find help and supplies sample support requests by group without a backend. Production builds should omit the define.

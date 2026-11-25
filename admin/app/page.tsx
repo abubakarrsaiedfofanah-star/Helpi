@@ -1,115 +1,181 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
-import { Sidebar } from '../components/Sidebar';
-import { Header } from '../components/Header';
-import { DashboardOverview } from '../components/DashboardOverview';
-import { MediaReviewView } from '../components/MediaReviewView';
-import { CountryOpsView } from '../components/CountryOpsView';
-import { AuditTrailView } from '../components/AuditTrailView';
-import { FraudQueueView } from '../components/FraudQueueView';
-import { GenericWorkspaceView } from '../components/GenericWorkspaceView';
 
-const api = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
-type Dashboard = { users: number; cases: number; verificationQueue: number; fraudQueue: number; openReports: number; transactions: number; openSafeguarding: number; organizations: number; helpCircles: number; appeals: number };
-type Tab = 'overview' | 'discover' | 'trust' | 'impact' | 'organizations' | 'countries' | 'circles' | 'security' | 'media' | 'global' | 'audit' | 'fraud';
+import { FormEvent, useEffect, useState } from 'react';
+import { AuditTrailView } from '../components/AuditTrailView';
+import { DashboardOverview } from '../components/DashboardOverview';
+import { Header } from '../components/Header';
+import { OrganizationsView } from '../components/OrganizationsView';
+import { PeopleView } from '../components/PeopleView';
+import { RequestsView } from '../components/RequestsView';
+import { SafetyReportsView } from '../components/SafetyReportsView';
+import { Sidebar } from '../components/Sidebar';
+import { adminFetch, api, clearAdminSession, saveAdminSession } from '../lib/api';
+
+type Tab = 'overview' | 'requests' | 'people' | 'organizations' | 'safety' | 'audit';
+type Dashboard = {
+  users: number;
+  activeUsers: number;
+  pendingUsers: number;
+  suspendedUsers: number;
+  publishedRequests: number;
+  openReports: number;
+  safeguarding: number;
+  organizations: number;
+  requestGroups: { category: string; _count: { _all: number } }[];
+};
 
 const tabs: { id: Tab; label: string; icon: string }[] = [
-  { id: 'overview', label: 'Dashboard', icon: '⌂' },
-  { id: 'media', label: 'Media Review', icon: '▶' },
-  { id: 'audit', label: 'Audit Trail', icon: '⚖' },
-  { id: 'fraud', label: 'Fraud Queue', icon: '⚡' },
-  { id: 'discover', label: 'Discover', icon: '⌕' },
-  { id: 'trust', label: 'Trust Center', icon: '✓' },
-  { id: 'impact', label: 'Impact', icon: '♥' },
-  { id: 'organizations', label: 'Organizations', icon: '▣' },
-  { id: 'countries', label: 'Countries', icon: '◎' },
-  { id: 'circles', label: 'Help Circles', icon: '♧' },
-  { id: 'global', label: 'Global Ops', icon: '◉' },
-  { id: 'security', label: 'Security', icon: '◆' }
+  { id: 'overview', label: 'Dashboard', icon: 'H' },
+  { id: 'requests', label: 'Requests', icon: 'R' },
+  { id: 'people', label: 'People', icon: 'P' },
+  { id: 'organizations', label: 'Organizations', icon: 'O' },
+  { id: 'safety', label: 'Safety reports', icon: '!' },
+  { id: 'audit', label: 'Audit trail', icon: 'A' },
 ];
 
-const featureCards: [string, string, string][] = [
-  ['Verified Help', 'Browse needs that passed the required verification workflow.', 'discover'],
-  ['Trust Passport', 'Understand exactly what was checked without turning trust into a score.', 'trust'],
-  ['Proof of Impact', 'Follow assistance from contribution to confirmed outcome.', 'impact'],
-  ['Organization Network', 'Schools, hospitals, NGOs and community groups can work through one system.', 'organizations'],
-  ['Global Help', 'Country-aware discovery, currencies and payment routes.', 'countries'],
-  ['Help Circles', 'Coordinate family, friends or community support privately.', 'circles'],
+const featureCards: [string, string, Tab][] = [
+  ['Support requests', 'Browse requests by support group and amount.', 'requests'],
+  ['People', 'Manage member accounts and access.', 'people'],
+  ['Organizations', 'See NGOs and community partners.', 'organizations'],
+  ['Community safety', 'Review community conduct reports.', 'safety'],
 ];
+
+const titles: Record<Tab, string> = {
+  overview: 'Connect people with support.',
+  requests: 'Requests by support group.',
+  people: 'Community accounts and access.',
+  organizations: 'Organizations and community helpers.',
+  safety: 'Support a safe community.',
+  audit: 'Review administrator activity.',
+};
 
 export default function Page() {
+  const [token, setToken] = useState('');
   const [d, setD] = useState<Dashboard | null>(null);
   const [tab, setTab] = useState<Tab>('overview');
   const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [mfaCode, setMfaCode] = useState('');
+  const [busy, setBusy] = useState(false);
 
-  const load = () => {
-    const token = typeof window !== 'undefined' ? localStorage.getItem('helpi_admin_token') : '';
-    fetch(`${api}/admin/dashboard`, { headers: { Authorization: `Bearer ${token || ''}` } })
-      .then(async (r) => {
-        if (!r.ok) throw new Error('Admin authentication required.');
-        return r.json();
-      })
-      .then(setD)
-      .catch((e) => setError(e.message));
+  const load = async (authToken: string) => {
+    try {
+      const response = await adminFetch('/admin/dashboard', {}, authToken);
+      if (!response.ok) {
+        if (response.status === 401 || response.status === 403) {
+          clearAdminSession();
+          setToken('');
+        }
+        throw new Error(response.status === 403 ? 'Administrator access is required.' : 'Could not load the admin dashboard.');
+      }
+      setD(await response.json());
+      setError('');
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Could not connect to Helpi.');
+    }
   };
 
-  useEffect(load, []);
+  useEffect(() => {
+    const saved = sessionStorage.getItem('helpi_admin_token') || '';
+    if (saved) {
+      setToken(saved);
+      void load(saved);
+    }
+  }, []);
 
-  const cards: [string, any, string][] = useMemo(() => [
-    ['People', d?.users, 'users'],
-    ['Active cases', d?.cases, 'cases'],
-    ['Verification queue', d?.verificationQueue, 'review'],
-    ['Fraud queue', d?.fraudQueue, 'risk'],
-    ['Open reports', d?.openReports, 'reports'],
-    ['Transactions', d?.transactions, 'payments'],
-    ['Safeguarding', d?.openSafeguarding, 'safety'],
-    ['Organizations', d?.organizations, 'network'],
-    ['Help circles', d?.helpCircles, 'groups'],
-    ['Appeals', d?.appeals, 'fairness']
-  ], [d]);
+  useEffect(() => {
+    const expire = () => {
+      setToken('');
+      setD(null);
+      setError('Your admin session expired. Sign in again.');
+    };
+    window.addEventListener('helpi-admin-session-expired', expire);
+    return () => window.removeEventListener('helpi-admin-session-expired', expire);
+  }, []);
 
-  const title = {
-    overview: 'Protect people while enabling help.',
-    discover: 'Discover verified needs safely.',
-    trust: 'Make trust understandable.',
-    impact: 'Show where help creates impact.',
-    organizations: 'Connect the humanitarian network.',
-    countries: 'Help anywhere, with local context.',
-    circles: 'Make helping social and coordinated.',
-    security: 'Protect the people and the platform.',
-    media: 'Review public-facing video evidence safely.',
-    global: 'Operate Helpi consistently across countries.',
-    audit: 'Immutable administrative audit log.',
-    fraud: 'Investigate high-risk signals and fraud queues.'
-  }[tab];
+  const signIn = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setBusy(true);
+    setError('');
+    try {
+      const response = await fetch(`${api}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, ...(mfaCode ? { mfaCode } : {}) }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || 'Sign-in failed.');
+      if (result.user?.role !== 'ADMIN') throw new Error('This account is not an administrator.');
+      saveAdminSession(result.accessToken, result.refreshToken);
+      setToken(result.accessToken);
+      await load(result.accessToken);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : 'Sign-in failed.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const signOut = () => {
+    const refreshToken = sessionStorage.getItem('helpi_admin_refresh_token');
+    if (refreshToken) {
+      void fetch(`${api}/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      });
+    }
+    clearAdminSession();
+    setToken('');
+    setD(null);
+    setError('');
+  };
+
+  if (!token) {
+    return (
+      <main className="loginPage">
+        <form className="loginCard" onSubmit={signIn}>
+          <div className="mark">H</div>
+          <p className="eyebrow">HELPI ADMIN</p>
+          <h1>Welcome back</h1>
+          <p>Sign in to manage community accounts, requests, organizations, and safety reports.</p>
+          <label>Email<input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="username" /></label>
+          <label>Password<input type="password" value={password} onChange={(event) => setPassword(event.target.value)} required autoComplete="current-password" /></label>
+          <label>Authenticator code <span className="muted">If enabled</span><input inputMode="numeric" value={mfaCode} onChange={(event) => setMfaCode(event.target.value.replace(/\D/g, '').slice(0, 6))} maxLength={6} autoComplete="one-time-code" /></label>
+          {error && <div className="alert" role="alert">{error}</div>}
+          <button className="primary" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        </form>
+      </main>
+    );
+  }
+
+  const cards: [string, number | undefined, string][] = [
+    ['Active people', d?.activeUsers, 'accounts'],
+    ['Requests', d?.publishedRequests, 'published'],
+    ['Pending accounts', d?.pendingUsers, 'awaiting account activation'],
+    ['Open reports', d?.openReports, 'awaiting review'],
+    ['Safeguarding cases', d?.safeguarding, 'open or being investigated'],
+    ['Organizations', d?.organizations, 'community partners'],
+  ];
 
   return (
     <main>
-      <Sidebar open={open} tab={tab} setTab={setTab} setOpen={setOpen} tabs={tabs} />
+      <Sidebar open={open} tab={tab} setTab={setTab} setOpen={setOpen} tabs={tabs} onSignOut={signOut} />
       <section className="content">
         <Header setOpen={setOpen} search={search} setSearch={setSearch} setTab={setTab} />
-        <div className="mobileTabs">
-          {tabs.map((x) => (
-            <button className={tab === x.id ? 'active' : ''} onClick={() => setTab(x.id)} key={x.id}>
-              {x.label}
-            </button>
-          ))}
-        </div>
-        {tab === 'overview' ? (
-          <DashboardOverview d={d} title={title} error={error} load={load} setTab={setTab} cards={cards} featureCards={featureCards} />
-        ) : tab === 'media' ? (
-          <MediaReviewView />
-        ) : tab === 'countries' ? (
-          <CountryOpsView />
-        ) : tab === 'audit' ? (
-          <AuditTrailView />
-        ) : tab === 'fraud' ? (
-          <FraudQueueView />
-        ) : (
-          <GenericWorkspaceView tab={tab} d={d} search={search} />
-        )}
+        <label className="mobileSearch"><span>Search workspace</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Requests, people, organizations…" /></label>
+        <nav className="mobileTabs" aria-label="Admin sections">
+          {tabs.map((item) => <button className={tab === item.id ? 'active' : ''} onClick={() => setTab(item.id)} key={item.id}>{item.label}</button>)}
+        </nav>
+        {tab === 'overview' ? <DashboardOverview d={d} title={titles[tab]} error={error} load={() => void load(token)} setTab={setTab} cards={cards} featureCards={featureCards} />
+          : tab === 'requests' ? <RequestsView token={token} search={search} />
+            : tab === 'people' ? <PeopleView token={token} search={search} />
+              : tab === 'organizations' ? <OrganizationsView token={token} search={search} />
+                : tab === 'safety' ? <SafetyReportsView token={token} search={search} />
+                  : <AuditTrailView token={token} search={search} />}
       </section>
     </main>
   );

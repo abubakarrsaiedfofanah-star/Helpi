@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../core/case_categories.dart';
 import '../../core/offline_manager.dart';
 import '../../core/theme.dart';
 
@@ -11,30 +12,24 @@ class OfflineCaseCreateScreen extends StatefulWidget {
 }
 
 class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
-  final titleCtrl = TextEditingController();
-  final descCtrl = TextEditingController();
   final goalCtrl = TextEditingController();
   final cityCtrl = TextEditingController();
-  String category = 'MEDICAL';
+  String? category;
   String currency = 'KES';
   bool busy = false;
 
   @override
   void dispose() {
-    titleCtrl.dispose();
-    descCtrl.dispose();
     goalCtrl.dispose();
     cityCtrl.dispose();
     super.dispose();
   }
 
   Future<void> saveDraftOffline() async {
-    final title = titleCtrl.text.trim();
-    final desc = descCtrl.text.trim();
     final goal = double.tryParse(goalCtrl.text.trim()) ?? 0.0;
 
-    if (title.isEmpty || desc.isEmpty || goal <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill in title, description, and valid goal amount.')));
+    if (category == null || goal <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Choose your group and enter the amount you are seeking.')));
       return;
     }
 
@@ -43,9 +38,7 @@ class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
 
     try {
       await OfflineManager.enqueueOfflineAction('/cases', 'POST', {
-        'title': title,
-        'description': desc,
-        'category': category,
+        'category': category!,
         'goalMinor': (goal * 100).round(),
         'currency': currency,
         'countryCode': 'KE',
@@ -64,7 +57,7 @@ class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Draft Help Request (Offline)')),
+      appBar: AppBar(title: const Text('Request Support (Offline)')),
       body: ListView(
         padding: const EdgeInsets.all(20),
         children: [
@@ -89,23 +82,14 @@ class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          const Text('Request Title', style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 6),
-          TextField(controller: titleCtrl, decoration: const InputDecoration(hintText: 'e.g. Emergency Medical Assistance')),
-          const SizedBox(height: 16),
-          const Text('Category', style: TextStyle(fontWeight: FontWeight.bold)),
+          const Text('Your group', style: TextStyle(fontWeight: FontWeight.bold)),
           const SizedBox(height: 6),
           DropdownButtonFormField<String>(
-            value: category,
+            initialValue: category,
             decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(14))),
-            items: const [
-              DropdownMenuItem(value: 'MEDICAL', child: Text('Medical Support')),
-              DropdownMenuItem(value: 'EDUCATION', child: Text('Education & Tuition')),
-              DropdownMenuItem(value: 'FOOD', child: Text('Food & Nutrition')),
-              DropdownMenuItem(value: 'HOUSING', child: Text('Emergency Housing')),
-            ],
+            items: caseCategoryLabels.entries.map((entry) => DropdownMenuItem(value: entry.key, child: Text(entry.value))).toList(),
             onChanged: (v) {
-              if (v != null) setState(() => category = v);
+              setState(() => category = v);
             },
           ),
           const SizedBox(height: 16),
@@ -115,7 +99,7 @@ class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Goal Amount', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const Text('Amount you are seeking', style: TextStyle(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 6),
                     TextField(controller: goalCtrl, keyboardType: const TextInputType.numberWithOptions(decimal: true), decoration: const InputDecoration(hintText: '50000')),
                   ],
@@ -150,9 +134,6 @@ class _OfflineCaseCreateScreenState extends State<OfflineCaseCreateScreen> {
           const SizedBox(height: 6),
           TextField(controller: cityCtrl, decoration: const InputDecoration(hintText: 'e.g. Nairobi')),
           const SizedBox(height: 16),
-          const Text('Description', style: TextStyle(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 6),
-          TextField(controller: descCtrl, maxLines: 4, decoration: const InputDecoration(hintText: 'Provide specific details about the verified need...')),
           const SizedBox(height: 30),
           FilledButton.icon(
             style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(52)),

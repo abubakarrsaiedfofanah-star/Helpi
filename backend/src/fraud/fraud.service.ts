@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import { FraudSignalStatus } from '@prisma/client';
 @Injectable()
 export class FraudService {
   constructor(private prisma: PrismaService) {}
@@ -14,6 +15,6 @@ export class FraudService {
     for(const s of signals) await this.prisma.fraudSignal.create({data:{caseId,actorId,type:s.type,severity:s.severity,details:s.details}});
     return {caseId,signalCount:signals.length,signals};
   }
-  list(status?:string){return this.prisma.fraudSignal.findMany({where:status?{status}:{},orderBy:{createdAt:'desc'},take:200});}
+  list(status?:string){return this.prisma.fraudSignal.findMany({where:status?{status:status as FraudSignalStatus}:{},orderBy:{createdAt:'desc'},take:200});}
   resolve(id:string,reviewerId:string,status:'REVIEWED'|'DISMISSED'|'CONFIRMED',note?:string){return this.prisma.fraudSignal.update({where:{id},data:{status,resolvedBy:reviewerId,resolvedAt:new Date(),resolutionNote:note}});}
 }

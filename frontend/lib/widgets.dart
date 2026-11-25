@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'core/case_categories.dart';
 import 'core/theme.dart';
 
 class HelpiPage extends StatelessWidget {
@@ -86,18 +87,10 @@ class CaseCard extends StatelessWidget {
   const CaseCard({super.key, required this.item, this.onTap});
   @override
   Widget build(BuildContext c) {
-    final goalMinor = item['goalMinor'];
-    final raisedMinor = item['raisedMinor'];
-    final goal = (goalMinor is num
-            ? goalMinor.toDouble()
-            : double.tryParse(goalMinor?.toString() ?? '') ?? 0) /
+    final requested = (item['goalMinor'] is num
+            ? (item['goalMinor'] as num).toDouble()
+            : double.tryParse(item['goalMinor']?.toString() ?? '') ?? 0) /
         100;
-    final raised = (raisedMinor is num
-            ? raisedMinor.toDouble()
-            : double.tryParse(raisedMinor?.toString() ?? '') ?? 0) /
-        100;
-    final double p =
-        goal > 0 ? (raised / goal).clamp(0.0, 1.0).toDouble() : 0.0;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -111,36 +104,16 @@ class CaseCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(color: orange.withValues(alpha: .1), borderRadius: BorderRadius.circular(30)),
-                child: Text((item['category'] ?? 'FINANCIAL HELP').toString().replaceAll('_', ' '), style: const TextStyle(color: orange, fontSize: 11, fontWeight: FontWeight.bold)),
+                child: Text(caseCategoryLabel((item['category'] ?? 'OTHER').toString()), style: const TextStyle(color: orange, fontSize: 11, fontWeight: FontWeight.bold)),
               ),
               const Spacer(),
             ]),
             const SizedBox(height: 10),
-            Text(item['title'] ?? '',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
-            Text(item['description'] ?? '',
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(color: Colors.black54)),
-            if (goal > 0) ...[
-              const SizedBox(height: 10),
-              ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: LinearProgressIndicator(
-                      value: p,
-                      minHeight: 7.0,
-                      color: orange,
-                      backgroundColor: orange.withValues(alpha: .10))),
-              const SizedBox(height: 6),
-              Text(
-                  '${item['currency'] ?? ''} ${raised.toStringAsFixed(0)} raised of ${goal.toStringAsFixed(0)}',
-                  style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w700)),
-            ],
+            const SizedBox(height: 4),
+            Text(
+              '${item['currency'] ?? ''} ${requested.toStringAsFixed(0)} requested',
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+            ),
             const SizedBox(height: 10),
             Row(children: [
               const Icon(Icons.public, size: 16, color: orange),

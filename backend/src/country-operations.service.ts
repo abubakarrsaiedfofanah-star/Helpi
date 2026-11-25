@@ -23,7 +23,7 @@ export class CountryOperationsService {
     if (!c) throw new NotFoundException('Country not found.');
     return {...defaults, languages:['en'], currencies:[c.currency], countryCode:c.code, countryName:c.name, continent:c.continent};
   }
-  async get(code:string) {
+  async get(code:string): Promise<any> {
     const countryCode=code.toUpperCase();
     const row=await this.prisma.countryConfiguration.findUnique({where:{countryCode}});
     if(row) return {...this.base(countryCode),...row};
