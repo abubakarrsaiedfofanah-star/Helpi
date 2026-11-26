@@ -1,10 +1,9 @@
 import './globals.css';
 import type { Viewport } from 'next';
-import { PwaRegistration } from '../components/PwaRegistration';
 
 export const metadata = {
-  title: 'Helpi Admin',
-  description: 'Manage support requests, organizations, and community safety.',
+  title: 'Helpi | Community support',
+  description: 'Download the Helpi Android app or use community support online.',
   applicationName: 'Helpi',
   icons: { icon: '/helpi_logo.png', apple: '/pwa-192.png' },
 };
@@ -17,5 +16,5 @@ export const viewport: Viewport = {
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <html lang="en"><body><PwaRegistration />{children}</body></html>;
+  return <html lang="en"><body>{children}</body></html>;
 }

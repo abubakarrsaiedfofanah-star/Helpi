@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../core/app_state.dart';
 import '../../core/case_categories.dart';
 import '../../core/localization.dart';
@@ -16,9 +15,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  static const _androidApkUrl =
-      'https://github.com/abubakarrsaiedfofanah-star/Helpi/releases/latest/download/Helpi-Android.apk';
-
   final _formKey = GlobalKey<FormState>();
   final name = TextEditingController();
   final email = TextEditingController();
@@ -147,19 +143,6 @@ class _AuthScreenState extends State<AuthScreen> {
     } finally {
       if (mounted) setState(() => busy = false);
     }
-  }
-
-  Future<void> _downloadAndroidApp() async {
-    final uri = Uri.parse(_androidApkUrl);
-    try {
-      if (await launchUrl(uri, mode: LaunchMode.externalApplication) ||
-          !mounted) return;
-    } catch (_) {
-      if (!mounted) return;
-    }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Could not open the Android app download.')),
-    );
   }
 
   String? _emailError(String? value) {
@@ -497,11 +480,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 child: Text(register
                                     ? l.get('already_registered')
                                     : l.get('need_account')),
-                              ),
-                              TextButton.icon(
-                                onPressed: busy ? null : _downloadAndroidApp,
-                                icon: const Icon(Icons.android),
-                                label: const Text('Download Android app'),
                               ),
                             ],
                           ),

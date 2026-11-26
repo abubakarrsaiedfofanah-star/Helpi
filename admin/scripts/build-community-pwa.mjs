@@ -10,9 +10,8 @@ const webOutput = path.join(flutterRoot, 'build', 'web');
 const publicRoot = path.join(adminRoot, 'public');
 const communityOutput = path.join(publicRoot, 'community');
 const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
-const adminPortalUrl = process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL || 'https://helpi-eight.vercel.app';
 
-const env = { ...process.env, API_URL: apiUrl, ADMIN_PORTAL_URL: adminPortalUrl, BASE_HREF: '/community/' };
+const env = { ...process.env, API_URL: apiUrl, BASE_HREF: '/community/' };
 let result;
 if (process.platform === 'win32') {
   const builtIndex = path.join(webOutput, 'index.html');

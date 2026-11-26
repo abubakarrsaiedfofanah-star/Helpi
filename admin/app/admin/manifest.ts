@@ -2,11 +2,11 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    id: '/',
+    id: '/admin',
     name: 'Helpi Admin',
     short_name: 'Helpi Admin',
     description: 'Manage Helpi community accounts, support requests, organizations, and safety.',
-    start_url: '/',
+    start_url: '/admin',
     scope: '/',
     display: 'standalone',
     background_color: '#fff8f1',
