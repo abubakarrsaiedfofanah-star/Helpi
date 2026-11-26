@@ -286,6 +286,21 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ],
                               SizedBox(height: tightHeight ? 14 : 24),
+                              if (_adminPortalUrl.isNotEmpty &&
+                                  !requiresEmailVerification) ...[
+                                Align(
+                                  alignment: Alignment.centerRight,
+                                  child: TextButton.icon(
+                                    onPressed: busy ? null : _openAdminPortal,
+                                    icon: const Icon(
+                                      Icons.admin_panel_settings_outlined,
+                                      size: 18,
+                                    ),
+                                    label: const Text('Admin website'),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                              ],
                               if (requiresEmailVerification) ...[
                                 TextFormField(
                                   controller: verificationToken,
@@ -516,13 +531,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ? l.get('already_registered')
                                     : l.get('need_account')),
                               ),
-                              if (_adminPortalUrl.isNotEmpty)
-                                TextButton.icon(
-                                  onPressed: busy ? null : _openAdminPortal,
-                                  icon: const Icon(
-                                      Icons.admin_panel_settings_outlined),
-                                  label: const Text('Administrator portal'),
-                                ),
                               TextButton.icon(
                                 onPressed: busy ? null : _downloadAndroidApp,
                                 icon: const Icon(Icons.android),
