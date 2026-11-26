@@ -16,7 +16,7 @@ export default function AboutPage() {
           <p>Helpi is a community support app for people seeking help, people ready to help, and organizations serving their communities.</p>
           <a className={styles.primaryButton} href="/community/">Join the community</a>
         </div>
-        <Image src="/helpi-community.svg" alt="Community members sharing support" width={560} height={460} priority unoptimized />
+        <Image className={styles.infoPhoto} src="/images/community-water-project.jpg" alt="Local volunteers working together to repair a community water borehole in Ghana" width={960} height={1440} priority />
       </section>
 
       <section className={styles.missionSection}>

@@ -50,15 +50,13 @@ export default function PublicHomePage() {
         </div>
 
         <div className={styles.heroVisual}>
-          <div className={styles.visualGlow} />
           <Image
-            className={styles.illustration}
-            src="/helpi-community.svg"
-            alt="Illustration of community members sharing support"
-            width={680}
-            height={560}
+            className={styles.heroPhoto}
+            src="/images/volunteers-accra.jpg"
+            alt="Community volunteers sharing food with people in Accra"
+            width={1280}
+            height={853}
             priority
-            unoptimized
           />
           <div className={styles.floatingNote}>
             <span className={styles.noteHeart} aria-hidden="true">+</span>

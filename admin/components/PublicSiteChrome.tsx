@@ -37,7 +37,7 @@ export function PublicSiteChrome({ children }: { children: React.ReactNode }) {
         </nav>
         <div className={styles.footerBottom}>
           <span>Community support, together.</span>
-          <span>Helpi</span>
+          <span>Photos: <a href="https://commons.wikimedia.org/wiki/File:Free_Food_distribution.jpg" target="_blank" rel="noreferrer">Esthee2010</a> and <a href="https://commons.wikimedia.org/wiki/File:Workers_and_Volunteers_helping_out.jpg" target="_blank" rel="noreferrer">Rebecamarta</a> · <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a></span>
         </div>
       </footer>
     </div>

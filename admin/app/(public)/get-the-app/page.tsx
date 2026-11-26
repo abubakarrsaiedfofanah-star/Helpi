@@ -16,7 +16,7 @@ export default function GetTheAppPage() {
           <p>Install the Android app, or open the community app in your browser and add it to your home screen where supported.</p>
           <a className={styles.primaryButton} href="/community/">Open Helpi in browser</a>
         </div>
-        <Image src="/helpi-community.svg" alt="Helpi community support illustration" width={500} height={410} priority unoptimized />
+        <Image className={styles.infoPhoto} src="/images/volunteers-accra.jpg" alt="Community volunteers sharing food in Accra" width={1280} height={853} priority />
       </section>
 
       <section className={styles.deviceGrid} aria-label="Install Helpi on your device">

@@ -303,6 +303,49 @@
 .deviceCard .primaryButton, .deviceCard .secondaryButton { margin-top: auto; }
 .deviceCard small { display: block; margin-top: 13px; color: #798294; font-size: 11px; line-height: 1.55; }
 
+/* Keep the public site chrome calm and consistent, and use locally hosted photos. */
+.header { background: #fffaf6; }
+.footer { background: #fffaf6; }
+.heroVisual { min-height: 340px; }
+.heroPhoto {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: min(100%, 540px);
+  height: clamp(300px, 34vw, 410px);
+  object-fit: cover;
+  object-position: center;
+  border: 8px solid #fff;
+  border-radius: 30px;
+  box-shadow: 0 24px 55px #46210f21;
+}
+.infoPhoto {
+  display: block;
+  width: 100%;
+  height: 350px !important;
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 18px 45px #46210f17;
+}
+.downloadSection {
+  color: var(--ink);
+  border: 1px solid #f0ded0;
+  background: linear-gradient(115deg, #fff 0%, #fff1e5 100%);
+  box-shadow: 0 16px 45px #6c37100b;
+}
+.downloadSection .eyebrow { color: var(--orange-dark); }
+.downloadSection>div:first-child>p:last-child { color: var(--muted); }
+.webButton { color: var(--ink); border-color: #e9d9cd; background: #fff; }
+.webButton:hover { border-color: #e5b895; background: #fffaf6; }
+.footerBottom a { color: #59657a; }
+
+@media (max-width: 700px) {
+  .heroVisual { min-height: 0; }
+  .heroPhoto { height: clamp(230px, 68vw, 340px); border-width: 5px; border-radius: 23px; }
+  .infoPhoto { height: 270px !important; }
+  .footerBottom { flex-direction: column; line-height: 1.7; }
+}
+
 @media (max-width: 760px) {
   .informationPage { padding: 4px 14px 58px; }
   .informationHero, .appHero { min-height: 0; padding: 30px 23px; grid-template-columns: 1fr; gap: 12px; border-radius: 24px; }
