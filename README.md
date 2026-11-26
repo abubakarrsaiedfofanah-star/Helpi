@@ -2,7 +2,7 @@
 
 Helpi is one community-support platform with two role-based portals and one shared backend/database:
 
-- **Community portal:** the Flutter user app for people seeking help and helpers. It runs on Android and as an installable PWA.
+- **Community portal:** the React Native/Expo user app for people seeking help and helpers. It runs on Android and as an installable PWA.
 - **Admin portal:** the Next.js operations website, also installable as a PWA.
 - **Shared backend:** NestJS API with PostgreSQL managed through Prisma migrations. All portals use the same accounts and API; administrators sign in with an account granted the `ADMIN` role.
 
@@ -22,7 +22,7 @@ Helpi is one community-support platform with two role-based portals and one shar
 - Authenticated Socket.IO realtime messaging
 - Reports, referrals, notifications and help offers
 - Admin/verification dashboard statistics
-- Flutter app with orange Helpi design, secure storage, case discovery, help requests, offers, messaging, security center and secure-help payment flow
+- Expo app with secure native token storage, account access, case discovery, support requests, conversations, notifications and a responsive PWA
 
 ## Run backend
 1. Copy `backend/.env.example` to `backend/.env` and set strong secrets plus a reachable PostgreSQL `DATABASE_URL` (local Postgres or Supabase session/direct connection).
@@ -32,14 +32,13 @@ Helpi is one community-support platform with two role-based portals and one shar
 
 For Supabase setup and connection details, see [`backend/README.md`](backend/README.md). Database passwords belong only in `backend/.env` and Vercel/backend server environment settings, never in Flutter or Next.js public variables.
 
-The admin website and Flutter user PWA ship together in the existing Vercel project: admin is `/`, community app is `/community/`. The Android APK is distributed separately. The same build shares the configured API URL, and the sign-in screens link between the two portals. See [`frontend/README.md`](frontend/README.md) and [`admin/README.md`](admin/README.md).
+The admin website and Expo user PWA ship together in the existing Vercel project: admin is `/`, community app is `/community/`. Android APKs are built separately with Expo EAS. The Expo web build uses the same configured API URL. See [`user-app/README.md`](user-app/README.md) and [`admin/README.md`](admin/README.md). The earlier Flutter client remains in `frontend/` as a migration reference.
 
-## Run Flutter in Android Studio
-1. Install Flutter SDK and the Flutter/Dart plugins.
-2. Open `frontend` in Android Studio.
-3. Run `flutter pub get`.
-4. Start an Android emulator or connect a device.
-5. Run with `--dart-define=API_URL=http://10.0.2.2:3000/api` for the Android emulator, or use the reachable LAN URL for a physical device.
+## Run the Expo community app
+1. Install Node.js and npm.
+2. From `user-app`, run `npm ci` and `npx expo start`.
+3. Configure `EXPO_PUBLIC_API_URL` to your reachable API URL for production builds. Android emulators use `http://10.0.2.2:3000/api` for local development.
+4. Build an installable APK with `npx eas-cli build --platform android --profile production` after Expo EAS login.
 
 ## Production payment rule
 The payment endpoint creates an intent and ledger record. Actual money movement must be performed and confirmed by a configured regulated payment provider. The signed webhook is the source of provider confirmation. Never store raw card data in Helpi.

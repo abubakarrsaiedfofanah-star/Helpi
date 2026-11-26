@@ -1,0 +1,14 @@
+{
+  "id": "/community/",
+  "name": "Helpi Community",
+  "short_name": "Helpi",
+  "description": "Find support and offer help in your community.",
+  "start_url": "/community/",
+  "scope": "/community/",
+  "display": "standalone",
+  "background_color": "#fffaf5",
+  "theme_color": "#10213d",
+  "icons": [
+    { "src": "/community/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
