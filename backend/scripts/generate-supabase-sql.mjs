@@ -8,6 +8,7 @@ const prismaCli = path.join(backendRoot, 'node_modules', 'prisma', 'build', 'ind
 const schemaPath = path.join(backendRoot, 'prisma', 'schema.prisma');
 const countriesPath = path.join(backendRoot, 'data', 'countries.json');
 const outputPath = path.join(backendRoot, 'supabase', 'helpi_complete_schema.sql');
+const partsRoot = path.join(backendRoot, 'supabase', 'parts');
 
 const diff = spawnSync(process.execPath, [
   prismaCli,
@@ -114,4 +115,52 @@ COMMIT;
 const output = header + diff.stdout.trim() + '\n\n' + countrySeed + rls;
 mkdirSync(path.dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, output, 'utf8');
+
+// The Supabase SQL Editor can truncate large pasted queries. Split the Prisma DDL
+// only at completed statement boundaries and keep every editor-ready part small.
+const statements = [];
+let pendingStatementLines = [];
+for (const line of diff.stdout.trim().split(/\r?\n/)) {
+  pendingStatementLines.push(line);
+  if (line.trimEnd().endsWith(';')) {
+    statements.push(pendingStatementLines.join('\n'));
+    pendingStatementLines = [];
+  }
+}
+if (pendingStatementLines.length) statements.push(pendingStatementLines.join('\n'));
+
+const maxPartBytes = 15_000;
+const ddlChunks = [];
+let currentChunk = [];
+let currentBytes = 0;
+for (const statement of statements) {
+  const statementBytes = Buffer.byteLength(statement, 'utf8') + 1;
+  if (currentChunk.length && currentBytes + statementBytes > maxPartBytes) {
+    ddlChunks.push(currentChunk.join('\n\n'));
+    currentChunk = [];
+    currentBytes = 0;
+  }
+  currentChunk.push(statement);
+  currentBytes += statementBytes;
+}
+if (currentChunk.length) ddlChunks.push(currentChunk.join('\n\n'));
+
+const partCount = ddlChunks.length;
+mkdirSync(partsRoot, { recursive: true });
+for (let index = 0; index < partCount; index += 1) {
+  const isLast = index === partCount - 1;
+  const content = [
+    `-- Helpi Supabase setup, part ${index + 1} of ${partCount}. Run parts in order.`,
+    '-- Run each part once in a NEW project. If a part fails, fix that part before continuing.',
+    'BEGIN;',
+    ddlChunks[index],
+    isLast ? countrySeed.trim() : '',
+    isLast ? rls.trim().replace(/\nCOMMIT;\s*$/, '') : '',
+    'COMMIT;',
+    '',
+  ].filter(Boolean).join('\n\n');
+  const partPath = path.join(partsRoot, `helpi_schema_part_${index + 1}.sql`);
+  writeFileSync(partPath, content, 'utf8');
+  console.log(`Wrote ${path.relative(backendRoot, partPath)} (${Buffer.byteLength(content, 'utf8')} bytes).`);
+}
 console.log(`Wrote ${path.relative(backendRoot, outputPath)} (${countries.length} country defaults).`);

@@ -16,16 +16,16 @@ The schema is PostgreSQL and its SQL is versioned under `prisma/migrations`. The
 
 `db:setup` runs `prisma validate`, `prisma generate`, `prisma migrate deploy`, and the idempotent country-configuration seed. It does not reset or drop existing data. The checked-in migrations also enable row-level security with no public client policies; the NestJS API must connect with the private Supabase PostgreSQL owner role so it can access tables and apply authorization in the API. Do not put the database password or service credentials in either frontend.
 
-### One-file setup in the Supabase SQL Editor
+### Setup in the Supabase SQL Editor
 
 If you want to create a brand-new Supabase database by pasting SQL:
 
-1. In a fresh Supabase project, open **SQL Editor** and run the complete contents of [`supabase/helpi_complete_schema.sql`](supabase/helpi_complete_schema.sql). It creates the current Prisma schema, seeds country settings, and enables row-level security on all application tables. It does not create a demo/admin account.
+1. In a fresh Supabase project, open **SQL Editor** and run [`supabase/parts/helpi_schema_part_1.sql`](supabase/parts/helpi_schema_part_1.sql), then `part_2.sql`, then `part_3.sql`, as three separate queries in that order. The smaller files avoid query truncation in the SQL Editor. The combined file [`supabase/helpi_complete_schema.sql`](supabase/helpi_complete_schema.sql) is for tools that execute SQL files directly. This setup creates the current Prisma schema, seeds country settings, and enables row-level security. It does not create a demo/admin account.
 2. Copy the Supabase Session Pooler or Direct connection URI (port `5432`) into `DATABASE_URL` in `backend/.env`.
 3. From `backend`, run `npm install`, then `npm run db:baseline:supabase`. This records the checked-in Prisma migration history for the schema you just created; it does not run or reset the SQL a second time.
 4. Run `npm run db:status` and `npm run db:setup`. The setup command should report the migrations as applied, regenerate Prisma, and safely seed country configuration.
 
-Generate an updated one-file SQL export after schema changes with `npm run db:export:supabase`. Use normal Prisma migrations for future changes. **Do not run the one-file bootstrap over a database that already has Helpi tables or data.** For an existing project, set `DATABASE_URL` and run `npm run db:setup` instead.
+Generate updated SQL exports after schema changes with `npm run db:export:supabase`. Use normal Prisma migrations for future changes. **Do not run the bootstrap over a database that already has Helpi tables or data.** For an existing project, set `DATABASE_URL` and run `npm run db:setup` instead.
 
 RLS has no policies for Supabase `anon` or `authenticated` roles, so browser/mobile code must not query these tables with a Supabase public key. All access goes through the NestJS API using its private database connection.
 
