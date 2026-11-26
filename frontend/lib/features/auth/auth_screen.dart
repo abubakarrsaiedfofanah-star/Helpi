@@ -15,7 +15,6 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  static const _adminPortalUrl = String.fromEnvironment('ADMIN_PORTAL_URL');
   static const _androidApkUrl =
       'https://github.com/abubakarrsaiedfofanah-star/Helpi/releases/latest/download/Helpi-Android.apk';
 
@@ -149,24 +148,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  Future<void> _openAdminPortal() async {
-    final uri = Uri.tryParse(_adminPortalUrl);
-    if (uri == null ||
-        !uri.hasAuthority ||
-        !['http', 'https'].contains(uri.scheme)) return;
-    try {
-      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
-      if (opened || !mounted) return;
-    } catch (_) {
-      if (!mounted) return;
-    }
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open the admin portal.')),
-      );
-    }
-  }
-
   Future<void> _downloadAndroidApp() async {
     final uri = Uri.parse(_androidApkUrl);
     try {
@@ -286,21 +267,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ],
                               SizedBox(height: tightHeight ? 14 : 24),
-                              if (_adminPortalUrl.isNotEmpty &&
-                                  !requiresEmailVerification) ...[
-                                Align(
-                                  alignment: Alignment.centerRight,
-                                  child: TextButton.icon(
-                                    onPressed: busy ? null : _openAdminPortal,
-                                    icon: const Icon(
-                                      Icons.admin_panel_settings_outlined,
-                                      size: 18,
-                                    ),
-                                    label: const Text('Admin website'),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                              ],
                               if (requiresEmailVerification) ...[
                                 TextFormField(
                                   controller: verificationToken,
