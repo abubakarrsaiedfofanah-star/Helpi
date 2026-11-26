@@ -42,19 +42,15 @@ const defaults = {
   communicationRules: { translation: true, voice: true, video: true, childContactRequiresSafeguards: true },
 };
 
-const seedRows = countries.map((country) => {
+const countryRows = countries.map((country) => {
   if (!/^[A-Z]{2}$/.test(country.code) || codes.has(country.code)) {
     throw new Error(`Invalid or duplicate country registry entry: ${country.code}`);
   }
   codes.add(country.code);
-  return `  (${[
-    sqlString(`country-${country.code}`), sqlString(country.code), 'TRUE', sqlString('en'),
-    jsonb(defaults.languages), jsonb(country.currency ? [country.currency] : []), jsonb(defaults.paymentMethods),
-    jsonb(defaults.kycRequirements), jsonb(defaults.kybRequirements), jsonb(defaults.safeguardingRules),
-    jsonb(defaults.emergencyResources), jsonb(defaults.documentTypes), jsonb(defaults.dataRetention),
-    jsonb(defaults.helpMethods), jsonb(defaults.verificationRules), jsonb(defaults.communicationRules),
-    'NULL', 'CURRENT_TIMESTAMP', 'CURRENT_TIMESTAMP',
-  ].join(', ')})`;
+  if (country.currency != null && typeof country.currency !== 'string') {
+    throw new Error(`Invalid currency for country ${country.code}`);
+  }
+  return `  (${sqlString(country.code)}, ${country.currency ? sqlString(country.currency) : 'NULL'})`;
 }).join(',\n');
 
 const header = `-- Helpi Supabase bootstrap SQL
@@ -75,8 +71,24 @@ INSERT INTO "CountryConfiguration" (
   "paymentMethods", "kycRequirements", "kybRequirements", "safeguardingRules",
   "emergencyResources", "documentTypes", "dataRetention", "helpMethods",
   "verificationRules", "communicationRules", "updatedById", "createdAt", "updatedAt"
-) VALUES
-${seedRows}
+) SELECT
+  'country-' || country.code, country.code, TRUE, 'en',
+  ${jsonb(defaults.languages)},
+  CASE WHEN country.currency IS NULL THEN '[]'::jsonb ELSE jsonb_build_array(country.currency) END,
+  ${jsonb(defaults.paymentMethods)},
+  ${jsonb(defaults.kycRequirements)},
+  ${jsonb(defaults.kybRequirements)},
+  ${jsonb(defaults.safeguardingRules)},
+  ${jsonb(defaults.emergencyResources)},
+  ${jsonb(defaults.documentTypes)},
+  ${jsonb(defaults.dataRetention)},
+  ${jsonb(defaults.helpMethods)},
+  ${jsonb(defaults.verificationRules)},
+  ${jsonb(defaults.communicationRules)},
+  NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+FROM (VALUES
+${countryRows}
+) AS country(code, currency)
 ON CONFLICT ("countryCode") DO UPDATE SET "currencies" = EXCLUDED."currencies";
 
 `;
