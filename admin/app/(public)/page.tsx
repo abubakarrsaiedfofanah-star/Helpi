@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import styles from './page.module.css';
+import styles from './public-site.module.css';
+import { DeviceAppLink } from '../../components/DeviceAppLink';
 
 export const metadata = {
   title: 'Helpi | Community support',
@@ -25,19 +26,7 @@ function DownloadIcon() {
 
 export default function PublicHomePage() {
   return (
-    <main className={styles.page}>
-      <header className={styles.header}>
-        <a className={styles.brand} href="/" aria-label="Helpi home">
-          <Image src="/helpi_logo.png" alt="" width={46} height={46} priority />
-          <span>Helpi</span>
-        </a>
-        <nav className={styles.nav} aria-label="Main navigation">
-          <a href="#how-it-works">How it works</a>
-          <a href="/community/">Community app</a>
-        </nav>
-        <a className={styles.headerCta} href="#get-the-app">Get the app <ArrowIcon /></a>
-      </header>
-
+    <>
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}><span /> COMMUNITY SUPPORT, TOGETHER</p>
@@ -47,9 +36,9 @@ export default function PublicHomePage() {
             Find a way to give or receive support in one welcoming app.
           </p>
           <div className={styles.heroActions}>
-            <a className={styles.primaryButton} href="/downloads/Helpi-Android.apk" download>
-              <DownloadIcon /> Download for Android
-            </a>
+            <DeviceAppLink className={styles.primaryButton}>
+              <DownloadIcon /> Get the app
+            </DeviceAppLink>
             <a className={styles.secondaryButton} href="/community/">
               Open the web app <ArrowIcon />
             </a>
@@ -123,28 +112,11 @@ export default function PublicHomePage() {
           <p>Open the community app in your browser or install the Android app on your phone.</p>
         </div>
         <div className={styles.downloadActions}>
-          <a className={styles.downloadButton} href="/downloads/Helpi-Android.apk" download><DownloadIcon /> Download Android app</a>
+          <DeviceAppLink className={styles.downloadButton}><DownloadIcon /> Get the app</DeviceAppLink>
           <a className={styles.webButton} href="/community/">Use Helpi online <ArrowIcon /></a>
         </div>
       </section>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerMain}>
-          <a className={styles.brand} href="/" aria-label="Helpi home">
-            <Image src="/helpi_logo.png" alt="" width={42} height={42} />
-            <span>Helpi</span>
-          </a>
-          <p>Bringing helpers and people seeking support closer together.</p>
-        </div>
-        <nav className={styles.footerLinks} aria-label="Footer navigation">
-          <a href="/community/">Open community app</a>
-          <a href="/downloads/Helpi-Android.apk" download>Download Android app</a>
-        </nav>
-        <div className={styles.footerBottom}>
-          <span>Community support, together.</span>
-          <span>Helpi</span>
-        </div>
-      </footer>
-    </main>
+    </>
   );
 }

@@ -11,7 +11,7 @@ The admin portal is installable as a PWA on supported browsers. Open the deploye
 3. Install packages with `npm install` and run `npm run dev`.
 4. Sign in with an active, email-verified account that has the `ADMIN` role. Enter an authenticator code when MFA is enabled.
 
-For Vercel, the repository-root `vercel.json` routes the NestJS API under `/api` and serves this Next.js project from a single deployment. The public download landing page is `/`, the Flutter community PWA is `/community/`, and the administrator website is `/admin` (login is role-checked by the API). The Android APK is served from `/downloads/Helpi-Android.apk`. Use one Vercel project with the repository root as its root directory and **Services** as its framework preset. Set `NEXT_PUBLIC_API_URL` to the Vercel production domain plus `/api`.
+For Vercel, the repository-root `vercel.json` routes the NestJS API under `/api` and serves this Next.js project from a single deployment. The public site includes `/` (landing page), `/about/`, `/what-we-do/`, and `/get-the-app/`; the Flutter community PWA is `/community/`, and the administrator website is `/admin` (login is role-checked by the API and is not linked from the public pages). Android downloads use `/downloads/Helpi-Android.apk`; non-Android devices open the community PWA. Use one Vercel project with the repository root as its root directory and **Services** as its framework preset. Set `NEXT_PUBLIC_API_URL` to the Vercel production domain plus `/api`.
 
 The access token is kept in the browser's session storage and cleared when the admin signs out or the session ends. Serve the portal and API over HTTPS outside local development, and restrict CORS to the portal origin.
 
