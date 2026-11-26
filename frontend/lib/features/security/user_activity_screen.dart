@@ -14,6 +14,7 @@ class _UserActivityScreenState extends State<UserActivityScreen> {
   List<dynamic> events = [];
   List<dynamic> sessions = [];
   bool loading = true;
+  String? error;
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _UserActivityScreenState extends State<UserActivityScreen> {
 
   Future<void> load() async {
     final api = context.read<AppState>().api;
+    if (mounted) setState(() { loading = true; error = null; });
     try {
       final res = await Future.wait([
         api.securityEvents(),
@@ -32,10 +34,11 @@ class _UserActivityScreenState extends State<UserActivityScreen> {
         setState(() {
           events = res[0] as List<dynamic>;
           sessions = res[1] as List<dynamic>;
-          loading = false;
         });
       }
-    } catch (_) {
+    } catch (cause) {
+      if (mounted) setState(() => error = cause.toString().replaceFirst('Exception: ', ''));
+    } finally {
       if (mounted) setState(() => loading = false);
     }
   }
@@ -43,12 +46,25 @@ class _UserActivityScreenState extends State<UserActivityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Account Activity & Security Log')),
+      appBar: AppBar(
+        title: const Text('Account Activity & Security Log'),
+        actions: [IconButton(onPressed: loading ? null : load, tooltip: 'Refresh', icon: const Icon(Icons.refresh))],
+      ),
       body: loading
           ? const Center(child: CircularProgressIndicator(color: orange))
           : ListView(
               padding: const EdgeInsets.all(20),
               children: [
+                if (error != null)
+                  Card(
+                    color: Colors.orange.shade50,
+                    child: ListTile(
+                      leading: const Icon(Icons.cloud_off_outlined),
+                      title: const Text('Could not load activity'),
+                      subtitle: Text(error!),
+                      trailing: IconButton(onPressed: load, tooltip: 'Retry', icon: const Icon(Icons.refresh)),
+                    ),
+                  ),
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(color: navy, borderRadius: BorderRadius.circular(22)),

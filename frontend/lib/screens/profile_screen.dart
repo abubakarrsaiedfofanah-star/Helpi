@@ -31,6 +31,7 @@ class ProfileScreen extends StatelessWidget {
         .take(2)
         .map((part) => part[0].toUpperCase())
         .join();
+    final compact = MediaQuery.sizeOf(c).width < 380;
     return Scaffold(
       appBar: AppBar(title: Text(l.get('profile')), actions: [
         IconButton(
@@ -46,61 +47,90 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
                 color: navy, borderRadius: BorderRadius.circular(24)),
-            child: Row(
-              children: [
-                CircleAvatar(
-                    radius: 32,
-                    backgroundColor: orange,
-                    child: Text(initials,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final details = Column(
+                  crossAxisAlignment: compact
+                      ? CrossAxisAlignment.center
+                      : CrossAxisAlignment.start,
+                  children: [
+                    Text(name,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: compact ? TextAlign.center : TextAlign.start,
                         style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900))),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name,
-                          style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 21,
-                              fontWeight: FontWeight.w900)),
-                      const SizedBox(height: 3),
-                      Row(children: [
+                            fontSize: 21,
+                            fontWeight: FontWeight.w900)),
+                    const SizedBox(height: 3),
+                    Wrap(
+                      alignment:
+                          compact ? WrapAlignment.center : WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 5,
+                      children: [
                         Icon(
                             isAnonymous
                                 ? Icons.visibility_off_outlined
                                 : Icons.person_outline,
                             size: 15,
                             color: Colors.white70),
-                        const SizedBox(width: 5),
                         Text(identityLabel,
                             style: const TextStyle(
                                 color: Colors.white70,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 13))
-                      ]),
-                      if (caseCategoryLabels
-                          .containsKey(u?['supportGroup']?.toString())) ...[
-                        const SizedBox(height: 5),
-                        Text(
-                          l.category(u!['supportGroup'].toString()),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: Colors.white70, fontSize: 12),
-                        ),
+                                fontSize: 13)),
                       ],
-                      const SizedBox(height: 4),
-                      if (!isAnonymous && email.isNotEmpty)
-                        Text(email,
-                            style: const TextStyle(
-                                color: Colors.white70, fontSize: 12)),
+                    ),
+                    if (caseCategoryLabels
+                        .containsKey(u?['supportGroup']?.toString())) ...[
+                      const SizedBox(height: 5),
+                      Text(
+                        l.category(u!['supportGroup'].toString()),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: compact ? TextAlign.center : TextAlign.start,
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 12),
+                      ),
                     ],
-                  ),
-                ),
-              ],
+                    if (!isAnonymous && email.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(email,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign:
+                              compact ? TextAlign.center : TextAlign.start,
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 12)),
+                    ],
+                  ],
+                );
+                final avatar = CircleAvatar(
+                    radius: 32,
+                    backgroundColor: orange,
+                    child: Text(initials,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900)));
+                if (compact) {
+                  return Column(
+                    children: [
+                      avatar,
+                      const SizedBox(height: 12),
+                      SizedBox(width: constraints.maxWidth, child: details),
+                    ],
+                  );
+                }
+                return Row(
+                  children: [
+                    avatar,
+                    const SizedBox(width: 16),
+                    Expanded(child: details),
+                  ],
+                );
+              },
             ),
           ),
           const SizedBox(height: 16),
@@ -121,20 +151,9 @@ class ProfileScreen extends StatelessWidget {
           ),
           Card(
             margin: const EdgeInsets.only(bottom: 10),
-            child: ListTile(
-              leading: const CircleAvatar(
-                  backgroundColor: Color(0xFFE3F2FD),
-                  foregroundColor: Colors.blue,
-                  child: Icon(Icons.language)),
-              title: Text(l.get('language'),
-                  style: TextStyle(fontWeight: FontWeight.w800)),
-              subtitle: Text(l.get('current_language', {
-                'language': AppLocalizations.supportedLanguages[s.locale] ??
-                    AppLocalizations.supportedLanguages['en']!,
-              })),
-              trailing: SizedBox(
-                width: 108,
-                child: DropdownButton<String>(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final languagePicker = DropdownButton<String>(
                   value: s.locale,
                   underline: const SizedBox(),
                   items: AppLocalizations.supportedLanguages.entries
@@ -147,8 +166,52 @@ class ProfileScreen extends StatelessWidget {
                     if (v != null) s.setLocale(v);
                   },
                   isExpanded: true,
-                ),
-              ),
+                );
+                final languageText = Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(l.get('language'),
+                        style: const TextStyle(fontWeight: FontWeight.w800)),
+                    Text(l.get('current_language', {
+                      'language':
+                          AppLocalizations.supportedLanguages[s.locale] ??
+                              AppLocalizations.supportedLanguages['en']!,
+                    })),
+                  ],
+                );
+
+                if (constraints.maxWidth < 350) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 10),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                            backgroundColor: Color(0xFFE3F2FD),
+                            foregroundColor: Colors.blue,
+                            child: Icon(Icons.language)),
+                        const SizedBox(width: 12),
+                        Expanded(child: languageText),
+                        const SizedBox(width: 8),
+                        SizedBox(width: 100, child: languagePicker),
+                      ],
+                    ),
+                  );
+                }
+
+                return ListTile(
+                  leading: const CircleAvatar(
+                      backgroundColor: Color(0xFFE3F2FD),
+                      foregroundColor: Colors.blue,
+                      child: Icon(Icons.language)),
+                  title: Text(l.get('language'),
+                      style: const TextStyle(fontWeight: FontWeight.w800)),
+                  subtitle: Text(l.get('current_language', {
+                    'language': AppLocalizations.supportedLanguages[s.locale] ??
+                        AppLocalizations.supportedLanguages['en']!,
+                  })),
+                  trailing: SizedBox(width: 108, child: languagePicker),
+                );
+              },
             ),
           ),
           _item(c, Icons.folder_open, l.get('my_requests'),

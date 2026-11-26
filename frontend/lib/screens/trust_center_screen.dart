@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../services/api.dart';
+import 'package:provider/provider.dart';
+
+import '../core/app_state.dart';
 
 class TrustCenterScreen extends StatefulWidget {
   const TrustCenterScreen({super.key});
@@ -9,49 +11,76 @@ class TrustCenterScreen extends StatefulWidget {
 }
 
 class _TrustCenterScreenState extends State<TrustCenterScreen> {
-  final api = Api();
   bool busy = false;
 
-  Future<void> safeguarding() async {
-    final c = TextEditingController();
-    final ok = await showDialog<bool>(
+  Future<void> reportSafetyConcern() async {
+    final controller = TextEditingController();
+    String? validationError;
+    final description = await showDialog<String>(
       context: context,
-      builder: (x) => AlertDialog(
-        title: const Text('Safeguarding report'),
-        content: TextField(
-          controller: c,
-          maxLines: 5,
-          decoration: const InputDecoration(hintText: 'Describe what needs urgent attention. Do not include passwords or unnecessary private data.'),
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, updateDialog) => AlertDialog(
+          title: const Text('Report a safety concern'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: controller,
+                autofocus: true,
+                minLines: 3,
+                maxLines: 5,
+                maxLength: 3000,
+                onChanged: (_) => updateDialog(() => validationError = null),
+                decoration: const InputDecoration(
+                  hintText: 'Tell us what happened. Please do not include passwords or payment details.',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              if (validationError != null)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(validationError!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () {
+                final value = controller.text.trim();
+                if (value.length < 10) {
+                  updateDialog(() => validationError = 'Please enter at least 10 characters.');
+                  return;
+                }
+                Navigator.pop(dialogContext, value);
+              },
+              child: const Text('Submit report'),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(x, false), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(x, true), child: const Text('Submit')),
-        ],
       ),
     );
-    if (ok == true && c.text.trim().isNotEmpty) {
-      setState(() => busy = true);
-      try {
-        await api.call('POST', '/safeguarding/report', {'description': c.text.trim(), 'type': 'SAFETY'});
-        if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Safeguarding report submitted securely.')));
-      } finally {
-        if (mounted) setState(() => busy = false);
-      }
-    }
-  }
+    controller.dispose();
+    if (description == null || !mounted) return;
 
-  Future<void> room(String type) async {
     setState(() => busy = true);
     try {
-      final r = await api.call('POST', '/communications/room', {'type': type, 'participantIds': []});
+      await context.read<AppState>().api.report(
+            'SAFEGUARDING',
+            description,
+          );
       if (mounted) {
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: Text('$type assistance'),
-            content: Text(r['message']?.toString() ?? 'Secure room requested. A configured provider is required for live calls.'),
-            actions: [TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close'))],
-          ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Your report was submitted.')),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not submit report: $error')),
         );
       }
     } finally {
@@ -60,41 +89,42 @@ class _TrustCenterScreenState extends State<TrustCenterScreen> {
   }
 
   @override
-  Widget build(BuildContext c) => Scaffold(
+  Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: const Text('Trust & Safety')),
         body: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            const Text('Your safety comes first', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const Text(
+              'Your safety matters',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
-            const Text('Helpi connects people seeking financial support with helpers and NGOs. You choose what to share in direct conversations.'),
+            const Text(
+              'Helpi connects people seeking financial support with helpers and NGOs. You choose what to share in direct conversations.',
+            ),
             const SizedBox(height: 20),
             Card(
               child: ListTile(
-                leading: const Icon(Icons.gavel),
-                title: const Text('Safeguarding'),
-                subtitle: const Text('Report abuse, exploitation, coercion or unsafe contact.'),
-                onTap: busy ? null : safeguarding,
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.call),
-                title: const Text('Secure voice assistance'),
-                subtitle: const Text('Start a protected voice room when a provider is configured.'),
-                onTap: busy ? null : () => room('VOICE'),
-              ),
-            ),
-            Card(
-              child: ListTile(
-                leading: const Icon(Icons.videocam),
-                title: const Text('Secure video assistance'),
-                subtitle: const Text('Video rooms are created only through a configured provider.'),
-                onTap: busy ? null : () => room('VIDEO'),
+                leading: const Icon(Icons.flag_outlined),
+                title: const Text('Report a safety concern'),
+                subtitle: const Text(
+                  'Report harassment, exploitation, coercion, or unsafe contact.',
+                ),
+                trailing: busy
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(Icons.chevron_right),
+                onTap: busy ? null : reportSafetyConcern,
               ),
             ),
             const SizedBox(height: 12),
-            const Text('Never share passwords, PINs or full card details in chat.', style: TextStyle(fontWeight: FontWeight.w600)),
+            const Text(
+              'Never share passwords, PINs, or full card details in chat.',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
           ],
         ),
       );

@@ -20,6 +20,7 @@ class _SecurityScreenState extends State<SecurityScreen> {
   bool busy = true;
   bool mfaBusy = false;
   bool biometricSupported = false;
+  String? loadError;
 
   @override
   void initState() {
@@ -35,12 +36,14 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
   Future<void> load() async {
     final a = context.read<AppState>().api;
+    if (mounted) setState(() { busy = true; loadError = null; });
     try {
       final r = await Future.wait([a.securityEvents(), a.sessions(), a.profile()]);
       events = r[0] as List<dynamic>;
       sessions = r[1] as List<dynamic>;
       profile = r[2] as Map<String, dynamic>;
-    } catch (_) {
+    } catch (error) {
+      loadError = error.toString().replaceFirst('Exception: ', '');
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -155,6 +158,20 @@ class _SecurityScreenState extends State<SecurityScreen> {
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                if (loadError != null)
+                  Card(
+                    color: Colors.orange.shade50,
+                    child: ListTile(
+                      leading: const Icon(Icons.cloud_off_outlined),
+                      title: const Text('Could not load account security details'),
+                      subtitle: Text(loadError!),
+                      trailing: IconButton(
+                        tooltip: 'Retry',
+                        onPressed: load,
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ),
+                  ),
                 Card(
                   child: ListTile(
                     leading: const Icon(Icons.verified_user, color: green),
