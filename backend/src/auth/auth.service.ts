@@ -16,15 +16,16 @@ function randomBase32(bytes=20){const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
  constructor(private prisma:PrismaService,private jwt:JwtService,private accountSecurity:AccountSecurityService){}
  async register(dto:RegisterDto,meta:any){
   const exposeDevToken=process.env.NODE_ENV!=='production'&&process.env.EXPOSE_DEV_TOKENS==='true';
+  const resendApiKey=process.env.RESEND_API_KEY?.trim();
   const webhookUrl=process.env.EMAIL_WEBHOOK_URL?.trim();
   const webhookSecret=process.env.EMAIL_WEBHOOK_SECRET;
   const verificationBase=process.env.EMAIL_VERIFICATION_BASE_URL?.trim();
-  if(!webhookUrl&&!exposeDevToken)throw new ServiceUnavailableException('Email verification is not configured. Please try again later.');
-  if(webhookUrl&&(!webhookSecret||!verificationBase))throw new ServiceUnavailableException('Email verification is not configured correctly. Please contact support.');
+  if(!webhookUrl&&!resendApiKey&&!exposeDevToken)throw new ServiceUnavailableException('Email verification is not configured. Please try again later.');
+  if((webhookUrl&&!webhookSecret)||((webhookUrl||resendApiKey)&&!verificationBase))throw new ServiceUnavailableException('Email verification is not configured correctly. Please contact support.');
   let webhook:URL|undefined;
   let verificationUrl:URL|undefined;
-  if(webhookUrl){
-   try{webhook=new URL(webhookUrl);verificationUrl=new URL(verificationBase!);if(!['https:','http:'].includes(webhook.protocol)||!['https:','http:'].includes(verificationUrl.protocol))throw new Error('Unsupported URL scheme');if(process.env.NODE_ENV==='production'&&(webhook.protocol!=='https:'||verificationUrl.protocol!=='https:'))throw new Error('HTTPS is required');}
+  if(webhookUrl||((resendApiKey)&&verificationBase)){
+   try{if(webhookUrl)webhook=new URL(webhookUrl);verificationUrl=new URL(verificationBase!);if((webhook&&!['https:','http:'].includes(webhook.protocol))||!['https:','http:'].includes(verificationUrl.protocol))throw new Error('Unsupported URL scheme');if(process.env.NODE_ENV==='production'&&((webhook&&webhook.protocol!=='https:')||verificationUrl.protocol!=='https:'))throw new Error('HTTPS is required');}
    catch{throw new ServiceUnavailableException('Email verification requires valid HTTPS webhook and app URLs.');}
   }
   const email=dto.email.trim().toLowerCase();
@@ -35,13 +36,15 @@ function randomBase32(bytes=20){const alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ234567
   const expiresAt=new Date(Date.now()+30*60*1000);
   await this.prisma.emailVerificationToken.create({data:{userId:user.id,tokenHash:hashToken(raw),expiresAt}});
   await this.audit(user.id,'ACCOUNT_CREATED',meta);
-  if(webhook&&verificationUrl){
+  if(verificationUrl&&(webhook||resendApiKey)){
    verificationUrl.searchParams.set('token',raw);
    const subject='Verify your Helpi account';
    const link=verificationUrl.toString();
    const text=`Hello ${user.name},\n\nVerify your Helpi account within 30 minutes by opening this link:\n${link}\n\nIf you did not create this account, ignore this email.`;
    try{
-    const response=await fetch(webhook,{method:'POST',headers:{'content-type':'application/json','authorization':`Bearer ${webhookSecret}`,'x-helpi-event':'email.verification'},body:JSON.stringify({event:'email.verification',to:user.email,name:user.name,subject,text,verificationUrl:link,verificationToken:raw,expiresAt:expiresAt.toISOString()}),signal:AbortSignal.timeout(10000)});
+    const response=webhook&&webhookSecret
+     ? await fetch(webhook,{method:'POST',headers:{'content-type':'application/json','authorization':`Bearer ${webhookSecret}`,'x-helpi-event':'email.verification'},body:JSON.stringify({event:'email.verification',to:user.email,name:user.name,subject,text,verificationUrl:link,verificationToken:raw,expiresAt:expiresAt.toISOString()}),signal:AbortSignal.timeout(10000)})
+     : await fetch('https://api.resend.com/emails',{method:'POST',headers:{'content-type':'application/json','authorization':`Bearer ${resendApiKey}`},body:JSON.stringify({from:process.env.EMAIL_FROM?.trim()||'Helpi <onboarding@resend.dev>',to:[user.email],subject,text,html:`<p>Hello ${user.name.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!))},</p><p>Verify your Helpi account within 30 minutes:</p><p><a href="${link}">Verify my account</a></p><p>If you did not create this account, ignore this email.</p>`}),signal:AbortSignal.timeout(10000)});
     if(!response.ok)throw new Error(`Email webhook returned ${response.status}`);
    }catch{
     await this.prisma.$transaction(async tx=>{await tx.emailVerificationToken.deleteMany({where:{userId:user.id}});await tx.user.delete({where:{id:user.id}});});
