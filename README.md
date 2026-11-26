@@ -32,7 +32,7 @@ Helpi is one community-support platform with two role-based portals and one shar
 
 For Supabase setup and connection details, see [`backend/README.md`](backend/README.md). Database passwords belong only in `backend/.env` and Vercel/backend server environment settings, never in Flutter or Next.js public variables.
 
-The admin PWA ships with the existing admin Vercel project. The Flutter user PWA is a separate Vercel project from the same GitHub repository, rooted at `frontend`; the Android APK is distributed separately. Set `NEXT_PUBLIC_USER_PORTAL_URL` and build the Flutter web app with `ADMIN_PORTAL_URL` to connect the portals. See [`frontend/README.md`](frontend/README.md) and [`admin/README.md`](admin/README.md).
+The admin website and Flutter user PWA ship together in the existing Vercel project: admin is `/`, community app is `/community/`. The Android APK is distributed separately. The same build shares the configured API URL, and the sign-in screens link between the two portals. See [`frontend/README.md`](frontend/README.md) and [`admin/README.md`](admin/README.md).
 
 ## Run Flutter in Android Studio
 1. Install Flutter SDK and the Flutter/Dart plugins.

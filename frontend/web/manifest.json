@@ -1,8 +1,8 @@
 {
     "name": "Helpi Community Support",
     "short_name": "Helpi",
-    "start_url": "/",
-    "scope": "/",
+    "start_url": "./",
+    "scope": "./",
     "display": "standalone",
     "background_color": "#FFF8F1",
     "theme_color": "#FF7A00",

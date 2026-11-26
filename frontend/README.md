@@ -26,12 +26,12 @@ Build a sideloadable release APK with the backend address reachable by the phone
 
 The APK is written to `build/app/outputs/flutter-apk/app-release.apk`. The Android emulator default (`10.0.2.2`) only works from an emulator; a physical phone needs the public HTTPS API URL or a reachable computer LAN address. This project currently signs release APKs with the debug key, which is suitable for direct installation but not Play Store publishing.
 
-The Android app remains a Flutter app. The same Flutter project can also be built as an installable web app (PWA) and hosted as a separate portal on Vercel. Keep the existing admin Vercel project rooted at `admin`; create a second Vercel project from the same GitHub repository with root directory `frontend`. `frontend/vercel.json` and `frontend/vercel-build.sh` configure Flutter web build output and client-side routing for that project.
+The Android app remains a Flutter app. The same Flutter project is also built as an installable PWA at `/community/` inside the existing admin Vercel deployment. This keeps both websites in one Vercel project and on one domain: admin is `/`, community app is `/community/`.
 
-Build the web app with production URLs configured:
+The web app uses `/community/` as its base path inside the shared Vercel project. To build it manually with production URLs configured:
 
-    flutter build web --release --base-href / --dart-define=API_URL=https://api.example.com/api --dart-define=ADMIN_PORTAL_URL=https://admin.example.com
+    flutter build web --release --base-href /community/ --dart-define=API_URL=https://api.example.com/api --dart-define=ADMIN_PORTAL_URL=https://admin.example.com
 
-Set `API_URL` and `ADMIN_PORTAL_URL` in the user portal Vercel project's environment to the real production URLs. Set `NEXT_PUBLIC_USER_PORTAL_URL` in the admin Vercel project's environment to the user portal URL, then redeploy the admin site. Add both portal origins to the backend `CORS_ORIGINS` setting. The Flutter SDK is downloaded by the project build script; use a reachable deployed API URL before deploying so sign-in and server features work.
+The existing Vercel project should keep its root directory at `admin`. Its build script also builds Flutter from `frontend` and places the web app under `/community/`. Vercel's **Include source files outside of the Root Directory in the Build Step** setting must be enabled so the build can read the Flutter project. Set `NEXT_PUBLIC_API_URL` to the production API address; optionally set `NEXT_PUBLIC_ADMIN_PORTAL_URL` if your admin domain differs from the production domain. The Flutter SDK is downloaded automatically during the build. Add the Vercel site origin to the backend `CORS_ORIGINS` setting.
 
 On a supported mobile browser, users can install Helpi from the browser's install or add-to-home-screen option. The service worker caches the app shell and static app files so the PWA can open after a successful first load without a connection. Account, request, and other server-backed features still need the API connection; API responses are deliberately not cached. The Android build remains available independently of the web PWA.

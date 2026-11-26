@@ -20,6 +20,7 @@ fi
 export PATH="$FLUTTER_ROOT/bin:$PATH"
 flutter config --no-analytics
 flutter pub get
-flutter build web --release --base-href / \
+BASE_HREF="${BASE_HREF:-/}"
+flutter build web --release --base-href "$BASE_HREF" \
   --dart-define="API_URL=${API_URL}" \
   --dart-define="ADMIN_PORTAL_URL=${ADMIN_PORTAL_URL:-}"

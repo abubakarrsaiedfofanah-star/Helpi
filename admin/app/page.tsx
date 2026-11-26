@@ -51,7 +51,7 @@ const titles: Record<Tab, string> = {
 };
 
 export default function Page() {
-  const userPortalUrl = process.env.NEXT_PUBLIC_USER_PORTAL_URL?.trim();
+  const userPortalUrl = '/community/';
   const [token, setToken] = useState('');
   const [d, setD] = useState<Dashboard | null>(null);
   const [tab, setTab] = useState<Tab>('overview');

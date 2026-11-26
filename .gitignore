@@ -3,6 +3,7 @@ node_modules/
 dist/
 .env
 .vercel/
+/admin/public/community/
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
