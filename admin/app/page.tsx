@@ -154,6 +154,12 @@ export default function Page() {
               Open the Helpi community portal
             </a>
           )}
+          <a
+            className="downloadAppLink"
+            href="https://github.com/abubakarrsaiedfofanah-star/Helpi/releases/latest/download/Helpi-Android.apk"
+          >
+            Download the Android app
+          </a>
         </form>
       </main>
     );
