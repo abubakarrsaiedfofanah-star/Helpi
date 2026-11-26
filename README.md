@@ -1,6 +1,10 @@
 # Helpi — Real Humanitarian Assistance App
 
-Helpi is a security-first humanitarian assistance platform designed for real development. It uses Flutter for Android/mobile and NestJS + PostgreSQL for the backend.
+Helpi is one community-support platform with two role-based portals and one shared backend/database:
+
+- **Community portal:** the Flutter user app for people seeking help and helpers. It runs on Android and as an installable PWA.
+- **Admin portal:** the Next.js operations website, also installable as a PWA.
+- **Shared backend:** NestJS API with PostgreSQL managed through Prisma migrations. All portals use the same accounts and API; administrators sign in with an account granted the `ADMIN` role.
 
 ## Included now
 - Real PostgreSQL persistence with Prisma
@@ -21,13 +25,14 @@ Helpi is a security-first humanitarian assistance platform designed for real dev
 - Flutter app with orange Helpi design, secure storage, case discovery, help requests, offers, messaging, security center and secure-help payment flow
 
 ## Run backend
-1. Copy `backend/.env.example` to `backend/.env` and set strong secrets.
-2. Start PostgreSQL/Redis using `docker compose up -d` inside `backend`.
-3. Run `npm install`.
-4. Run `npx prisma generate`.
-5. Run `npx prisma migrate deploy`.
-6. Run `npm run start:dev`.
-7. API: `http://localhost:3000/api` and Swagger: `http://localhost:3000/api/docs`.
+1. Copy `backend/.env.example` to `backend/.env` and set strong secrets plus a reachable PostgreSQL `DATABASE_URL` (local Postgres or Supabase session/direct connection).
+2. From `backend`, run `npm install` and `npm run db:setup` to validate the Prisma schema, generate the client, and apply the checked-in SQL migrations.
+3. Run `npm run start:dev`.
+4. API: `http://localhost:3000/api` and Swagger: `http://localhost:3000/api/docs`.
+
+For Supabase setup and connection details, see [`backend/README.md`](backend/README.md). Database passwords belong only in `backend/.env` and Vercel/backend server environment settings, never in Flutter or Next.js public variables.
+
+The admin PWA ships with the existing admin Vercel project. The Flutter user PWA is a separate Vercel project from the same GitHub repository, rooted at `frontend`; the Android APK is distributed separately. Set `NEXT_PUBLIC_USER_PORTAL_URL` and build the Flutter web app with `ADMIN_PORTAL_URL` to connect the portals. See [`frontend/README.md`](frontend/README.md) and [`admin/README.md`](admin/README.md).
 
 ## Run Flutter in Android Studio
 1. Install Flutter SDK and the Flutter/Dart plugins.

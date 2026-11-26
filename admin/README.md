@@ -2,6 +2,8 @@
 
 Next.js portal for community operations. It is organized around the work Helpi supports: requests by group and amount, people and account access, NGO/community partners, safety reports and administrator audit history.
 
+The admin portal is installable as a PWA on supported browsers. Open the deployed admin URL in the browser and choose **Install app** or **Add to Home Screen**. The service worker only caches versioned static assets and icons; it does not cache admin pages, session data, or API responses.
+
 ## Run locally
 
 1. Start the API and database using `backend/README.md`.

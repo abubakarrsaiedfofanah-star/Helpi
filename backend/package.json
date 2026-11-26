@@ -11,6 +11,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
+    "db:setup": "prisma validate && prisma generate && prisma migrate deploy",
+    "db:status": "prisma migrate status",
     "test:build": "npm run prisma:generate && npm run build",
     "country:seed": "node seed-country-config.js"
   },

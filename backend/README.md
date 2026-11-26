@@ -2,14 +2,23 @@
 
 NestJS API backed by PostgreSQL and Prisma. The API connects people seeking financial support with helpers and NGOs. A request contains a support group and an amount; the app does not ask for the reason or track how assistance is paid.
 
-## Local setup
+## Database setup
 
-1. Install and start Docker Desktop, then copy `.env.example` to `.env` in this directory. The example database URL matches the local Postgres credentials in `docker-compose.yml`.
-2. Start the local database: `docker compose up -d postgres`.
-3. Install dependencies with `npm install`.
-4. Generate the Prisma client: `npx prisma generate`.
-5. Apply database migrations: `npx prisma migrate deploy` (or `npx prisma migrate dev` during local schema work).
-6. Start the API with `npm run start:dev` and check `http://localhost:3000/api/health`.
+The schema is PostgreSQL and its SQL is versioned under `prisma/migrations`. The migration lock file belongs at `prisma/migrations/migration_lock.toml`; keep schema changes in timestamped migration folders rather than applying untracked SQL to a live database.
+
+### Use Supabase Postgres
+
+1. In Supabase, open **Connect** and copy the **Session pooler** connection string on port `5432` (or the direct connection if your network supports IPv6). Prisma migrations need a direct/session connection, not the transaction pooler on port `6543`.
+2. Copy `.env.example` to `.env` in this directory and set `DATABASE_URL` to that connection string. URL-encode special characters in the database password. Do not commit `.env` or share the connection string.
+3. Install backend dependencies with `npm install`.
+4. Apply all pending SQL migrations and generate the Prisma client: `npm run db:setup` (`npm.cmd run db:setup` in Windows PowerShell if script execution is restricted).
+5. Check migration state with `npm run db:status`, then start the API with `npm run start:dev` and check `http://localhost:3000/api/health`.
+
+`db:setup` runs `prisma validate`, `prisma generate`, and `prisma migrate deploy` in order. It does not reset or drop existing data. For a new empty Supabase project it creates the Helpi tables from the checked-in SQL migrations. The application API uses the server-side database connection; do not put the database password or service credentials in either frontend.
+
+### Use local PostgreSQL
+
+For local development, copy `.env.example` to `.env`, keep its local `DATABASE_URL`, start Docker Desktop, and run `docker compose up -d postgres`. Then run `npm install` and `npm run db:setup` before starting the API. Docker Desktop is not installed in the current workspace, so the local `localhost:5432` database cannot be started here; use your Supabase connection or install/start PostgreSQL locally.
 
 The NestJS entry point loads `.env` automatically. Development CORS allows loopback origins on any port; production must use explicit `CORS_ORIGINS` values. Set unique secrets before production and set `EXPOSE_DEV_TOKENS=false`.
 
