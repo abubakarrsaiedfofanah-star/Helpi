@@ -16,6 +16,8 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   static const _adminPortalUrl = String.fromEnvironment('ADMIN_PORTAL_URL');
+  static const _androidApkUrl =
+      'https://github.com/abubakarrsaiedfofanah-star/Helpi/releases/latest/download/Helpi-Android.apk';
 
   final _formKey = GlobalKey<FormState>();
   final name = TextEditingController();
@@ -163,6 +165,19 @@ class _AuthScreenState extends State<AuthScreen> {
         const SnackBar(content: Text('Could not open the admin portal.')),
       );
     }
+  }
+
+  Future<void> _downloadAndroidApp() async {
+    final uri = Uri.parse(_androidApkUrl);
+    try {
+      if (await launchUrl(uri, mode: LaunchMode.externalApplication) ||
+          !mounted) return;
+    } catch (_) {
+      if (!mounted) return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Could not open the Android app download.')),
+    );
   }
 
   String? _emailError(String? value) {
@@ -508,6 +523,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                       Icons.admin_panel_settings_outlined),
                                   label: const Text('Administrator portal'),
                                 ),
+                              TextButton.icon(
+                                onPressed: busy ? null : _downloadAndroidApp,
+                                icon: const Icon(Icons.android),
+                                label: const Text('Download Android app'),
+                              ),
                             ],
                           ),
                         ),
