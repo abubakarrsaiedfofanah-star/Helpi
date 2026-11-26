@@ -156,7 +156,7 @@ export default function Page() {
           )}
           <a
             className="downloadAppLink"
-            href="https://github.com/abubakarrsaiedfofanah-star/Helpi/releases"
+            href="https://github.com/abubakarrsaiedfofanah-star/Helpi/releases/latest/download/Helpi-Android.apk"
           >
             Download the Android app
           </a>
