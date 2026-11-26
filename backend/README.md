@@ -11,16 +11,31 @@ The schema is PostgreSQL and its SQL is versioned under `prisma/migrations`. The
 1. In Supabase, open **Connect** and copy the **Session pooler** connection string on port `5432` (or the direct connection if your network supports IPv6). Prisma migrations need a direct/session connection, not the transaction pooler on port `6543`.
 2. Copy `.env.example` to `.env` in this directory and set `DATABASE_URL` to that connection string. URL-encode special characters in the database password. Do not commit `.env` or share the connection string.
 3. Install backend dependencies with `npm install`.
-4. Apply all pending SQL migrations and generate the Prisma client: `npm run db:setup` (`npm.cmd run db:setup` in Windows PowerShell if script execution is restricted).
+4. Apply all pending SQL migrations, generate the Prisma client, and seed country operations: `npm run db:setup` (`npm.cmd run db:setup` in Windows PowerShell if script execution is restricted).
 5. Check migration state with `npm run db:status`, then start the API with `npm run start:dev` and check `http://localhost:3000/api/health`.
 
-`db:setup` runs `prisma validate`, `prisma generate`, and `prisma migrate deploy` in order. It does not reset or drop existing data. For a new empty Supabase project it creates the Helpi tables from the checked-in SQL migrations. The application API uses the server-side database connection; do not put the database password or service credentials in either frontend.
+`db:setup` runs `prisma validate`, `prisma generate`, `prisma migrate deploy`, and the idempotent country-configuration seed. It does not reset or drop existing data. The checked-in migrations also enable row-level security with no public client policies; the NestJS API must connect with the private Supabase PostgreSQL owner role so it can access tables and apply authorization in the API. Do not put the database password or service credentials in either frontend.
+
+### One-file setup in the Supabase SQL Editor
+
+If you want to create a brand-new Supabase database by pasting SQL:
+
+1. In a fresh Supabase project, open **SQL Editor** and run the complete contents of [`supabase/helpi_complete_schema.sql`](supabase/helpi_complete_schema.sql). It creates the current Prisma schema, seeds country settings, and enables row-level security on all application tables. It does not create a demo/admin account.
+2. Copy the Supabase Session Pooler or Direct connection URI (port `5432`) into `DATABASE_URL` in `backend/.env`.
+3. From `backend`, run `npm install`, then `npm run db:baseline:supabase`. This records the checked-in Prisma migration history for the schema you just created; it does not run or reset the SQL a second time.
+4. Run `npm run db:status` and `npm run db:setup`. The setup command should report the migrations as applied, regenerate Prisma, and safely seed country configuration.
+
+Generate an updated one-file SQL export after schema changes with `npm run db:export:supabase`. Use normal Prisma migrations for future changes. **Do not run the one-file bootstrap over a database that already has Helpi tables or data.** For an existing project, set `DATABASE_URL` and run `npm run db:setup` instead.
+
+RLS has no policies for Supabase `anon` or `authenticated` roles, so browser/mobile code must not query these tables with a Supabase public key. All access goes through the NestJS API using its private database connection.
 
 ### Use local PostgreSQL
 
 For local development, copy `.env.example` to `.env`, keep its local `DATABASE_URL`, start Docker Desktop, and run `docker compose up -d postgres`. Then run `npm install` and `npm run db:setup` before starting the API. Docker Desktop is not installed in the current workspace, so the local `localhost:5432` database cannot be started here; use your Supabase connection or install/start PostgreSQL locally.
 
-The NestJS entry point loads `.env` automatically. Development CORS allows loopback origins on any port; production must use explicit `CORS_ORIGINS` values. Set unique secrets before production and set `EXPOSE_DEV_TOKENS=false`.
+The NestJS entry point loads `.env` automatically. Development CORS allows loopback origins on any port; production must use explicit `CORS_ORIGINS` values. Set unique secrets before production and keep `EXPOSE_DEV_TOKENS=false`.
+
+For production sign-ups, configure `EMAIL_WEBHOOK_URL`, `EMAIL_WEBHOOK_SECRET`, and `EMAIL_VERIFICATION_BASE_URL` in the API environment. The API sends a `POST` with `Authorization: Bearer <EMAIL_WEBHOOK_SECRET>` and a JSON `event: "email.verification"` payload containing `to`, `subject`, `text`, `verificationUrl`, and a single-use `verificationToken` that expires in 30 minutes. The webhook must deliver the email and return a `2xx` response. The verification link should open the `/community/` Flutter web app; the app completes verification and then lets the user sign in. Without email delivery configured, registration fails clearly instead of creating an account that cannot be activated. Local development may set `EXPOSE_DEV_TOKENS=true` to verify accounts without the mail webhook; never do this in production.
 
 ## Connecting the Flutter app
 

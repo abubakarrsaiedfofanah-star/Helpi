@@ -23,12 +23,29 @@ class _AuthScreenState extends State<AuthScreen> {
   final password = TextEditingController();
   final alias = TextEditingController();
   final mfaCode = TextEditingController();
+  final verificationToken = TextEditingController();
   String? supportGroup;
   bool register = false;
   bool showPassword = false;
   bool busy = false;
   bool anonymousPublic = false;
   bool requiresMfa = false;
+  bool requiresEmailVerification = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (kIsWeb) {
+      final token = Uri.base.queryParameters['token'];
+      if (token != null && token.isNotEmpty) {
+        verificationToken.text = token;
+        requiresEmailVerification = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) submit();
+        });
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -37,6 +54,7 @@ class _AuthScreenState extends State<AuthScreen> {
     password.dispose();
     alias.dispose();
     mfaCode.dispose();
+    verificationToken.dispose();
     super.dispose();
   }
 
@@ -47,7 +65,19 @@ class _AuthScreenState extends State<AuthScreen> {
     final messenger = ScaffoldMessenger.of(context);
     try {
       String? error;
-      if (register) {
+      if (requiresEmailVerification) {
+        error = await state.verifyEmail(verificationToken.text.trim());
+        if (error == null && mounted) {
+          setState(() {
+            requiresEmailVerification = false;
+            register = false;
+            verificationToken.clear();
+          });
+          messenger.showSnackBar(
+            const SnackBar(content: Text('Email verified. You can now sign in.')),
+          );
+        }
+      } else if (register) {
         error = await state.register(
           name.text.trim(),
           email.text.trim(),
@@ -66,12 +96,15 @@ class _AuthScreenState extends State<AuthScreen> {
         if (error == null && mounted) {
           final wasVerifiedLocally =
               state.lastDevelopmentVerificationToken != null;
-          setState(() => register = false);
+          setState(() {
+            register = false;
+            requiresEmailVerification = !wasVerifiedLocally;
+          });
           messenger.showSnackBar(
             SnackBar(
               content: Text(wasVerifiedLocally
                   ? 'Account created and verified for local development. You can sign in.'
-                  : 'Account created. Verify your email to sign in.'),
+                  : 'Account created. Open the verification email, or enter its code here.'),
             ),
           );
         }
@@ -196,7 +229,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               SizedBox(height: tightHeight ? 8 : 18),
                               Text(
-                                requiresMfa
+                                requiresEmailVerification
+                                    ? 'Verify your email'
+                                    : requiresMfa
                                     ? l.get('auth_mfa')
                                     : register
                                         ? l.get('auth_create')
@@ -210,7 +245,9 @@ class _AuthScreenState extends State<AuthScreen> {
                               ),
                               const SizedBox(height: 6),
                               Text(
-                                requiresMfa
+                                requiresEmailVerification
+                                    ? 'Use the link in your email or paste its verification code below.'
+                                    : requiresMfa
                                     ? l.get('auth_mfa_hint')
                                     : register
                                         ? l.get('auth_join_hint')
@@ -234,6 +271,24 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ],
                               SizedBox(height: tightHeight ? 14 : 24),
+                              if (requiresEmailVerification) ...[
+                                TextFormField(
+                                  controller: verificationToken,
+                                  enabled: !busy,
+                                  keyboardType: TextInputType.url,
+                                  textInputAction: TextInputAction.done,
+                                  autocorrect: false,
+                                  enableSuggestions: false,
+                                  onFieldSubmitted: (_) => submit(),
+                                  validator: (value) => (value ?? '').trim().isEmpty
+                                      ? 'Enter the verification code from your email.'
+                                      : null,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Email verification code',
+                                    prefixIcon: Icon(Icons.mark_email_read_outlined),
+                                  ),
+                                ),
+                              ] else ...[
                               if (register) ...[
                                 TextFormField(
                                   controller: name,
@@ -402,6 +457,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   ),
                                 ],
                               ],
+                              ],
                               const SizedBox(height: 20),
                               SizedBox(
                                 height: 52,
@@ -415,7 +471,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                             color: Colors.white,
                                           ),
                                         )
-                                      : Text(requiresMfa
+                                      : Text(requiresEmailVerification
+                                          ? 'Verify email'
+                                          : requiresMfa
                                           ? l.get('verify_signin')
                                           : register
                                               ? l.get('create_account')
@@ -431,7 +489,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 ),
                               ],
                               const SizedBox(height: 12),
-                              TextButton(
+                              if (!requiresEmailVerification) TextButton(
                                 onPressed: busy || requiresMfa
                                     ? null
                                     : () => setState(() {

@@ -1,0 +1,105 @@
+import { spawnSync } from 'node:child_process';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const backendRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const prismaCli = path.join(backendRoot, 'node_modules', 'prisma', 'build', 'index.js');
+const schemaPath = path.join(backendRoot, 'prisma', 'schema.prisma');
+const countriesPath = path.join(backendRoot, 'data', 'countries.json');
+const outputPath = path.join(backendRoot, 'supabase', 'helpi_complete_schema.sql');
+
+const diff = spawnSync(process.execPath, [
+  prismaCli,
+  'migrate', 'diff',
+  '--from-empty',
+  '--to-schema-datamodel', schemaPath,
+  '--script',
+], { cwd: backendRoot, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024, env: { ...process.env, NO_COLOR: '1' } });
+
+if (diff.error) throw diff.error;
+if (diff.status !== 0) {
+  process.stderr.write(diff.stderr || 'Prisma could not generate the Supabase schema.\n');
+  process.exit(diff.status ?? 1);
+}
+
+const countries = JSON.parse(readFileSync(countriesPath, 'utf8'));
+const codes = new Set();
+const sqlString = (value) => `'${String(value).replaceAll("'", "''")}'`;
+const jsonb = (value) => `${sqlString(JSON.stringify(value))}::jsonb`;
+
+const defaults = {
+  languages: ['en'],
+  paymentMethods: [],
+  kycRequirements: { identityRequired: true, acceptedDocumentTypes: [] },
+  kybRequirements: { enabled: true, requiredForOrganizations: true, documents: [] },
+  safeguardingRules: { childSafetyReview: true, exactAddressesPublic: false, escalationRequired: true },
+  emergencyResources: [],
+  documentTypes: [],
+  dataRetention: { identityDays: 2555, caseDays: 2555, financialDays: 2555, deletionRequestWorkflow: true },
+  helpMethods: ['MONEY', 'GOODS', 'SKILLS', 'TIME', 'TRANSPORT', 'SERVICES'],
+  verificationRules: { identity: true, need: true, institution: true, paymentDestination: true, humanReview: true },
+  communicationRules: { translation: true, voice: true, video: true, childContactRequiresSafeguards: true },
+};
+
+const seedRows = countries.map((country) => {
+  if (!/^[A-Z]{2}$/.test(country.code) || codes.has(country.code)) {
+    throw new Error(`Invalid or duplicate country registry entry: ${country.code}`);
+  }
+  codes.add(country.code);
+  return `  (${[
+    sqlString(`country-${country.code}`), sqlString(country.code), 'TRUE', sqlString('en'),
+    jsonb(defaults.languages), jsonb(country.currency ? [country.currency] : []), jsonb(defaults.paymentMethods),
+    jsonb(defaults.kycRequirements), jsonb(defaults.kybRequirements), jsonb(defaults.safeguardingRules),
+    jsonb(defaults.emergencyResources), jsonb(defaults.documentTypes), jsonb(defaults.dataRetention),
+    jsonb(defaults.helpMethods), jsonb(defaults.verificationRules), jsonb(defaults.communicationRules),
+    'NULL', 'CURRENT_TIMESTAMP', 'CURRENT_TIMESTAMP',
+  ].join(', ')})`;
+}).join(',\n');
+
+const header = `-- Helpi Supabase bootstrap SQL
+-- Generated from prisma/schema.prisma and data/countries.json.
+-- Run once in the SQL Editor of a NEW Supabase project.
+-- Do not run this over an existing Helpi database; use Prisma migrations for upgrades.
+-- RLS is enabled on all application tables with no client policies. The NestJS API must
+-- use the private Supabase Postgres connection as the database owner/service role.
+
+BEGIN;
+
+`;
+
+const countrySeed = `
+-- Initial country settings used by the app and admin country-operations screens.
+INSERT INTO "CountryConfiguration" (
+  "id", "countryCode", "enabled", "defaultLanguage", "languages", "currencies",
+  "paymentMethods", "kycRequirements", "kybRequirements", "safeguardingRules",
+  "emergencyResources", "documentTypes", "dataRetention", "helpMethods",
+  "verificationRules", "communicationRules", "updatedById", "createdAt", "updatedAt"
+) VALUES
+${seedRows}
+ON CONFLICT ("countryCode") DO UPDATE SET "currencies" = EXCLUDED."currencies";
+
+`;
+
+const rls = `
+-- Keep the public Supabase Data API closed to anonymous/authenticated client roles.
+-- The API server connects as the database owner and performs authorization itself.
+DO $helpi_enable_rls$
+DECLARE
+  target RECORD;
+BEGIN
+  FOR target IN
+    SELECT tablename FROM pg_tables WHERE schemaname = 'public'
+  LOOP
+    EXECUTE format('ALTER TABLE %I.%I ENABLE ROW LEVEL SECURITY', 'public', target.tablename);
+  END LOOP;
+END;
+$helpi_enable_rls$;
+
+COMMIT;
+`;
+
+const output = header + diff.stdout.trim() + '\n\n' + countrySeed + rls;
+mkdirSync(path.dirname(outputPath), { recursive: true });
+writeFileSync(outputPath, output, 'utf8');
+console.log(`Wrote ${path.relative(backendRoot, outputPath)} (${countries.length} country defaults).`);

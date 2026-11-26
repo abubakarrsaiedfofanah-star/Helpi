@@ -21,7 +21,7 @@ export class CountryOperationsService {
   private base(code: string) {
     const c = this.registry().find(x => x.code === code.toUpperCase());
     if (!c) throw new NotFoundException('Country not found.');
-    return {...defaults, languages:['en'], currencies:[c.currency], countryCode:c.code, countryName:c.name, continent:c.continent};
+    return {...defaults, languages:['en'], currencies:c.currency?[c.currency]:[], countryCode:c.code, countryName:c.name, continent:c.continent};
   }
   async get(code:string): Promise<any> {
     const countryCode=code.toUpperCase();
