@@ -18,6 +18,10 @@ if [[ ! -x "$FLUTTER_ROOT/bin/flutter" ]]; then
 fi
 
 export PATH="$FLUTTER_ROOT/bin:$PATH"
+# Vercel may extract the Flutter SDK with ownership that differs from the
+# build process user. Flutter invokes Git internally, so trust only this
+# downloaded SDK directory to avoid Git's dubious-ownership exit (128).
+git config --global --add safe.directory "$FLUTTER_ROOT"
 flutter config --no-analytics
 flutter pub get
 BASE_HREF="${BASE_HREF:-/}"
