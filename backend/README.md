@@ -8,8 +8,8 @@ The schema is PostgreSQL and its SQL is versioned under `prisma/migrations`. The
 
 ### Use Supabase Postgres
 
-1. In Supabase, open **Connect** and copy the **Session pooler** connection string on port `5432` (or the direct connection if your network supports IPv6). Prisma migrations need a direct/session connection, not the transaction pooler on port `6543`.
-2. Copy `.env.example` to `.env` in this directory and set `DATABASE_URL` to that connection string. URL-encode special characters in the database password. Do not commit `.env` or share the connection string.
+1. In Supabase, open **Connect → ORM → Prisma**. For a persistent backend, use the Session pooler URL (port `5432`) as `DATABASE_URL`. For Vercel Functions, use the Transaction pooler URL (port `6543`, with `pgbouncer=true`) as `DATABASE_URL`, and the Session pooler URL (port `5432`) as `DIRECT_URL` for Prisma migrations and baselining. URL-encode special characters in the database password.
+2. Copy `.env.example` to `.env` in this directory and set both URLs. Do not commit `.env` or share the connection strings.
 3. Install backend dependencies with `npm install`.
 4. Apply all pending SQL migrations, generate the Prisma client, and seed country operations: `npm run db:setup` (`npm.cmd run db:setup` in Windows PowerShell if script execution is restricted).
 5. Check migration state with `npm run db:status`, then start the API with `npm run start:dev` and check `http://localhost:3000/api/health`.
@@ -21,7 +21,7 @@ The schema is PostgreSQL and its SQL is versioned under `prisma/migrations`. The
 If you want to create a brand-new Supabase database by pasting SQL:
 
 1. In a fresh Supabase project, open **SQL Editor** and run [`supabase/parts/helpi_schema_part_1.sql`](supabase/parts/helpi_schema_part_1.sql), then `part_2.sql`, then `part_3.sql`, as three separate queries in that order. The smaller files avoid query truncation in the SQL Editor. The combined file [`supabase/helpi_complete_schema.sql`](supabase/helpi_complete_schema.sql) is for tools that execute SQL files directly. This setup creates the current Prisma schema, seeds country settings, and enables row-level security. It does not create a demo/admin account.
-2. Copy the Supabase Session Pooler or Direct connection URI (port `5432`) into `DATABASE_URL` in `backend/.env`.
+2. Set `DIRECT_URL` to the Supabase Session Pooler URI (port `5432`). For Vercel Functions, set `DATABASE_URL` to the Transaction Pooler URI (port `6543`) with `pgbouncer=true`; for local development, `DATABASE_URL` can use the same session/direct URI.
 3. From `backend`, run `npm install`, then `npm run db:baseline:supabase`. This records the checked-in Prisma migration history for the schema you just created; it does not run or reset the SQL a second time.
 4. Run `npm run db:status` and `npm run db:setup`. The setup command should report the migrations as applied, regenerate Prisma, and safely seed country configuration.
 
@@ -31,7 +31,7 @@ RLS has no policies for Supabase `anon` or `authenticated` roles, so browser/mob
 
 ### Deploy the API in the same Vercel project
 
-The repository-root `vercel.json` uses Vercel Services to route `/api/*` to this NestJS service while the same deployment serves the admin and Flutter web app. In the existing Vercel project, set the Root Directory to the repository root and Framework Preset to **Services**. Add `DATABASE_URL`, `JWT_ACCESS_SECRET`, `MFA_ENCRYPTION_KEY_B64`, and `CORS_ORIGINS=https://helpi-eight.vercel.app` as server environment variables. Use the Supabase Session Pooler URI for `DATABASE_URL`; never prefix it with `NEXT_PUBLIC_`. Also configure the email webhook variables before enabling account registration. The API then shares the Vercel domain at `https://helpi-eight.vercel.app/api`; the frontend's `NEXT_PUBLIC_API_URL` should use that URL. If the SQL Editor bootstrap was used, run `npm run db:baseline:supabase` once before relying on future Prisma migrations.
+The repository-root `vercel.json` uses Vercel Services to route `/api/*` to this NestJS service while the same deployment serves the admin and Flutter web app. In the existing Vercel project, set the Root Directory to the repository root and Framework Preset to **Services**. Add `DATABASE_URL` (Supabase Transaction Pooler URI with `pgbouncer=true`), `DIRECT_URL` (Supabase Session Pooler URI), `JWT_ACCESS_SECRET`, `MFA_ENCRYPTION_KEY_B64`, and `CORS_ORIGINS=https://helpi-eight.vercel.app` as server environment variables. Keep both database URLs secret; never prefix them with `NEXT_PUBLIC_`. Also configure the email webhook variables before enabling account registration. The API then shares the Vercel domain at `https://helpi-eight.vercel.app/api`; the frontend's `NEXT_PUBLIC_API_URL` should use that URL. If the SQL Editor bootstrap was used, run `npm run db:baseline:supabase` once before relying on future Prisma migrations.
 
 ### Use local PostgreSQL
 

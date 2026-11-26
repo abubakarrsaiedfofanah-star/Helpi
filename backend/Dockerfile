@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json ./
 RUN npm install --no-audit --no-fund
 COPY prisma ./prisma
-RUN npx prisma generate
+RUN DATABASE_URL=postgresql://local:local@localhost:5432/local DIRECT_URL=postgresql://local:local@localhost:5432/local npx prisma generate
 COPY tsconfig.json nest-cli.json ./
 COPY src ./src
 COPY data ./data
