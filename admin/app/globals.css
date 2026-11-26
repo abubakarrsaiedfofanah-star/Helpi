@@ -68,3 +68,4 @@ button[aria-busy='true']::after{content:' ';position:absolute;left:50%;top:50%;w
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.pagination{align-items:stretch;flex-direction:column}.pagination>div button{flex:1}}
 @media(max-width:620px){.grid{grid-template-columns:1fr}}
+.brandLogo{display:block;width:42px;height:42px;object-fit:cover;border-radius:13px;flex:none}.loginLogo{width:56px;height:56px;border-radius:16px;margin-bottom:4px}.portalLink{justify-self:center;color:#b84d00;font-size:13px;font-weight:700;text-decoration:none}.portalLink:hover{text-decoration:underline}@media(max-width:620px){.brand .brandLogo{width:36px;height:36px;border-radius:11px}}

@@ -1,35 +1,19 @@
 {
-    "name": "helpi",
-    "short_name": "helpi",
+    "name": "Helpi Community Support",
+    "short_name": "Helpi",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFF8F1",
+    "theme_color": "#FF7A00",
+    "description": "Helpi connects people seeking support with community helpers.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "icons/Icon-192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "icons/Icon-512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        },
-        {
-            "src": "icons/Icon-maskable-192.png",
-            "sizes": "192x192",
+            "src": "assets/assets/helpi_logo.png",
+            "sizes": "1024x1024",
             "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "icons/Icon-maskable-512.png",
-            "sizes": "512x512",
-            "type": "image/png",
-            "purpose": "maskable"
+            "purpose": "any maskable"
         }
     ]
 }

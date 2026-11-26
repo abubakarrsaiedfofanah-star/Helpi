@@ -1,3 +1,5 @@
+import { HelpiLogo } from './HelpiLogo';
+
 interface HeaderProps {
   setOpen: (open: boolean) => void;
   search: string;
@@ -10,7 +12,7 @@ export function Header({ setOpen, search, setSearch, setTab }: HeaderProps) {
     <header>
       <button className="menu" onClick={() => setOpen(true)} aria-label="Open navigation">Menu</button>
       <div className="brand">
-        <div className="mark">H</div>
+        <HelpiLogo className="brandLogo" />
         <div><strong>Helpi</strong><span>Community admin</span></div>
       </div>
       <div className="headerRight">

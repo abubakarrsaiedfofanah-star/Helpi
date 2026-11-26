@@ -9,6 +9,11 @@ Next.js portal for community operations. It is organized around the work Helpi s
 3. Install packages with `npm install` and run `npm run dev`.
 4. Sign in with an active, email-verified account that has the `ADMIN` role. Enter an authenticator code when MFA is enabled.
 
+For Vercel, set `NEXT_PUBLIC_API_URL` to the production API and
+`NEXT_PUBLIC_USER_PORTAL_URL` to the deployed Flutter web app URL. The admin
+sign-in page links to the user portal when that URL is configured. See
+`.env.example` for the public URL settings.
+
 The access token is kept in the browser's session storage and cleared when the admin signs out or the session ends. Serve the portal and API over HTTPS outside local development, and restrict CORS to the portal origin.
 
 ## Portal workspaces

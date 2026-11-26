@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { AuditTrailView } from '../components/AuditTrailView';
 import { DashboardOverview } from '../components/DashboardOverview';
 import { Header } from '../components/Header';
+import { HelpiLogo } from '../components/HelpiLogo';
 import { OrganizationsView } from '../components/OrganizationsView';
 import { PeopleView } from '../components/PeopleView';
 import { RequestsView } from '../components/RequestsView';
@@ -50,6 +51,7 @@ const titles: Record<Tab, string> = {
 };
 
 export default function Page() {
+  const userPortalUrl = process.env.NEXT_PUBLIC_USER_PORTAL_URL?.trim();
   const [token, setToken] = useState('');
   const [d, setD] = useState<Dashboard | null>(null);
   const [tab, setTab] = useState<Tab>('overview');
@@ -138,7 +140,7 @@ export default function Page() {
     return (
       <main className="loginPage">
         <form className="loginCard" onSubmit={signIn}>
-          <div className="mark">H</div>
+          <HelpiLogo className="brandLogo loginLogo" />
           <p className="eyebrow">HELPI ADMIN</p>
           <h1>Welcome back</h1>
           <p>Sign in to manage community accounts, requests, organizations, and safety reports.</p>
@@ -147,6 +149,11 @@ export default function Page() {
           <label>Authenticator code <span className="muted">If enabled</span><input inputMode="numeric" value={mfaCode} onChange={(event) => setMfaCode(event.target.value.replace(/\D/g, '').slice(0, 6))} maxLength={6} autoComplete="one-time-code" /></label>
           {error && <div className="alert" role="alert">{error}</div>}
           <button className="primary" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+          {userPortalUrl && (
+            <a className="portalLink" href={userPortalUrl} target="_blank" rel="noopener noreferrer">
+              Open the Helpi community portal
+            </a>
+          )}
         </form>
       </main>
     );

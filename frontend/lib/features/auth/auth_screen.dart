@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../core/app_state.dart';
 import '../../core/case_categories.dart';
 import '../../core/localization.dart';
@@ -14,6 +15,8 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  static const _adminPortalUrl = String.fromEnvironment('ADMIN_PORTAL_URL');
+
   final _formKey = GlobalKey<FormState>();
   final name = TextEditingController();
   final email = TextEditingController();
@@ -61,7 +64,8 @@ class _AuthScreenState extends State<AuthScreen> {
           }
         }
         if (error == null && mounted) {
-          final wasVerifiedLocally = state.lastDevelopmentVerificationToken != null;
+          final wasVerifiedLocally =
+              state.lastDevelopmentVerificationToken != null;
           setState(() => register = false);
           messenger.showSnackBar(
             SnackBar(
@@ -107,6 +111,24 @@ class _AuthScreenState extends State<AuthScreen> {
       }
     } finally {
       if (mounted) setState(() => busy = false);
+    }
+  }
+
+  Future<void> _openAdminPortal() async {
+    final uri = Uri.tryParse(_adminPortalUrl);
+    if (uri == null ||
+        !uri.hasAuthority ||
+        !['http', 'https'].contains(uri.scheme)) return;
+    try {
+      final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      if (opened || !mounted) return;
+    } catch (_) {
+      if (!mounted) return;
+    }
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open the admin portal.')),
+      );
     }
   }
 
@@ -421,6 +443,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                     ? l.get('already_registered')
                                     : l.get('need_account')),
                               ),
+                              if (_adminPortalUrl.isNotEmpty)
+                                TextButton.icon(
+                                  onPressed: busy ? null : _openAdminPortal,
+                                  icon: const Icon(
+                                      Icons.admin_panel_settings_outlined),
+                                  label: const Text('Administrator portal'),
+                                ),
                             ],
                           ),
                         ),

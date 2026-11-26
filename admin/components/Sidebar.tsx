@@ -1,3 +1,5 @@
+import { HelpiLogo } from './HelpiLogo';
+
 interface SidebarProps {
   open: boolean;
   tab: string;
@@ -15,7 +17,7 @@ export function Sidebar({ open, tab, setTab, setOpen, tabs, onSignOut }: Sidebar
 
   return <>
     <aside className={open ? 'drawer open' : 'drawer'} aria-label="Admin navigation">
-      <div className="sideBrand"><div className="mark">H</div><div><strong>Helpi</strong><span>Community admin</span></div></div>
+      <div className="sideBrand"><HelpiLogo className="brandLogo" /><div><strong>Helpi</strong><span>Community admin</span></div></div>
       <nav className="sideNav">{groups.map((group) => <div className="sideNavGroup" key={group.label}>
         <small>{group.label}</small>
         {group.items.map((item) => <button className={tab === item.id ? 'side active' : 'side'} onClick={() => { setTab(item.id); setOpen(false); }} key={item.id} aria-current={tab === item.id ? 'page' : undefined}>

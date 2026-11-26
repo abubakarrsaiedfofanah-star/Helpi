@@ -1,4 +1,5 @@
-import 'dart:convert'; import 'dart:io'; import 'dart:async'; import 'package:flutter/foundation.dart'; import 'package:http/http.dart' as http;
+import 'dart:convert'; import 'dart:async'; import 'package:flutter/foundation.dart'; import 'package:http/http.dart' as http;
+import 'network_exception_stub.dart' if (dart.library.io) 'network_exception_io.dart' as network_exceptions;
 class ApiException implements Exception { final String message; final int? statusCode; const ApiException(this.message,{this.statusCode}); @override String toString()=>message; }
 class Api{
   static const configuredBase = String.fromEnvironment('API_URL');
@@ -17,7 +18,7 @@ class Api{
       'Content-Type':'application/json',
       if(token!=null)'Authorization':'Bearer $token',
       'X-Timestamp': timestamp,
-      'X-Client-Platform': 'flutter-android',
+      'X-Client-Platform': kIsWeb ? 'flutter-web' : 'flutter-android',
     };
   }
   Future<dynamic> call(String method,String path,[Map<String,dynamic>? body])async{
@@ -32,8 +33,8 @@ class Api{
     }
     try {
       http.Response r;
-      try { r=await request(); } on SocketException {
-        if(method!='GET') rethrow;
+      try { r=await request(); } on Exception catch (error) {
+        if(method!='GET' || !network_exceptions.isSocketException(error)) rethrow;
         await Future<void>.delayed(const Duration(milliseconds:350));
         r=await request();
       }
@@ -53,7 +54,7 @@ class Api{
       if(r.statusCode<200||r.statusCode>=300)throw ApiException(_message(r),statusCode:r.statusCode);
       if(r.body.isEmpty)return {};
       try{return jsonDecode(r.body);}catch(_){throw const ApiException('The server returned an invalid response.');}
-    } on ApiException { rethrow; } on TimeoutException { throw const ApiException('The server took too long to respond. Check that the Helpi backend is running and try again.'); } on SocketException { throw const ApiException('Could not reach the Helpi backend. Check that it is running and that this device can reach the computer.'); } on http.ClientException { throw const ApiException('Could not connect to the Helpi backend. Check the API address and try again.'); } catch(_) { throw const ApiException('Something went wrong. Please try again.'); }
+    } on ApiException { rethrow; } on TimeoutException { throw const ApiException('The server took too long to respond. Check that the Helpi backend is running and try again.'); } on http.ClientException { throw const ApiException('Could not connect to the Helpi backend. Check the API address and try again.'); } catch(error) { if (network_exceptions.isSocketException(error)) throw const ApiException('Could not reach the Helpi backend. Check that it is running and that this device can reach the computer.'); throw const ApiException('Something went wrong. Please try again.'); }
   }
   String _message(http.Response r){try{final j=jsonDecode(r.body);final m=j['message'];if(m is List)return m.join(', ');return m?.toString()??'Request failed (${r.statusCode})';}catch(_){return 'Request failed (${r.statusCode})';}}
   Future<Map<String,dynamic>> refresh(String refreshToken)=>call('POST','/auth/refresh',{'refreshToken':refreshToken}) as Future<Map<String,dynamic>>;
