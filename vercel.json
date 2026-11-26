@@ -1,0 +1,27 @@
+{
+  "services": {
+    "web": {
+      "root": "admin",
+      "framework": "nextjs",
+      "rewrites": [
+        { "source": "/community", "destination": "/community/index.html" },
+        { "source": "/community/:path*", "destination": "/community/index.html" }
+      ],
+      "headers": [
+        {
+          "source": "/community/sw.js",
+          "headers": [
+            { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
+          ]
+        }
+      ]
+    },
+    "api": {
+      "root": "backend"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "api" } },
+    { "source": "/(.*)", "destination": { "service": "web" } }
+  ]
+}

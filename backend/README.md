@@ -29,6 +29,10 @@ Generate updated SQL exports after schema changes with `npm run db:export:supaba
 
 RLS has no policies for Supabase `anon` or `authenticated` roles, so browser/mobile code must not query these tables with a Supabase public key. All access goes through the NestJS API using its private database connection.
 
+### Deploy the API in the same Vercel project
+
+The repository-root `vercel.json` uses Vercel Services to route `/api/*` to this NestJS service while the same deployment serves the admin and Flutter web app. In the existing Vercel project, set the Root Directory to the repository root and Framework Preset to **Services**. Add `DATABASE_URL`, `JWT_ACCESS_SECRET`, `MFA_ENCRYPTION_KEY_B64`, and `CORS_ORIGINS=https://helpi-eight.vercel.app` as server environment variables. Use the Supabase Session Pooler URI for `DATABASE_URL`; never prefix it with `NEXT_PUBLIC_`. Also configure the email webhook variables before enabling account registration. The API then shares the Vercel domain at `https://helpi-eight.vercel.app/api`; the frontend's `NEXT_PUBLIC_API_URL` should use that URL. If the SQL Editor bootstrap was used, run `npm run db:baseline:supabase` once before relying on future Prisma migrations.
+
 ### Use local PostgreSQL
 
 For local development, copy `.env.example` to `.env`, keep its local `DATABASE_URL`, start Docker Desktop, and run `docker compose up -d postgres`. Then run `npm install` and `npm run db:setup` before starting the API. Docker Desktop is not installed in the current workspace, so the local `localhost:5432` database cannot be started here; use your Supabase connection or install/start PostgreSQL locally.
