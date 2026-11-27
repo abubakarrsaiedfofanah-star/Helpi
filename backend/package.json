@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate --schema=prisma/schema.prisma && nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
@@ -15,7 +15,7 @@
     "db:status": "prisma migrate status",
     "db:export:supabase": "node scripts/generate-supabase-sql.mjs",
     "db:baseline:supabase": "node scripts/baseline-supabase-sql.mjs",
-    "test:build": "npm run prisma:generate && npm run build",
+    "test:build": "npm run build",
     "country:seed": "node seed-country-config.js"
   },
   "dependencies": {
