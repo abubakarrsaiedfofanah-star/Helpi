@@ -4,7 +4,10 @@ class ApiException implements Exception { final String message; final int? statu
 class Api{
   static const configuredBase = String.fromEnvironment('API_URL');
   String get base {
-    if (configuredBase.isNotEmpty) return configuredBase;
+    if (configuredBase.isNotEmpty) {
+      final configured = configuredBase.replaceFirst(RegExp(r'/+$'), '');
+      return configured.endsWith('/api') ? configured : '$configured/api';
+    }
     if (!kDebugMode) return 'https://helpi-eight.vercel.app/api';
     if (kIsWeb) return 'http://localhost:3000/api';
     if (defaultTargetPlatform == TargetPlatform.android) return 'http://10.0.2.2:3000/api';

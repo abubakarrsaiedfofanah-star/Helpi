@@ -9,7 +9,13 @@ const flutterRoot = path.join(repositoryRoot, 'frontend');
 const webOutput = path.join(flutterRoot, 'build', 'web');
 const publicRoot = path.join(adminRoot, 'public');
 const communityOutput = path.join(publicRoot, 'community');
-const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL?.trim() || 'https://helpi-eight.vercel.app/api';
+const parsedApiUrl = new URL(configuredApiUrl);
+const apiPath = parsedApiUrl.pathname.replace(/\/+$/, '');
+if (!apiPath.endsWith('/api')) parsedApiUrl.pathname = `${apiPath}/api`;
+parsedApiUrl.search = '';
+parsedApiUrl.hash = '';
+const apiUrl = parsedApiUrl.toString().replace(/\/$/, '');
 
 const env = { ...process.env, API_URL: apiUrl, BASE_HREF: '/community/' };
 let result;
