@@ -17,9 +17,8 @@
       ]
     },
     "api": {
-      "root": "backend",
-      "framework": "nestjs",
-      "entrypoint": "src/main.ts"
+      "root": "backend/",
+      "entrypoint": "Dockerfile"
     }
   },
   "rewrites": [
