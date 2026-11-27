@@ -1,10 +1,11 @@
 import Image from 'next/image';
 import styles from './public-site.module.css';
 import { DeviceAppLink } from '../../components/DeviceAppLink';
+import { AboutSection, WhatWeDoSection } from '../../components/PublicSiteSections';
 
 export const metadata = {
-  title: 'Helpi | Community support',
-  description: 'Find community support or offer help with the Helpi app.',
+  title: 'Helpi | Connect for financial help',
+  description: 'Helpi connects people seeking financial help with helpers who choose to connect.',
   manifest: '/community/manifest.json',
 };
 
@@ -27,13 +28,12 @@ function DownloadIcon() {
 export default function PublicHomePage() {
   return (
     <>
-      <section className={styles.hero}>
+      <section className={styles.hero} id="home">
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}><span /> COMMUNITY SUPPORT, TOGETHER</p>
           <h1>Help feels closer when we connect.</h1>
           <p className={styles.lede}>
-            Helpi brings people seeking support together with helpers and community organizations.
-            Find a way to give or receive support in one welcoming app.
+            Helpi connects people seeking financial help with helpers who want to connect.
           </p>
           <div className={styles.heroActions}>
             <DeviceAppLink className={styles.primaryButton}>
@@ -45,7 +45,7 @@ export default function PublicHomePage() {
           </div>
           <div className={styles.heroMeta}>
             <span className={styles.metaIcon} aria-hidden="true">H</span>
-            <span>For helpers and people looking for support</span>
+          <span>For people seeking financial help and the helpers who connect with them</span>
           </div>
         </div>
 
@@ -69,7 +69,7 @@ export default function PublicHomePage() {
         <div className={styles.sectionIntro}>
           <p className={styles.eyebrow}>ONE COMMUNITY APP</p>
           <h2>There is a place for you here.</h2>
-          <p>Whether you need a hand or are ready to lend one, start in the same community.</p>
+          <p>One shared app connects people seeking financial help with helpers.</p>
         </div>
         <div className={styles.audienceGrid}>
           <article className={styles.audienceCard}>
@@ -77,7 +77,7 @@ export default function PublicHomePage() {
               <svg viewBox="0 0 24 24" fill="none"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" /></svg>
             </span>
             <h3>Looking for support?</h3>
-            <p>Explore community requests and connect with people and organizations offering help.</p>
+            <p>Browse financial help requests and connect with a helper.</p>
             <a href="/community/">Find support <ArrowIcon /></a>
           </article>
           <article className={styles.audienceCard}>
@@ -85,11 +85,14 @@ export default function PublicHomePage() {
               <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8m0-12.8L5.6 18.4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>
             </span>
             <h3>Ready to help?</h3>
-            <p>Find requests where your time, skills, or contribution could make a difference.</p>
+            <p>Review requests from people seeking financial help and choose whether to connect.</p>
             <a href="/community/">Offer help <ArrowIcon /></a>
           </article>
         </div>
       </section>
+
+      <AboutSection />
+      <WhatWeDoSection />
 
       <section className={styles.howSection} id="how-it-works">
         <div className={styles.howHeading}>
@@ -114,7 +117,7 @@ export default function PublicHomePage() {
         <div className={styles.storyCopy}>
           <p className={styles.eyebrow}>COMMUNITY IN ACTION</p>
           <h2 id="community-story-title">Support grows when people work together.</h2>
-          <p>Across communities, people already share their time and skills to meet local needs. Helpi helps people find one another and take the next step together.</p>
+          <p>This photo shows neighbors working together on a local water project in Ghana. Helpi focuses on connecting people seeking financial help with helpers.</p>
           <a className={styles.storyLink} href="/what-we-do/">See what Helpi does <ArrowIcon /></a>
         </div>
       </section>

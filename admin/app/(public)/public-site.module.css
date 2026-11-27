@@ -5,15 +5,20 @@
   --orange-dark: #aa4800;
   --line: #f0e2d8;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: clip;
   color: var(--ink);
   background: #fffaf6;
 }
 
 .header {
-  width: min(1240px, calc(100% - 48px));
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  box-sizing: border-box;
+  width: 100%;
   min-height: 88px;
   margin: 0 auto;
+  padding: 0 max(24px, calc((100vw - 1240px) / 2));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,7 +39,7 @@
 
 .brand img { display: block; border-radius: 13px; }
 
-.nav { display: flex; align-items: center; gap: clamp(20px, 4vw, 46px); }
+.nav { display: flex; align-items: center; gap: clamp(16px, 3vw, 34px); }
 .nav a, .footerLinks a {
   color: #455169;
   text-decoration: none;
@@ -177,7 +182,11 @@
 .webButton { min-width: 230px; color: #fff; border-color: #3c4961; background: #18243a; }
 .webButton:hover { border-color: #73809a; background: #202e47; }
 
-.footer { padding-bottom: 25px; }
+.footer {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 30px max(24px, calc((100vw - 1120px) / 2)) 25px;
+}
 .footerMain { display: flex; align-items: center; gap: 22px; padding-bottom: 24px; }
 .footerMain .brand { font-size: 20px; }
 .footerMain p { max-width: 360px; margin: 0; color: #737d8e; font-size: 13px; line-height: 1.5; }
@@ -291,8 +300,8 @@
 .workIcon { width: 46px; height: 46px; display: grid; place-items: center; color: #a94d0b; background: #fff0e4; border-radius: 15px; }
 .workIcon svg { width: 24px; height: 24px; }
 .workCard h2 { margin: 23px 0 9px; font-size: 20px; letter-spacing: -.035em; }
-.workCta { margin-top: 22px; padding: 30px 34px; display: flex; align-items: center; justify-content: space-between; gap: 24px; color: #fff; background: var(--ink); border-radius: 22px; }
-.workCta .eyebrow { color: #ffbd86; }
+.workCta { margin-top: 22px; padding: 30px 34px; display: flex; align-items: center; justify-content: space-between; gap: 24px; color: var(--ink); background: #fff1e4; border: 1px solid #f0ded0; border-radius: 22px; }
+.workCta .eyebrow { color: var(--orange-dark); }
 .workCta h2 { margin: 0; font-size: 30px; letter-spacing: -.05em; }
 .deviceGrid { padding: 20px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 14px; }
 .deviceCard { display: flex; flex-direction: column; align-items: flex-start; }
@@ -304,8 +313,28 @@
 .deviceCard small { display: block; margin-top: 13px; color: #798294; font-size: 11px; line-height: 1.55; }
 
 /* Keep the public site chrome calm and consistent, and use locally hosted photos. */
-.header { background: #fffaf6; }
-.footer { background: #fffaf6; }
+.header {
+  background: #ff7800;
+  box-shadow: 0 5px 18px #44200018;
+}
+.footer { background: #ff7800; }
+.header .brand, .header .nav a, .footer .brand, .footerLinks a, .footerBottom, .footerBottom a {
+  color: #0b1730;
+}
+.nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 7px; }
+.headerCta { background: #0b1730; }
+.header .nav a:hover, .footer .footerLinks a:hover {
+  color: #0b1730;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.header a:focus-visible, .footer a:focus-visible {
+  outline: 3px solid #0b1730;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.footerMain p { color: #3f2d20; }
+.footerLinks { border-color: #0b173055; }
 .heroVisual { min-height: 340px; }
 .heroPhoto {
   position: relative;
@@ -337,7 +366,8 @@
 .downloadSection>div:first-child>p:last-child { color: var(--muted); }
 .webButton { color: var(--ink); border-color: #e9d9cd; background: #fff; }
 .webButton:hover { border-color: #e5b895; background: #fffaf6; }
-.footerBottom a { color: #59657a; }
+.footerBottom a { color: #0b1730; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.hero[id], .informationPage[id] { scroll-margin-top: 110px; }
 .communityStory {
   width: min(1120px, calc(100% - 48px));
   margin: 0 auto 42px;
@@ -367,6 +397,11 @@
 .storyLink:hover { gap: 12px; }
 
 @media (max-width: 700px) {
+  .header { width: 100%; min-height: 70px; padding: 9px 16px 0; }
+  .nav { order: 3; width: 100%; margin: 0 -16px; padding: 8px 16px 11px; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { flex: 0 0 auto; }
+  .footer { padding: 25px 18px 22px; }
   .communityStory { width: calc(100% - 36px); margin-bottom: 30px; padding: 11px; grid-template-columns: 1fr; gap: 8px; }
   .storyPhoto { height: 235px; }
   .storyCopy { padding: 17px 12px 16px; }
