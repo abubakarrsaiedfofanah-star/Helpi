@@ -22,7 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 
 Build a sideloadable release APK with the backend address reachable by the phone:
 
-    flutter build apk --release --dart-define=API_URL=https://api.example.com/api
+    flutter build apk --release --dart-define=API_URL=https://helpi-eight.vercel.app/api
 
 The APK is written to `build/app/outputs/flutter-apk/app-release.apk`. The Android emulator default (`10.0.2.2`) only works from an emulator; a physical phone needs the public HTTPS API URL or a reachable computer LAN address. This project currently signs release APKs with the debug key, which is suitable for direct installation but not Play Store publishing.
 
