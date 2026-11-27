@@ -18,6 +18,7 @@
     },
     "api": {
       "root": "backend/",
+      "runtime": "container",
       "entrypoint": "Dockerfile"
     }
   },
