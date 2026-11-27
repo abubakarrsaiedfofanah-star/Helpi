@@ -1,4 +1,9 @@
-import 'dotenv/config';
+// Vercel injects environment variables directly. Load .env only for local runs
+// so production startup does not depend on dotenv being bundled as a runtime
+// module by the function packager.
+if (!process.env.VERCEL) {
+  require('dotenv').config();
+}
 
 import { randomUUID } from 'crypto';
 import { ValidationPipe } from '@nestjs/common';
