@@ -1,2 +1,12 @@
-import {Injectable} from '@nestjs/common';
-@Injectable() export class CommunicationsService{async createRoom(i:{type:'VOICE'|'VIDEO';participantIds:string[]}){if(!process.env.VIDEO_PROVIDER_API_KEY)return{status:'CONFIGURATION_REQUIRED',message:'Configure a compliant voice/video provider before creating live rooms.'};return{status:'READY',provider:process.env.VIDEO_PROVIDER||'configured-provider',type:i.type,participantCount:i.participantIds.length}}}
+import { Injectable, ServiceUnavailableException } from '@nestjs/common';
+
+@Injectable()
+export class CommunicationsService {
+  async createRoom(): Promise<never> {
+    // A provider adapter must create an authorized room and return short-lived
+    // participant tokens. A configured API key alone does not make calls work.
+    throw new ServiceUnavailableException(
+      'Voice and video calling are not configured for this deployment.',
+    );
+  }
+}

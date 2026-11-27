@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_state.dart';
 import '../core/localization.dart';
 import '../core/theme.dart';
 import '../widgets.dart';
-import 'voice_call_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -270,18 +271,26 @@ class _ThreadScreenState extends State<ThreadScreen> {
   bool busy = true;
   bool sending = false;
   String? error;
+  Timer? _messageRefresh;
 
   @override
   void initState() {
     super.initState();
     load();
+    _messageRefresh = Timer.periodic(const Duration(seconds: 5), (_) {
+      if (!mounted || busy || sending || context.read<AppState>().demoMode)
+        return;
+      load(silent: true);
+    });
   }
 
-  Future<void> load() async {
-    setState(() {
-      busy = true;
-      error = null;
-    });
+  Future<void> load({bool silent = false}) async {
+    if (!silent) {
+      setState(() {
+        busy = true;
+        error = null;
+      });
+    }
     try {
       final state = context.read<AppState>();
       final List<dynamic> result = state.demoMode
@@ -295,12 +304,22 @@ class _ThreadScreenState extends State<ThreadScreen> {
         });
       }
       if (mounted) {
+        var receivedNewMessage = false;
         setState(() {
-          messages
-            ..clear()
-            ..addAll(result);
+          final knownIds = messages
+              .map((message) => message['id']?.toString())
+              .whereType<String>()
+              .toSet();
+          for (final message in result) {
+            final id = message['id']?.toString();
+            if (id == null || knownIds.add(id)) {
+              messages.add(message);
+              receivedNewMessage = true;
+            }
+          }
+          if (error != null) error = null;
         });
-        _scrollToLatest();
+        if (receivedNewMessage) _scrollToLatest();
       }
     } catch (e) {
       if (mounted) {
@@ -363,6 +382,25 @@ class _ThreadScreenState extends State<ThreadScreen> {
     }
   }
 
+  void _showCallsUnavailable(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.call_end_outlined, color: orange),
+        title: const Text('Calls are not available yet'),
+        content: const Text(
+          'Voice and video calling need a calling service that is not configured for Helpi. You can still message here; no call is being started.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _scrollToLatest() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (scroll.hasClients) {
@@ -377,6 +415,7 @@ class _ThreadScreenState extends State<ThreadScreen> {
 
   @override
   void dispose() {
+    _messageRefresh?.cancel();
     body.dispose();
     scroll.dispose();
     super.dispose();
@@ -405,20 +444,12 @@ class _ThreadScreenState extends State<ThreadScreen> {
           IconButton(
             tooltip: l.get('voice_call'),
             icon: const Icon(Icons.phone_outlined),
-            onPressed: () => Navigator.push(
-                c,
-                MaterialPageRoute(
-                    builder: (_) =>
-                        VoiceCallScreen(peerName: widget.peerName))),
+            onPressed: () => _showCallsUnavailable(c),
           ),
           IconButton(
             tooltip: l.get('video_call'),
             icon: const Icon(Icons.videocam_outlined),
-            onPressed: () => Navigator.push(
-                c,
-                MaterialPageRoute(
-                    builder: (_) =>
-                        VoiceCallScreen(peerName: widget.peerName))),
+            onPressed: () => _showCallsUnavailable(c),
           ),
         ],
       ),

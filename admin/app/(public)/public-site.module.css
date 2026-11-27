@@ -338,8 +338,40 @@
 .webButton { color: var(--ink); border-color: #e9d9cd; background: #fff; }
 .webButton:hover { border-color: #e5b895; background: #fffaf6; }
 .footerBottom a { color: #59657a; }
+.communityStory {
+  width: min(1120px, calc(100% - 48px));
+  margin: 0 auto 42px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: minmax(250px, .8fr) 1.2fr;
+  align-items: center;
+  gap: clamp(24px, 5vw, 64px);
+  border: 1px solid var(--line);
+  border-radius: 26px;
+  background: #fff;
+  box-shadow: 0 16px 50px #46210f0b;
+}
+.storyPhoto {
+  display: block;
+  width: 100%;
+  height: 310px;
+  object-fit: cover;
+  object-position: 50% 46%;
+  border-radius: 19px;
+}
+.storyCopy { padding: 20px clamp(8px, 3vw, 32px) 20px 0; }
+.storyCopy h2 { max-width: 530px; margin: 0; font-size: clamp(29px, 3.8vw, 42px); line-height: 1.08; letter-spacing: -.055em; }
+.storyCopy>p:not(.eyebrow) { max-width: 540px; margin: 15px 0 19px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.storyLink { display: inline-flex; align-items: center; gap: 8px; color: var(--orange-dark); font-size: 14px; font-weight: 850; text-decoration: none; }
+.storyLink svg { width: 17px; height: 17px; }
+.storyLink:hover { gap: 12px; }
 
 @media (max-width: 700px) {
+  .communityStory { width: calc(100% - 36px); margin-bottom: 30px; padding: 11px; grid-template-columns: 1fr; gap: 8px; }
+  .storyPhoto { height: 235px; }
+  .storyCopy { padding: 17px 12px 16px; }
+  .storyCopy h2 { font-size: 31px; }
+  .storyCopy>p:not(.eyebrow) { font-size: 14px; }
   .heroVisual { min-height: 0; }
   .heroPhoto { height: clamp(230px, 68vw, 340px); border-width: 5px; border-radius: 23px; }
   .infoPhoto { height: 270px !important; }

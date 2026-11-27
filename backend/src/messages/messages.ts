@@ -172,9 +172,9 @@ export class MessagesController {
     if (!thread) throw new ForbiddenException();
     return this.p.message.findMany({
       where: { threadId: id },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
       take: 200,
-    });
+    }).then((items) => items.reverse());
   }
 
   @Post('threads/:id')

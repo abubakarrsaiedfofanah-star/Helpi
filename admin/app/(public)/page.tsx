@@ -103,6 +103,22 @@ export default function PublicHomePage() {
         </div>
       </section>
 
+      <section className={styles.communityStory} aria-labelledby="community-story-title">
+        <Image
+          className={styles.storyPhoto}
+          src="/images/community-water-project.jpg"
+          alt="Volunteers and nearby residents working together to repair a community water borehole in Ghana"
+          width={960}
+          height={1440}
+        />
+        <div className={styles.storyCopy}>
+          <p className={styles.eyebrow}>COMMUNITY IN ACTION</p>
+          <h2 id="community-story-title">Support grows when people work together.</h2>
+          <p>Across communities, people already share their time and skills to meet local needs. Helpi helps people find one another and take the next step together.</p>
+          <a className={styles.storyLink} href="/what-we-do/">See what Helpi does <ArrowIcon /></a>
+        </div>
+      </section>
+
       <section className={styles.downloadSection} id="get-the-app">
         <div>
           <p className={styles.eyebrow}>HELPI GOES WITH YOU</p>
