@@ -17,15 +17,16 @@ function isUniqueConstraintError(error:unknown){return typeof error==='object'&&
  constructor(private prisma:PrismaService,private jwt:JwtService,private accountSecurity:AccountSecurityService){}
  async register(dto:RegisterDto,meta:any){
   const exposeDevToken=process.env.NODE_ENV!=='production'&&process.env.EXPOSE_DEV_TOKENS==='true';
+  const verificationRequired=process.env.EMAIL_VERIFICATION_REQUIRED!=='false';
   const resendApiKey=process.env.RESEND_API_KEY?.trim();
   const webhookUrl=process.env.EMAIL_WEBHOOK_URL?.trim();
   const webhookSecret=process.env.EMAIL_WEBHOOK_SECRET;
   const verificationBase=process.env.EMAIL_VERIFICATION_BASE_URL?.trim();
-  if(!webhookUrl&&!resendApiKey&&!exposeDevToken)throw new ServiceUnavailableException('Email verification is not configured. Please try again later.');
-  if((webhookUrl&&!webhookSecret)||((webhookUrl||resendApiKey)&&!verificationBase))throw new ServiceUnavailableException('Email verification is not configured correctly. Please contact support.');
+  if(verificationRequired&&!webhookUrl&&!resendApiKey&&!exposeDevToken)throw new ServiceUnavailableException('Email verification is not configured. Please try again later.');
+  if(verificationRequired&&((webhookUrl&&!webhookSecret)||((webhookUrl||resendApiKey)&&!verificationBase)))throw new ServiceUnavailableException('Email verification is not configured correctly. Please contact support.');
   let webhook:URL|undefined;
   let verificationUrl:URL|undefined;
-  if(webhookUrl||((resendApiKey)&&verificationBase)){
+  if(verificationRequired&&(webhookUrl||((resendApiKey)&&verificationBase))){
    try{if(webhookUrl)webhook=new URL(webhookUrl);verificationUrl=new URL(verificationBase!);if((webhook&&!['https:','http:'].includes(webhook.protocol))||!['https:','http:'].includes(verificationUrl.protocol))throw new Error('Unsupported URL scheme');if(process.env.NODE_ENV==='production'&&((webhook&&webhook.protocol!=='https:')||verificationUrl.protocol!=='https:'))throw new Error('HTTPS is required');}
    catch{throw new ServiceUnavailableException('Email verification requires valid HTTPS webhook and app URLs.');}
   }
@@ -34,7 +35,7 @@ function isUniqueConstraintError(error:unknown){return typeof error==='object'&&
   const passwordHash=await argon2.hash(dto.password,{type:argon2.argon2id,memoryCost:19456,timeCost:2,parallelism:1});
   let user;
   try{
-   user=await this.prisma.user.create({data:{email,passwordHash,name:dto.name.trim(),countryCode:dto.countryCode.toUpperCase(),supportGroup:dto.supportGroup,status:'PENDING',publicIdentityMode:dto.anonymousPublic?'ANONYMOUS':(dto.publicAlias?'ALIAS':'REAL_NAME'),publicAlias:dto.publicAlias?.trim()||null}});
+   user=await this.prisma.user.create({data:{email,passwordHash,name:dto.name.trim(),countryCode:dto.countryCode.toUpperCase(),supportGroup:dto.supportGroup,status:verificationRequired?'PENDING':'ACTIVE',emailVerifiedAt:verificationRequired?undefined:new Date(),publicIdentityMode:dto.anonymousPublic?'ANONYMOUS':(dto.publicAlias?'ALIAS':'REAL_NAME'),publicAlias:dto.publicAlias?.trim()||null}});
   }catch(error){
    if(isUniqueConstraintError(error))throw new ConflictException('An account with this email already exists.');
    throw error;
@@ -43,7 +44,7 @@ function isUniqueConstraintError(error:unknown){return typeof error==='object'&&
   const expiresAt=new Date(Date.now()+30*60*1000);
   await this.prisma.emailVerificationToken.create({data:{userId:user.id,tokenHash:hashToken(raw),expiresAt}});
   await this.audit(user.id,'ACCOUNT_CREATED',meta);
-  if(verificationUrl&&(webhook||resendApiKey)){
+  if(verificationRequired&&verificationUrl&&(webhook||resendApiKey)){
    verificationUrl.searchParams.set('token',raw);
    const subject='Verify your Helpi account';
    const link=verificationUrl.toString();
@@ -57,6 +58,10 @@ function isUniqueConstraintError(error:unknown){return typeof error==='object'&&
     await this.prisma.$transaction(async tx=>{await tx.emailVerificationToken.deleteMany({where:{userId:user.id}});await tx.user.delete({where:{id:user.id}});});
     throw new ServiceUnavailableException('We could not send the verification email. Please try again shortly.');
    }
+  }
+  if(!verificationRequired){
+   await this.audit(user.id,'ACCOUNT_CREATED_WITHOUT_EMAIL_VERIFICATION',meta);
+   return this.issue(user,meta);
   }
   return {verificationRequired:true,verificationTokenForDevelopment:exposeDevToken?raw:undefined};
  }

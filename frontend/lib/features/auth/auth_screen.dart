@@ -94,13 +94,16 @@ class _AuthScreenState extends State<AuthScreen> {
         if (error == null && mounted) {
           final wasVerifiedLocally =
               state.lastDevelopmentVerificationToken != null;
+          final signedInImmediately = state.access != null;
           setState(() {
             register = false;
-            requiresEmailVerification = !wasVerifiedLocally;
+            requiresEmailVerification = !wasVerifiedLocally && !signedInImmediately;
           });
           messenger.showSnackBar(
             SnackBar(
-              content: Text(wasVerifiedLocally
+              content: Text(signedInImmediately
+                  ? 'Account created. You are now signed in.'
+                  : wasVerifiedLocally
                   ? 'Account created and verified for local development. You can sign in.'
                   : 'Account created. Open the verification email, or enter its code here.'),
             ),
