@@ -11,7 +11,7 @@ export function PublicSiteChrome({ children }: { children: React.ReactNode }) {
     <div className={styles.page}>
       <header className={styles.header}>
         <a className={styles.brand} href="/" aria-label="Helpi home">
-          <Image src="/helpi_logo.png" alt="" width={46} height={46} priority />
+          <Image src="/helpi_logo.png" alt="" width={46} height={46} priority unoptimized />
           <span>Helpi</span>
         </a>
         <PublicSiteNav />
@@ -21,7 +21,7 @@ export function PublicSiteChrome({ children }: { children: React.ReactNode }) {
       <footer className={styles.footer}>
         <div className={styles.footerMain}>
           <a className={styles.brand} href="/" aria-label="Helpi home">
-            <Image src="/helpi_logo.png" alt="" width={42} height={42} />
+            <Image src="/helpi_logo.png" alt="" width={42} height={42} unoptimized />
             <span>Helpi</span>
           </a>
           <p>Connecting people seeking financial help with helpers.</p>

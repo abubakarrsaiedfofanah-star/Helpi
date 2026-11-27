@@ -57,6 +57,7 @@ export default function PublicHomePage() {
             width={1280}
             height={853}
             priority
+            unoptimized
           />
           <div className={styles.floatingNote}>
             <span className={styles.noteHeart} aria-hidden="true">+</span>
@@ -113,6 +114,7 @@ export default function PublicHomePage() {
           alt="Volunteers and nearby residents working together to repair a community water borehole in Ghana"
           width={960}
           height={1440}
+          unoptimized
         />
         <div className={styles.storyCopy}>
           <p className={styles.eyebrow}>COMMUNITY IN ACTION</p>

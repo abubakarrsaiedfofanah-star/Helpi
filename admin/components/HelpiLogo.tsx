@@ -8,6 +8,7 @@ export function HelpiLogo({ className = '' }: { className?: string }) {
       alt="Helpi"
       width={64}
       height={64}
+      unoptimized
     />
   );
 }

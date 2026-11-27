@@ -11,7 +11,7 @@ export function AboutSection() {
           <p>Helpi is a community app that brings people seeking financial support and helpers together. It helps them discover requests and connect directly.</p>
           <a className={styles.primaryButton} href="/community/">Open the community app</a>
         </div>
-        <Image className={styles.infoPhoto} src="/images/community-water-project.jpg" alt="Local volunteers working together on a community water project in Ghana" width={960} height={1440} />
+        <Image className={styles.infoPhoto} src="/images/community-water-project.jpg" alt="Local volunteers working together on a community water project in Ghana" width={960} height={1440} unoptimized />
       </section>
 
       <section className={styles.missionSection}>
