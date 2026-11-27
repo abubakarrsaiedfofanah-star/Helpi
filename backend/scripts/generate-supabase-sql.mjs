@@ -112,7 +112,10 @@ $helpi_enable_rls$;
 COMMIT;
 `;
 
-const output = header + diff.stdout.trim() + '\n\n' + countrySeed + rls;
+const normalizedEmailIndex = `-- Enforce one account per email regardless of casing or surrounding whitespace.
+CREATE UNIQUE INDEX "User_email_normalized_key" ON "User" (LOWER(BTRIM("email")));`;
+const generatedDdl = `${diff.stdout.trim()}\n\n${normalizedEmailIndex}`;
+const output = header + generatedDdl + '\n\n' + countrySeed + rls;
 mkdirSync(path.dirname(outputPath), { recursive: true });
 writeFileSync(outputPath, output, 'utf8');
 
@@ -120,7 +123,7 @@ writeFileSync(outputPath, output, 'utf8');
 // only at completed statement boundaries and keep every editor-ready part small.
 const statements = [];
 let pendingStatementLines = [];
-for (const line of diff.stdout.trim().split(/\r?\n/)) {
+for (const line of generatedDdl.split(/\r?\n/)) {
   pendingStatementLines.push(line);
   if (line.trimEnd().endsWith(';')) {
     statements.push(pendingStatementLines.join('\n'));

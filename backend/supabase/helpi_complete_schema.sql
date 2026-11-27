@@ -1046,6 +1046,9 @@ ALTER TABLE "_ThreadParticipants" ADD CONSTRAINT "_ThreadParticipants_A_fkey" FO
 -- AddForeignKey
 ALTER TABLE "_ThreadParticipants" ADD CONSTRAINT "_ThreadParticipants_B_fkey" FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+-- Enforce one account per email regardless of casing or surrounding whitespace.
+CREATE UNIQUE INDEX "User_email_normalized_key" ON "User" (LOWER(BTRIM("email")));
+
 
 -- Initial country settings used by the app and admin country-operations screens.
 INSERT INTO "CountryConfiguration" (
